@@ -1,0 +1,19 @@
+{
+  "name": "craftme-ui",
+  "version": "1.0.0",
+  "description": "Learn new skills anywhere",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/socaldevs/craftme-ui.git"
+  },
+  "author": "Arthur Albegov Brian Duong Eddie Huang Yahya (John)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/socaldevs/craftme-ui/issues"
+  },
+  "homepage": "https://github.com/socaldevs/craftme-ui#readme"
+}
