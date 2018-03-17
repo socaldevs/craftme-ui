@@ -7,15 +7,22 @@ class Chat extends Component {
     this.state = {
       handle: '',
       message: '',
-      display: '',
+      messages: [],
       feedback: '',
     }
+    this.room = 'abc123';
   }
   componentDidMount() {
-    this.socket = io('http://localhost:3001');
+    this.socket = io('http://localhost:3001/');
+
+    // this.socket.on('connect', () => {
+    //   this.socket.emit('room', this.room);
+    // })
+    // this.socket.on('message', (data) => console.log('message from server', data));
+
     this.socket.on('chat', (data) => {
-      console.log('data from server',data);
-      this.setState({ display: `${this.state.display}\n${data.handle}: ${data.message}`});
+      this.setState({ feedback: '' });
+      this.setState({ messages: [...this.state.messages, data] });
     })
     this.socket.on('typing', (data) => {
       this.setState({ feedback: data});
@@ -29,7 +36,6 @@ class Chat extends Component {
       this.setState({ message: e.target.value });
     }
     this.socket.emit('typing', `${this.state.handle} is typing...`);
-    
   }
 
   sendChat() {
@@ -45,8 +51,12 @@ class Chat extends Component {
       <div>
         Hello from Chat!
         <div id="chat-window">
-          <div id="output">{this.state.display}</div>
-          <div id="feedback"></div>
+          <div id="output">
+            {this.state.messages.map((data,i) => {
+              return <div key={i}><strong>{data.handle}</strong>: {data.message}</div>
+            })}
+          </div>
+          <div id="feedback">{this.state.feedback}</div>
         </div>
         <input id="handle" type="text" placeholder="Handle" value={this.state.handle} onChange={e => this.setText(e)}/>
         <input id="message" type="text" placeholder="Message" value={this.state.message} onChange={e => this.setText(e)}/>
