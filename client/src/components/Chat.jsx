@@ -2,23 +2,24 @@ import React, { Component } from 'react';
 import io from 'socket.io-client/dist/socket.io.js';
 
 class Chat extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props); //super puts props on this... this.props = props;
+    
     this.state = {
       handle: '',
       message: '',
       messages: [],
       feedback: '',
     }
-    this.room = 'abc123';
   }
-  componentDidMount() {
+  componentDidMount() { //CDM doesn't fire on re render, only on initial mount
     this.socket = io('http://localhost:3001/');
 
-    // this.socket.on('connect', () => {
-    //   this.socket.emit('room', this.room);
-    // })
-    // this.socket.on('message', (data) => console.log('message from server', data));
+    this.socket.on('connect', () => {
+      this.socket.emit('room', this.props.roomId);
+    });
+
+    this.socket.on('message', (data) => console.log('message from server', data));
 
     this.socket.on('chat', (data) => {
       this.setState({ feedback: '' });
@@ -27,6 +28,14 @@ class Chat extends Component {
     this.socket.on('typing', (data) => {
       this.setState({ feedback: data});
     })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // this.props still old!
+    if (this.props.roomId !== nextProps.roomId) { //only do this if props.roomId has updated( enter new room )
+      console.log('-- roomid has changed, old, new', this.props.roomId, nextProps.roomId);
+      this.socket.emit('room', nextProps.roomId);
+    }
   }
 
   setText(e) {
@@ -47,9 +56,10 @@ class Chat extends Component {
   }
 
   render() {
+    console.log('Im rendering MOrty! and room Id', this.props.roomId)
     return (
       <div>
-        Hello from Chat!
+        Hello from Chat #{this.props.roomId}!
         <div id="chat-window">
           <div id="output">
             {this.state.messages.map((data,i) => {
