@@ -6,7 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "react-dev": "webpack -d --watch",
+<<<<<<< a8963c732c0c7165f47f6910aee6c325838ba106
     "start": "nodemon ./server/index.js"
+=======
+    "start": "node ./server/"
+>>>>>>> [Calender] npm  installs Big Calender
   },
   "repository": {
     "type": "git",
@@ -31,6 +35,7 @@
     "nodemon": "^1.17.2",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
+    "react-big-calendar": "^0.18.0",
     "react-dom": "^16.2.0",
     "react-event-listener": "^0.5.3",
     "react-popper": "^0.8.3",
