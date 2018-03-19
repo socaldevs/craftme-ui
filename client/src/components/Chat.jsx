@@ -36,6 +36,7 @@ class Chat extends Component {
       console.log('-- roomid has changed, old, new', this.props.roomId, nextProps.roomId);
       this.socket.emit('room', nextProps.roomId);
     }
+    this.setState({ feedback: '' });
   }
 
   setText(e) {
@@ -43,12 +44,16 @@ class Chat extends Component {
       this.setState({ handle: e.target.value });
     } else {
       this.setState({ message: e.target.value });
+      this.socket.emit('typing', {
+        room: this.props.roomId,
+        feedback: `${this.state.handle} is typing...`,
+      });
     }
-    this.socket.emit('typing', `${this.state.handle} is typing...`);
   }
 
   sendChat() {
     this.socket.emit('chat', {
+      room: this.props.roomId,
       handle: this.state.handle,
       message: this.state.message
     })
