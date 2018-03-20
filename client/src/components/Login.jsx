@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import RaisedButton from 'material-ui/RaisedButton';
 
 export default class Login extends Component {
   constructor(props) {
@@ -14,7 +15,7 @@ export default class Login extends Component {
           Username: <input type="text" />
           <br />
           Password: <input type="text" />
-          <button onClick={this.login}>Login </button>
+          <RaisedButton onClick={this.login}>Login </RaisedButton>
         </form>
       </div>
     );
