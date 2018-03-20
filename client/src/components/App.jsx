@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import UserList from '../containers/user-list.jsx';
 import UserDetail from '../containers/user-detail.jsx';
 import { Switch, Route, Link } from 'react-router-dom';
+import Protected from './Protected.jsx';
 import Login from './Login.jsx';
 import Signup from './Signup.jsx';
 <<<<<<< HEAD
@@ -43,11 +44,22 @@ export default class App extends Component {
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
 <<<<<<< HEAD
+<<<<<<< HEAD
             <Route path="/chatrooms" component={ChatRoomList} />
 =======
             <Route path="/user/lessons" component={Lessons} />
             <Route path="/user/messages" component={Messages} />
 >>>>>>> [Components] - commit for rebase
+=======
+            <Route
+              path="/user/lessons"
+              component={props => <Protected component={Lessons} {...props} />}
+            />
+            <Route
+              path="/user/messages"
+              component={props => <Protected component={Messages} {...props} />}
+            />
+>>>>>>> [Rebase] - commit for rebase
           </Switch>
         </div>
         <div>

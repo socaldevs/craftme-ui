@@ -1,4 +1,9 @@
-import React from 'react';
-export const Messages = () => {
-  return <div>This is the Messages Component</div>;
-};
+import React, { Component } from 'react';
+export default class Messages extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return <div>This is the messages component</div>;
+  }
+}
