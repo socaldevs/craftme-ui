@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import RaisedButton from 'material-ui/RaisedButton';
 
 export default class Login extends Component {
   constructor(props) {
@@ -48,7 +49,7 @@ export default class Login extends Component {
           value={this.state.password}
           onChange={e => this.handleChange(e)}
         />
-        <button onClick={this.login}>Login </button>
+        <RaisedButton onClick={this.login}>Login </RaisedButton>
       </div>
     );
   }
