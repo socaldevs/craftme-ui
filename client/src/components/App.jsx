@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import UserList from "../containers/user-list.jsx";
-import UserDetail from "../containers/user-detail.jsx";
-import { Switch, Route, Link } from "react-router-dom";
-import Login from "./Login.jsx";
-import Signup from "./Signup.jsx";
+import React, { Component } from 'react';
+import UserList from '../containers/user-list.jsx';
+import UserDetail from '../containers/user-detail.jsx';
+import { Switch, Route, Link } from 'react-router-dom';
+import Login from './Login.jsx';
+import Signup from './Signup.jsx';
 
 export default class App extends Component {
   constructor(props) {
