@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client/dist/socket.io.js';
+import axios from 'axios';
 
 class Chat extends Component {
   constructor(props) {
-    super(props); //super puts props on this... this.props = props;
-    
+    super(props); 
     this.state = {
       handle: '',
       message: '',
@@ -12,18 +12,17 @@ class Chat extends Component {
       feedback: '',
     }
   }
-  componentDidMount() { //CDM doesn't fire on re render, only on initial mount
+  componentDidMount() { 
     this.socket = io('http://localhost:3001/');
-
     this.socket.on('connect', () => {
       this.socket.emit('room', this.props.roomId);
     });
-
     this.socket.on('message', (data) => console.log('message from server', data));
-
     this.socket.on('chat', (data) => {
-      this.setState({ feedback: '' });
-      this.setState({ messages: [...this.state.messages, data] });
+      this.setState({ 
+        messages: [...this.state.messages, data], 
+        feedback: '',
+      });
     })
     this.socket.on('typing', (data) => {
       this.setState({ feedback: data});
@@ -31,12 +30,31 @@ class Chat extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // this.props still old!
-    if (this.props.roomId !== nextProps.roomId) { //only do this if props.roomId has updated( enter new room )
-      console.log('-- roomid has changed, old, new', this.props.roomId, nextProps.roomId);
+    if (this.props.roomId !== nextProps.roomId) { 
+      this.socket.emit('exit', this.props.roomId);
       this.socket.emit('room', nextProps.roomId);
+      this.setState({ messages: [], feedback: '' });
     }
-    this.setState({ feedback: '' });
+  }
+
+  async saveChat () {
+    const { messages } = this.state;
+    try {
+      const data = await axios.post('http://localhost:3001/chat/save/', { messages });
+      console.log('await axios data', data);
+    } catch(err) {
+      console.log('err from Chat', err);
+    }
+  }
+
+  async fetchChat () {
+    const testId = '5ab06c447ee8e1cddeddd726'; //TEST
+    try {
+      const data = await axios.get(`http://localhost:3001/chat/fetch/${testId}`);
+      console.log('await axios data', data);
+    } catch(err) {
+      console.log('err from Chat', err);
+    }
   }
 
   setText(e) {
@@ -56,12 +74,10 @@ class Chat extends Component {
       room: this.props.roomId,
       handle: this.state.handle,
       message: this.state.message
-    })
-    console.log('chat sent', this.state.handle, this.state.message);
+    });
   }
 
   render() {
-    console.log('Im rendering MOrty! and room Id', this.props.roomId)
     return (
       <div>
         Hello from Chat #{this.props.roomId}!
@@ -76,6 +92,8 @@ class Chat extends Component {
         <input id="handle" type="text" placeholder="Handle" value={this.state.handle} onChange={e => this.setText(e)}/>
         <input id="message" type="text" placeholder="Message" value={this.state.message} onChange={e => this.setText(e)}/>
         <button id="send" onClick={() => this.sendChat()}>Send</button>
+        <button id="save" onClick={() => this.saveChat()}>SAVE CHAT</button>
+        <button id="fetch" onClick={() => this.fetchChat()}>RETRIEVE CHAT</button>
       </div>
     );
   } 
