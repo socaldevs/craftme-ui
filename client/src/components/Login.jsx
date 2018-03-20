@@ -1,21 +1,54 @@
-import React, { Component } from "react";
-import axios from "axios";
+import React, { Component } from 'react';
+import axios from 'axios';
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    this.login = () => {};
+    this.state = {
+      username: '',
+      password: ''
+    };
+
+    this.login = async () => {
+      try {
+        let data = await axios.post('http://localhost:3000/auth/login', {
+          username: this.state.username,
+          password: this.state.password
+        });
+        if (data) {
+          localStorage.setItem('token', data.data.token);
+          localStorage.setItem('username', data.data.username);
+        }
+        console.log(data);
+      } catch (error) {
+        console.log('error with login', error);
+        return;
+      }
+    };
+
+    this.handleChange = e => {
+      this.setState({ [e.target.name]: e.target.value });
+    };
   }
   render() {
     return (
       <div>
-        <form>
-          Username: <input type="text" />
-          <br />
-          Password: <input type="text" />
-          <button onClick={this.login}>Login </button>
-        </form>
+        Username:{' '}
+        <input
+          type="text"
+          name="username"
+          value={this.state.username}
+          onChange={e => this.handleChange(e)}
+        />
+        <br />
+        Password:{' '}
+        <input
+          type="password"
+          name="password"
+          value={this.state.password}
+          onChange={e => this.handleChange(e)}
+        />
+        <button onClick={this.login}>Login </button>
       </div>
     );
   }
