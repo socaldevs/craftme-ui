@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Chat from './Chat.jsx';
-
 class ChatRoomList extends Component {
   constructor(props) {
     super(props);
