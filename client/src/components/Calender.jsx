@@ -102,7 +102,7 @@ const events = [
   },
 ];
 
-let Selectable = () => (
+let Calender = () => (
   <React.Fragment>
     <h3 className="callout">
       Click an event to see more info, or drag the mouse over the calendar to
@@ -127,4 +127,4 @@ let Selectable = () => (
   </React.Fragment>
 )
 
-export default Selectable
+export default Calender;
