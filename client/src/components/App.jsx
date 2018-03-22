@@ -1,131 +1,138 @@
-import { Component } from 'react';
 import React from 'react';
-import UserList from '../containers/user-list.jsx';
-import UserDetail from '../containers/user-detail.jsx';
-import { Switch, Route, Link } from 'react-router-dom';
-import Protected from './Protected.jsx';
-import Login from './Login.jsx';
-import Signup from './Signup.jsx';
-import ChatRoomList from './ChatRoomList.jsx';
-import Lessons from './Lessons.jsx';
-import Messages from './Messages.jsx';
-import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
+import Autosuggest from 'react-autosuggest';
+import match from 'autosuggest-highlight/match';
+import parse from 'autosuggest-highlight/parse';
+import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
-import Grid from 'material-ui/Grid';
-import Button from 'material-ui/Button';
-import Menu, { MenuItem } from 'material-ui/Menu';
+import { MenuItem } from 'material-ui/Menu';
 
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing.unit * 2,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-});
+const suggestions = [
+  { label: 'Apple Picking' },
+];
 
-class App extends Component {
+function renderInput(inputProps) {
+  const { classes, ref, ...other } = inputProps;
+
+  return (
+    <TextField
+      fullWidth
+      InputProps={{
+        inputRef: ref,
+        ...other,
+      }}
+    />
+  );
+}
+
+function renderSuggestion(suggestion, { query, isHighlighted }) {
+  const matches = match(suggestion.label, query);
+  const parts = parse(suggestion.label, matches);
+
+  return (
+    <MenuItem selected={isHighlighted} component="div">
+      <div>
+        {parts.map((part, index) => {
+          return part.highlight ? (
+            <span key={String(index)} style={{ fontWeight: 300 }}>
+              {part.text}
+            </span>
+          ) : (
+              <strong key={String(index)} style={{ fontWeight: 500 }}>
+                {part.text}
+              </strong>
+            );
+        })}
+      </div>
+    </MenuItem>
+  );
+}
+
+function renderSuggestionsContainer(options) {
+  const { containerProps, children } = options;
+
+  return (
+    <Paper {...containerProps} square>
+      {children}
+    </Paper>
+  );
+}
+
+function getSuggestionValue(suggestion) {
+  return suggestion.label;
+}
+
+function getSuggestions(value) {
+  const inputValue = value.trim().toLowerCase();
+  const inputLength = inputValue.length;
+  let count = 0;
+
+  return inputLength === 0
+    ? []
+    : suggestions.filter(suggestion => {
+      const keep =
+        count < 5 && suggestion.label.toLowerCase().slice(0, inputLength) === inputValue;
+
+      if (keep) {
+        count += 1;
+      }
+
+      return keep;
+    });
+}
+
+
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      anchorEl: null
-    };
-    this.handleClick = this.handleClick.bind(this)
-    this.handleClose= this.handleClose.bind(this)
+      value: '',
+      suggestions: []
+    }
+    this.handleSuggestionsFetchRequested = this.handleSuggestionsFetchRequested.bind(this);
+    this.handleSuggestionsClearRequested= this.handleSuggestionsClearRequested.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
-  handleClick(event){
-    this.setState({ anchorEl: event.currentTarget });
+
+  handleSuggestionsFetchRequested({ value }){
+    this.setState({
+      suggestions: getSuggestions(value),
+    });
   };
 
-  handleClose(){
-    this.setState({ anchorEl: null });
+  handleSuggestionsClearRequested(){
+    this.setState({
+      suggestions: [],
+    });
+  };
+
+  handleChange(event, { newValue }){
+    this.setState({
+      value: newValue,
+    });
   };
 
   render() {
-    const anchorEl  = this.state.anchorEl;
-    return (
-      <div className={this.state}>
-      <Grid container spacing={24}>
-        <Grid item xs={12}>
-          <Paper className={this.state}>
-          <Button
-          aria-owns={anchorEl ? "simple-menu" : null}
-          aria-haspopup="true"
-          onClick={this.handleClick}
-        >
-          Open Menu
-        </Button>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={this.handleClose}
-        >
-          <MenuItem onClick={this.handleClose}><Link to="/login">Login</Link></MenuItem>
-          <MenuItem onClick={this.handleClose}><Link to="/signup">Signup</Link></MenuItem>
-          <MenuItem onClick={this.handleClose}><Link to="/chatrooms">ChatRooms</Link></MenuItem>
-        </Menu>
-        <Switch>
-    <Route path="/login" component={Login} />
-    <Route path="/signup" component={Signup} />
-    <Route path="/chatrooms" component={ChatRoomList} />
-  </Switch>
-          
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Paper className={this.state}>xs=12 sm=6</Paper>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Paper className={this.state}>xs=12 sm=6</Paper>
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <Paper className={this.state}>xs=6 sm=3</Paper>
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <Paper className={this.state}>xs=6 sm=3</Paper>
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <Paper className={this.state}>xs=6 sm=3</Paper>
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <Paper className={this.state}>xs=6 sm=3</Paper>
-        </Grid>
-      </Grid>
-    </div>
+    const { classes } = this.props;
 
+    return (
+      <Autosuggest
+        renderInputComponent={renderInput}
+        suggestions={this.state.suggestions}
+        onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
+        onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
+        renderSuggestionsContainer={renderSuggestionsContainer}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        inputProps={{
+          classes,
+          placeholder: 'Search a Skill (start with a)',
+          value: this.state.value,
+          onChange: this.handleChange,
+        }}
+      />
     );
   }
 }
-App.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-export default withStyles(styles)(App)
 
 
-{/* <header>
-<ul>
-  <li>
-    <Link to="/login">Login</Link>
-  </li>
-  <li>
-    <Link to="/signup">Signup</Link>
-  </li>
-  <li>
-    <Link to="/chatrooms">ChatRooms</Link>
-  </li>
-</ul>
-<div>
-  <Switch>
-    <Route path="/login" component={Login} />
-    <Route path="/signup" component={Signup} />
-    <Route path="/chatrooms" component={ChatRoomList} />
-  </Switch>
-</div>
-<div>
-  
-</div>
-</header> */}
+export default App;
