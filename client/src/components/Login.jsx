@@ -1,7 +1,18 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Button from 'material-ui/Button';
-import Calender from './Calender.jsx';
+import Popup from "reactjs-popup";
+import styled from 'styled-components';
+import { withStyles } from 'material-ui/styles';
+import Input, { InputLabel } from 'material-ui/Input';
+import { FormControl, FormHelperText } from 'material-ui/Form';
+
+
+const StyledPopup = styled(Popup)`
+font-size: 30px;
+width: 200%;
+padding: 20px 10px;
+`;
 
 export default class Login extends Component {
   constructor(props) {
@@ -29,29 +40,25 @@ export default class Login extends Component {
       }
     };
 
-    this.handleChange = e => {
-      this.setState({ [e.target.name]: e.target.value });
+    this.handleChange = (e,name) => {
+      this.setState({ [name]: e.target.value });
     };
   }
   render() {
     return (
       <div>
-        Username:{' '}
-        <input
-          type="text"
-          name="username"
-          value={this.state.username}
-          onChange={e => this.handleChange(e)}
-        />
+        <FormControl>
+        <InputLabel htmlFor="name-simple">Username</InputLabel>
+        <Input id="name-simple" value={this.state.username} onChange={e => this.handleChange(e,"username")} />
+        </FormControl>
         <br />
-        Password:{' '}
-        <input
-          type="password"
-          name="password"
-          value={this.state.password}
-          onChange={e => this.handleChange(e)}
-        />
-        <Button variant="raised" onClick={this.login}>Login </Button>
+        <FormControl>
+        <InputLabel htmlFor="name-simple">Password</InputLabel>
+        <Input type="password" value={this.state.password} onChange={e => this.handleChange(e,"password")} />
+        </FormControl>
+        <StyledPopup trigger={<Button variant="raised" onClick={this.login}>Login </Button>} position="right center">
+    <div>YOU HAVE LOGGED IN !!!</div>
+  </StyledPopup>
       </div>
     );
   }
