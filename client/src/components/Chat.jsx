@@ -49,7 +49,15 @@ class Chat extends Component {
     this.socket.on('fetchedPeerId', (data) => {
       this.setState({ otherPeerId: data });
     });
+  }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.roomId !== nextProps.roomId) { 
+      this.socket.emit('exit', this.props.roomId);
+      this.socket.emit('room', nextProps.roomId);
+      // this.peer.disconnect();
+      this.setState({ messages: [], feedback: '' });
+    }
     //P2P
     this.peer = new Peer({key: 'lwjd5qra8257b9'});
     this.peer.on('open', (id) => {
@@ -69,14 +77,7 @@ class Chat extends Component {
         console.log('Failed to get local stream', err);
       });
     });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.roomId !== nextProps.roomId) { 
-      this.socket.emit('exit', this.props.roomId);
-      this.socket.emit('room', nextProps.roomId);
-      this.setState({ messages: [], feedback: '' });
-    }
+    this.peer.on('disconnect', () => console.log('Peer has been disconnected'));
   }
 
   async saveChat () {
@@ -84,7 +85,7 @@ class Chat extends Component {
     try {
       const data = await axios.post('http://localhost:3001/chat/save/', { messages });
     } catch(err) {
-      console.log('err from Chat', err);
+      console.log('err from saveChat', err);
     }
   }
 
@@ -93,8 +94,12 @@ class Chat extends Component {
     try {
       const data = await axios.get(`http://localhost:3001/chat/fetch/${testId}`);
     } catch(err) {
-      console.log('err from Chat', err);
+      console.log('err from fetchChat', err);
     }
+  }
+
+  disconnect() {
+    this.peer.disconnect();
   }
 
   setText(e) {
@@ -117,25 +122,25 @@ class Chat extends Component {
     });
   }
 
-  getOtherPeerId() {
-    this.socket.emit('getOtherPeerId', this.props.roomId);
-  }
-
-  callPeer() { 
+  async callPeer() { 
     const peer = this.peer;
-    const { otherPeerId } = this.state;
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-    navigator.getUserMedia({video: true, audio: true}, (stream) => {
-      const call = peer.call(otherPeerId, stream);
-      call.on('stream', (remoteStream) => {
-        let video = document.createElement('video');
-        document.body.append(video);
-        video.src = window.URL.createObjectURL(remoteStream);
-        video.play();
+    try {
+      let getOtherPeerId = await this.socket.emit('getOtherPeerId', this.props.roomId);
+      let videoCall = await navigator.getUserMedia({video: true, audio: true}, (stream) => {
+        const call = peer.call(this.state.otherPeerId, stream);
+        call.on('stream', (remoteStream) => {
+          let video = document.createElement('video');
+          document.body.append(video);
+          video.src = window.URL.createObjectURL(remoteStream);
+          video.play();
+        });
+      }, (err) => {
+        console.log('Failed to get local stream', err);
       });
-    }, (err) => {
-      console.log('Failed to get local stream', err);
-    });
+    } catch(err) {
+      console.log('err from callPeer', err)
+    }
   }
 
   render() {
@@ -155,8 +160,8 @@ class Chat extends Component {
         <button id="send" onClick={() => this.sendChat()}>Send</button>
         <button id="save" onClick={() => this.saveChat()}>SAVE CHAT</button>
         <button id="fetch" onClick={() => this.fetchChat()}>RETRIEVE CHAT</button>
-        <button id="get" onClick={() => this.getOtherPeerId()}>Get PeerId</button>
         <button id="call" onClick={() => this.callPeer()}>Call Peer</button>
+        <button id="dc" onClick={() => this.disconnect()}>Disconnect</button>
       </div>
     );
   } 
