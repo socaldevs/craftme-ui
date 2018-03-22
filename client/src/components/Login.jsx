@@ -41,8 +41,7 @@ export default class Login extends Component {
     };
 
     this.handleChange = (e,name) => {
-
-      this.setState({ [name]: e.target.value.trim("*") });
+      this.setState({ [name]: e.target.value });
     };
   }
   render() {
