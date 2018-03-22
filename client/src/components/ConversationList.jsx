@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Conversation from './Conversation.jsx';
 
 class ConversationList extends Component {
   constructor(props) {
@@ -11,17 +10,18 @@ class ConversationList extends Component {
     this.setUserName = this.setUserName.bind(this);
   }
 
-  setUserName() {
+  //TODO: debug, this is not working
+  setUserName(messagePerson) {
     let user = localStorage.getItem('username');
     let storage = [];
-    let messages = this.props.messages;
-    for (let i = 0; i < messages.length; i++) {
-      for (let j = 0; j < messages[i].length; j++) {
+    for (let i = 0; i < this.props.messages.length; i++) {
+      for (let j = 0; j < this.props.messages[i].length; j++) {
+        console.log('inside setUserName');
         if (
-          messages[i][j].sender_id !== user &&
-          !storage.includes(messages[i][j].sender_id)
+          this.props.messages[i][j].sender_id !== user &&
+          !storage.includes(this.props.messages[i][j].sender_id)
         ) {
-          storage.push(messages[i][j].sender_id);
+          storage.push(this.props.messages[i][j].sender_id);
         }
       }
     }
@@ -30,19 +30,24 @@ class ConversationList extends Component {
     });
   }
 
-  expand() {}
-
-  componentWillMount() {
+  //TODO: debug, this is not working
+  //trying to create an array with every person conversation exists
+  componentDidMount() {
     this.setUserName();
   }
 
   render() {
     return (
       <div>
-        <Conversation
-          messages={this.props.messages}
-          people={this.state.messagePerson}
-        />
+        {this.props.messages.map(message => {
+          return message.map(mess => {
+            return (
+              <div>
+                {mess.sender_id} : {mess.text}
+              </div>
+            );
+          });
+        })}
       </div>
     );
   }
