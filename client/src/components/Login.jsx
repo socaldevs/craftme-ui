@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from 'material-ui/Button';
+
 
 export default class Login extends Component {
   constructor(props) {
@@ -50,7 +51,7 @@ export default class Login extends Component {
           value={this.state.password}
           onChange={e => this.handleChange(e)}
         />
-        <RaisedButton onClick={this.login}>Login </RaisedButton>
+        <Button variant="raised" onClick={this.login}>Login </Button>
       </div>
     );
   }

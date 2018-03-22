@@ -1,9 +1,5 @@
 # craftme-ui
+Front end server deilvering React/Redux/React Routes with Material UI and Modal
 
-<<<<<<< HEAD
-
-![alt text]()
-=======
 # webpack
 npm run react-dev
->>>>>>> [socket client] setup
