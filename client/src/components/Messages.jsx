@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Conversation from './Conversation.jsx';
+import ConversationList from './ConversationList.jsx';
 export default class Messages extends Component {
   constructor(props) {
     super(props);
@@ -25,16 +27,10 @@ export default class Messages extends Component {
   }
 
   render() {
-    console.log(this.state.messages);
+    console.log('messages: ', this.state.messages);
     return (
       <div>
-        {this.state.messages.map(message => {
-          return (
-            <div>
-              {message.sender_id} : {message.text}
-            </div>
-          );
-        })}
+        <ConversationList messages={this.state.messages} />
       </div>
     );
   }
