@@ -52,7 +52,6 @@ export default class Login extends Component {
           onChange={e => this.handleChange(e)}
         />
         <Button variant="raised" onClick={this.login}>Login </Button>
-        <Calender/>    
       </div>
     );
   }

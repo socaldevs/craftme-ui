@@ -1,130 +1,109 @@
 import React, { Component } from "react";
 import BigCalendar from 'react-big-calendar'
+import moment from 'moment';
+import { fetchTeacherBookings, submitBookingToServer } from './../apiCaller.js';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 
-import moment from 'moment';
-
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 
-const events = [
-  {
-    id: 0,
-    title: 'All Day Event very long title',
-    allDay: true,
-    start: new Date(2015, 3, 0),
-    end: new Date(2015, 3, 1),
-  },
-  {
-    id: 1,
-    title: 'Long Event',
-    start: new Date(2015, 3, 7),
-    end: new Date(2015, 3, 10),
-  },
+export default class Calender extends Component {
+  constructor(props) {
+    super(props);
+    
+    this.state = {
+      bookings: [],
+      start: '',
+      end: '',
+      buttonStatus: true,    
+    };
 
-  {
-    id: 2,
-    title: 'DTS STARTS',
-    start: new Date(2016, 2, 13, 0, 0, 0),
-    end: new Date(2016, 2, 20, 0, 0, 0),
-  },
+    this.submitBooking = this.submitBooking.bind(this);
+    this.timeSlotSelected = this.timeSlotSelected.bind(this);
+  }
 
-  {
-    id: 3,
-    title: 'DTS ENDS',
-    start: new Date(2016, 10, 6, 0, 0, 0),
-    end: new Date(2016, 10, 13, 0, 0, 0),
-  },
-
-  {
-    id: 4,
-    title: 'Some Event',
-    start: new Date(2015, 3, 9, 0, 0, 0),
-    end: new Date(2015, 3, 9, 0, 0, 0),
-  },
-  {
-    id: 5,
-    title: 'Conference',
-    start: new Date(2015, 3, 11),
-    end: new Date(2015, 3, 13),
-    desc: 'Big conference for important people',
-  },
-  {
-    id: 6,
-    title: 'Meeting',
-    start: new Date(2015, 3, 12, 10, 30, 0, 0),
-    end: new Date(2015, 3, 12, 12, 30, 0, 0),
-    desc: 'Pre-meeting meeting, to prepare for the meeting',
-  },
-  {
-    id: 7,
-    title: 'Lunch',
-    start: new Date(2015, 3, 12, 12, 0, 0, 0),
-    end: new Date(2015, 3, 12, 13, 0, 0, 0),
-    desc: 'Power lunch',
-  },
-  {
-    id: 8,
-    title: 'Meeting',
-    start: new Date(2015, 3, 12, 14, 0, 0, 0),
-    end: new Date(2015, 3, 12, 15, 0, 0, 0),
-  },
-  {
-    id: 9,
-    title: 'Happy Hour',
-    start: new Date(2015, 3, 12, 17, 0, 0, 0),
-    end: new Date(2015, 3, 12, 17, 30, 0, 0),
-    desc: 'Most important meal of the day',
-  },
-  {
-    id: 10,
-    title: 'Dinner',
-    start: new Date(2015, 3, 12, 20, 0, 0, 0),
-    end: new Date(2015, 3, 12, 21, 0, 0, 0),
-  },
-  {
-    id: 11,
-    title: 'Birthday Party',
-    start: new Date(2015, 3, 13, 7, 0, 0),
-    end: new Date(2015, 3, 13, 10, 30, 0),
-  },
-  {
-    id: 12,
-    title: 'Late Night Event',
-    start: new Date(2015, 3, 17, 19, 30, 0),
-    end: new Date(2015, 3, 18, 2, 0, 0),
-  },
-  {
-    id: 13,
-    title: 'Multi-day Event',
-    start: new Date(2015, 3, 20, 19, 30, 0),
-    end: new Date(2015, 3, 22, 2, 0, 0),
-  },
-];
-
-let Calender = () => (
-  <React.Fragment>
-    <h3 className="callout">
-      Click an event to see more info, or drag the mouse over the calendar to
-      select a date/time range.
-    </h3>
-    <BigCalendar
-      style={{height: '100%'}}
-      selectable
-      events={events}
-      defaultView="week"
-      scrollToTime={new Date(1970, 1, 1, 6)}
-      defaultDate={new Date(2015, 3, 12)}
-      onSelectEvent={event => alert(event.title)}
-      onSelectSlot={slotInfo =>
-        alert(
-          `selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
-            `\nend: ${slotInfo.end.toLocaleString()}` +
-            `\naction: ${slotInfo.action}`
-        )
+  submitBooking() {
+    
+    const getSubmittedBooking = async () => {
+      const { start, end } = this.state;
+      // const { student_id, teacher_id } = this.props;
+      try {
+        // let booking = await submitBookingToServer(student_id, teacher_id, start, end);
+        let booking = await submitBookingToServer(5, 1, start, end);        
+        //datefying the string date
+        booking.title = 'Teacher name and student name'
+        booking.start = new Date(booking.start);
+        booking.end = new Date(booking.end);
+        this.setState({bookings: [...this.state.bookings, booking]});
+        console.log('state after the booking submittion', this.state.bookings);
+      } catch (error) {
+        console.error('error while trying to submit booking', error);
       }
-    />
-  </React.Fragment>
-)
+    };
+    getSubmittedBooking();
+  }
 
-export default Calender;
+  timeSlotSelected(event){
+    //TODO: check if the range hits an occupied slot
+    //check if the slot has a title (occupied)
+    if(event.hasOwnProperty('title')){
+      console.log('this is taken');
+      //maybe show an error message saying you cant book this because its taken  
+    } else if (event.hasOwnProperty('slots')) {
+      console.log('this is available');
+      const { start, end } = event;
+      this.setState({start});
+      this.setState({end});
+      this.setState({ buttonStatus:false });  
+    }
+    
+  }
+
+  componentDidMount(){
+    // TODO: Grabbing the teacher_id and student_id from the state
+    const getBookings = async () => {
+      try {
+        // let bookings = await fetchTeacherBookings(this.state.teacher_id);
+        let bookings = await fetchTeacherBookings(1);
+        //datefying the string dates
+        bookings.map((booking) => {
+          booking.title = 'unavailable'
+          booking.start = new Date(booking.start);
+          booking.end = new Date(booking.end);
+          return booking;
+        });
+        this.setState({bookings});
+      } catch (error) {
+        console.error('error while trying to set the state from server bookings', error);
+      }
+    };
+    getBookings();    
+  }
+
+  render(){
+    return (
+      <React.Fragment>
+        <h3 className="callout">
+          Drag the mouse over the calendar to select a time range.
+        </h3>
+        <p>Selected timeslot: from {String(this.state.start)} to {String(this.state.end)}</p>
+        <button type="button" onClick={this.submitBooking} 
+          disabled={this.state.buttonStatus} >Submit
+        </button>
+        <BigCalendar
+          style={ {height: '100%'} }
+          selectable
+          events={ this.state.bookings }
+          defaultView="week"
+          scrollToTime={ new Date(1970, 1, 1, 6) }
+          defaultDate={ new Date() }
+          onSelectEvent={ this.timeSlotSelected }
+          onSelectSlot={ this.timeSlotSelected }
+          />
+      </React.Fragment>
+    );
+  }    
+}
+  
+
+

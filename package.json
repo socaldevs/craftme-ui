@@ -6,11 +6,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "react-dev": "webpack -d --watch",
+<<<<<<< e6aba92f59e3066133f5830db588ea8aafbd8f49
 <<<<<<< a8963c732c0c7165f47f6910aee6c325838ba106
     "start": "nodemon ./server/index.js"
 =======
     "start": "node ./server/"
 >>>>>>> [Calender] npm  installs Big Calender
+=======
+    "server-dev": "node ./server/",
+    "start": "npm-run-all -p server-dev react-dev"
+>>>>>>> [Calender] finishes mvp for calender ui
   },
   "repository": {
     "type": "git",
@@ -51,6 +56,7 @@
   },
   "devDependencies": {
     "css-loader": "^0.28.11",
+    "npm-run-all": "^4.1.2",
     "style-loader": "^0.20.3",
     "webpack-dev-server": "^3.1.1"
   }
