@@ -6,7 +6,7 @@ class Chat extends Component {
   constructor(props) {
     super(props); 
     this.state = {
-      handle: '',
+      handle: localStorage.getItem('username') || 'Kanye',
       message: '',
       messages: [],
       feedback: '',
@@ -55,7 +55,6 @@ class Chat extends Component {
     if (this.props.roomId !== nextProps.roomId) { 
       this.socket.emit('exit', this.props.roomId);
       this.socket.emit('room', nextProps.roomId);
-      // this.peer.disconnect();
       this.setState({ messages: [], feedback: '' });
     }
     //P2P
@@ -73,6 +72,10 @@ class Chat extends Component {
           video.src = window.URL.createObjectURL(remoteStream);
           video.play();
         });
+        this.socket.on('endCall', () => {
+          call.close();
+          video.pause();
+        })
       }, (err) => {
         console.log('Failed to get local stream', err);
       });
@@ -98,20 +101,16 @@ class Chat extends Component {
     }
   }
 
-  disconnect() {
-    this.peer.disconnect();
-  }
+  // disconnect() {
+  //   mediaConnection.close();
+  // }
 
   setText(e) {
-    if (e.target.id === 'handle') {
-      this.setState({ handle: e.target.value });
-    } else {
-      this.setState({ message: e.target.value });
-      this.socket.emit('typing', {
-        room: this.props.roomId,
-        feedback: `${this.state.handle} is typing...`,
-      });
-    }
+    this.setState({ message: e.target.value });
+    this.socket.emit('typing', {
+      room: this.props.roomId,
+      feedback: `${this.state.handle} is typing...`,
+    });
   }
 
   sendChat() {
@@ -131,10 +130,16 @@ class Chat extends Component {
         const call = peer.call(this.state.otherPeerId, stream);
         call.on('stream', (remoteStream) => {
           let video = document.createElement('video');
+          //video.setAttribute('id', 'video-player');
           document.body.append(video);
           video.src = window.URL.createObjectURL(remoteStream);
           video.play();
+          
         });
+        this.socket.on('endCall', () => {
+          call.close();
+          video.pause();
+        })
       }, (err) => {
         console.log('Failed to get local stream', err);
       });
@@ -150,12 +155,11 @@ class Chat extends Component {
         <div id="chat-window">
           <div id="output">
             {this.state.messages.map((data,i) => {
-              return <div key={i}><strong>{data.handle}</strong>: {data.message}</div>
+              return <div key={i}><strong>{this.state.handle}</strong>: {data.message}</div>
             })}
           </div>
           <div id="feedback">{this.state.feedback}</div>
         </div>
-        <input id="handle" type="text" placeholder="Handle" value={this.state.handle} onChange={e => this.setText(e)}/>
         <input id="message" type="text" placeholder="Message" value={this.state.message} onChange={e => this.setText(e)}/>
         <button id="send" onClick={() => this.sendChat()}>Send</button>
         <button id="save" onClick={() => this.saveChat()}>SAVE CHAT</button>
