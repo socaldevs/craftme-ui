@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "react-dev": "webpack -d --watch",
-    "start": "nodemon ./server/index.js"
+    "server-dev": "node ./server/",
+    "start": "npm-run-all -p server-dev react-dev"
   },
   "repository": {
     "type": "git",
@@ -28,9 +29,11 @@
     "jwt-decode": "^2.2.0",
     "npm": "^5.7.1",
     "material-ui": "^1.0.0-beta.38",
+    "moment": "^2.21.0",
     "nodemon": "^1.17.2",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
+    "react-big-calendar": "^0.18.0",
     "react-dom": "^16.2.0",
     "react-event-listener": "^0.5.3",
     "react-popper": "^0.8.3",
@@ -44,6 +47,9 @@
     "webpack-cli": "^2.0.12"
   },
   "devDependencies": {
+    "css-loader": "^0.28.11",
+    "npm-run-all": "^4.1.2",
+    "style-loader": "^0.20.3",
     "webpack-dev-server": "^3.1.1"
   }
 }
