@@ -20,6 +20,7 @@ export default class Login extends Component {
         if (data) {
           localStorage.setItem('token', data.data.token);
           localStorage.setItem('username', data.data.username);
+          localStorage.setItem('user_id', data.data.id);
         }
         console.log(data);
       } catch (error) {
