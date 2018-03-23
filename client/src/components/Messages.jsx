@@ -7,19 +7,8 @@ export default class Messages extends Component {
     this.state = {
       recipient: '',
       message: '',
-      messages: []
-    };
-    this.fetchAllMessages = async () => {
-      try {
-        let id = parseInt(localStorage.user_id);
-        let data = await axios.get(
-          `http://localhost:3000/user/messages/fetchAllMessages/${id}`
-        );
-        this.setState({ messages: data.data });
-      } catch (error) {
-        console.log('Error with fetchAllMessages on front end', error);
-        return;
-      }
+      conversations: [],
+      sent: false
     };
     this.sendMessage = this.sendMessage.bind(this);
   }
@@ -38,6 +27,7 @@ export default class Messages extends Component {
           recipient_id: id.data.id
         }
       );
+      this.setState({ sent: true });
     } catch (error) {
       console.log('Error with sendMessage', error);
       return;
@@ -48,8 +38,17 @@ export default class Messages extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  componentWillMount() {
-    this.fetchAllMessages();
+  async componentDidMount() {
+    try {
+      let id = parseInt(localStorage.user_id);
+      let data = await axios.get(
+        `http://localhost:3000/user/messages/fetchAllConversationsById/${id}`
+      );
+      this.setState({ conversations: data.data });
+    } catch (error) {
+      console.log('Error with fetchAllMessages on front end', error);
+      return;
+    }
   }
 
   render() {
@@ -69,7 +68,7 @@ export default class Messages extends Component {
           onChange={e => this.handleChange(e)}
         />
         <button onClick={() => this.sendMessage()}>Send </button>
-        <ConversationList messages={this.state.messages} />
+        <ConversationList conversations={this.state.conversations} />
       </div>
     );
   }
