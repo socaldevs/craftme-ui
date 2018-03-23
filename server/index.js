@@ -5,4 +5,13 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, '/../client/dist')));
 
-app.listen(8080, () => console.log('listening on 8080'));
+
+app.get('/*', function(req, res) {
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'), function(err) {
+      if (err) {
+        res.status(500).send(err)
+      }
+    })
+  })
+
+app.listen(1337, () => console.log('listening on 1337'));

@@ -82,12 +82,6 @@ class App extends Component {
           <MenuItem onClick={this.handleClose}><Link to="/chatrooms">ChatRooms</Link></MenuItem>
           <MenuItem onClick={this.handleClose}><Link to="/messages">Messages</Link></MenuItem>
         </Menu>
-        <Switch>
-    <Route path="/login" component={Login} />
-    <Route path="/signup" component={Signup} />
-    <Route path="/chatrooms" component={ChatRoomList} />
-    <Route path="/messages" component={Messages} />
-  </Switch>
           
           </Paper>
         </Grid>
@@ -103,10 +97,7 @@ class App extends Component {
            style={customStyles}
            ariaHideApp={false}
         >
-        <Link to="/calender">Calender</Link>
-        <Switch>
-    <Route path="/calender" component={Calender} />
-  </Switch>
+        <Calender/>
           <Button variant="raised" onClick={this.handleCloseModal}>Close Modal</Button>
         </ReactModal>
 
