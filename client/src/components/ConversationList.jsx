@@ -14,7 +14,7 @@ class ConversationList extends Component {
     try {
       let id = parseInt(e.target.getAttribute('data-id'));
       let conversations = await axios.get(
-        `http://localhost:3000/user/messages/fetchAllMessagesByConversationId/${id}`
+        process.env.REST_PATH + `/user/messages/fetchAllMessagesByConversationId/${id}`
       );
       this.setState({ conversation: conversations.data });
     } catch (error) {

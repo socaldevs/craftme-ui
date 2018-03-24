@@ -17,10 +17,10 @@ export default class Messages extends Component {
     try {
       let sender_id = parseInt(localStorage.user_id);
       let id = await axios.get(
-        `http://localhost:3000/user/getIdByUsername/${this.state.recipient}`
+        process.env.REST_PATH +`/user/getIdByUsername/${this.state.recipient}`
       );
       let message = await axios.post(
-        `http://localhost:3000/user/messages/sendMessage`,
+        process.env.REST_PATH +`/user/messages/sendMessage`,
         {
           text: this.state.message,
           sender_id: sender_id,
@@ -42,7 +42,7 @@ export default class Messages extends Component {
     try {
       let id = parseInt(localStorage.user_id);
       let data = await axios.get(
-        `http://localhost:3000/user/messages/fetchAllConversationsById/${id}`
+        process.env.REST_PATH +`/user/messages/fetchAllConversationsById/${id}`
       );
       this.setState({ conversations: data.data });
     } catch (error) {

@@ -14,7 +14,7 @@ export default class Lessons extends Component {
     try {
       let id = e.target.getAttribute('data-id');
       let chat = await axios.get(
-        `http://localhost:3000/user/fetchMongoChatById/${id}`
+        process.env.REST_PATH +`/user/fetchMongoChatById/${id}`
       );
       console.log('chat', chat);
       this.setState({ chats: chat.data });
@@ -28,7 +28,7 @@ export default class Lessons extends Component {
     let id = parseInt(localStorage.getItem('user_id'));
     try {
       let data = await axios.get(
-        `http://localhost:3000/user/fetchAllLessons/${id}`
+        process.env.REST_PATH +`/user/fetchAllLessons/${id}`
       );
       this.setState({ lessons: data.data });
     } catch (error) {

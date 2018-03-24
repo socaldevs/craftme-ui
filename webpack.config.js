@@ -2,6 +2,8 @@ var path = require('path');
 var SRC_DIR = path.join(__dirname, '/client/src');
 var DIST_DIR = path.join(__dirname, '/client/dist');
 
+const Dotenv = require('dotenv-webpack');
+
 module.exports = {
   entry: `${SRC_DIR}/entry.js`,
   output: {
@@ -23,5 +25,8 @@ module.exports = {
         use: ['style-loader', 'css-loader']
       },
     ]
-  }
+  },
+  plugins: [
+    new Dotenv()
+  ]
 };

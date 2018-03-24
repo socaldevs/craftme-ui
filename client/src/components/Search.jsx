@@ -129,7 +129,7 @@ class Search extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.search = async () => {
       try {
-        let data = await axios.get('http://localhost:3000/user/getAllCrafts');
+        let data = await axios.get(process.env.REST_PATH +'/user/getAllCrafts');
         if (data) {
           let newPull = [];
           for(var element of data.data){
