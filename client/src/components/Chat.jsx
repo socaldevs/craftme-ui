@@ -6,13 +6,13 @@ class Chat extends Component {
   constructor(props) {
     super(props); 
     this.state = {
-      handle: localStorage.getItem('username') || 'Kanye',
       message: '',
       messages: [],
       feedback: '',
       peerId: '',
       otherPeerId: '',
     }
+    this.username = localStorage.getItem('username') || 'Kanye';
   }
   componentDidMount() { 
     this.socket = io('http://localhost:3001/');
@@ -22,13 +22,13 @@ class Chat extends Component {
     this.socket.on('confirmation', (data) => {
       console.log('message from server:', data)
       if (this.state.messages.length !== 0) {
-        this.socket.emit('renderchat', {
+        this.socket.emit('renderChat', {
           messages: this.state.messages,
           room: this.props.roomId,
         });
       } 
     });
-    this.socket.on('renderchat', (data) => {
+    this.socket.on('renderChat', (data) => {
       this.setState({ messages: [...data]});
     })
     this.socket.on('chat', (data) => {
@@ -36,6 +36,7 @@ class Chat extends Component {
         messages: [...this.state.messages, data], 
         feedback: '',
       });
+      console.log('this.state.messages',this.state.messages);
     })
     this.socket.on('typing', (data) => {
       this.setState({ feedback: data});
@@ -68,7 +69,7 @@ class Chat extends Component {
         call.answer(stream); 
         call.on('stream', (remoteStream) => {
           let video = document.createElement('video');
-          document.body.append(video);
+          this.videoContainer.append(video);
           video.src = window.URL.createObjectURL(remoteStream);
           video.play();
         });
@@ -80,7 +81,6 @@ class Chat extends Component {
         console.log('Failed to get local stream', err);
       });
     });
-    this.peer.on('disconnect', () => console.log('Peer has been disconnected'));
   }
 
   async saveChat () {
@@ -92,33 +92,21 @@ class Chat extends Component {
     }
   }
 
-  async fetchChat () {
-    const testId = '5ab06c447ee8e1cddeddd726'; //TEST
-    try {
-      const data = await axios.get(`http://localhost:3001/chat/fetch/${testId}`);
-    } catch(err) {
-      console.log('err from fetchChat', err);
-    }
-  }
-
-  // disconnect() {
-  //   mediaConnection.close();
-  // }
-
   setText(e) {
     this.setState({ message: e.target.value });
     this.socket.emit('typing', {
       room: this.props.roomId,
-      feedback: `${this.state.handle} is typing...`,
+      feedback: `${this.username} is typing...`,
     });
   }
 
   sendChat() {
     this.socket.emit('chat', {
       room: this.props.roomId,
-      handle: this.state.handle,
+      handle: this.username,
       message: this.state.message
     });
+    this.setState({ message: '' });
   }
 
   async callPeer() { 
@@ -127,17 +115,16 @@ class Chat extends Component {
     try {
       let getOtherPeerId = await this.socket.emit('getOtherPeerId', this.props.roomId);
       let videoCall = await navigator.getUserMedia({video: true, audio: true}, (stream) => {
-        const call = peer.call(this.state.otherPeerId, stream);
-        call.on('stream', (remoteStream) => {
+        this.call = peer.call(this.state.otherPeerId, stream);
+        this.call.on('stream', (remoteStream) => {
           let video = document.createElement('video');
           //video.setAttribute('id', 'video-player');
-          document.body.append(video);
+          this.videoContainer.append(video);
           video.src = window.URL.createObjectURL(remoteStream);
           video.play();
-          
         });
         this.socket.on('endCall', () => {
-          call.close();
+          this.call.close();
           video.pause();
         })
       }, (err) => {
@@ -152,20 +139,20 @@ class Chat extends Component {
     return (
       <div>
         Hello from Chat #{this.props.roomId}!
+        <div id="video-container" ref={(input) => { this.videoContainer = input; }} />
+        <br />
         <div id="chat-window">
           <div id="output">
             {this.state.messages.map((data,i) => {
-              return <div key={i}><strong>{this.state.handle}</strong>: {data.message}</div>
+              return <div key={i}><strong>{data.handle}</strong>: {data.message}</div>
             })}
           </div>
           <div id="feedback">{this.state.feedback}</div>
         </div>
         <input id="message" type="text" placeholder="Message" value={this.state.message} onChange={e => this.setText(e)}/>
-        <button id="send" onClick={() => this.sendChat()}>Send</button>
+        <button id="send" onClick={() => this.sendChat()}>SEND</button>
         <button id="save" onClick={() => this.saveChat()}>SAVE CHAT</button>
-        <button id="fetch" onClick={() => this.fetchChat()}>RETRIEVE CHAT</button>
-        <button id="call" onClick={() => this.callPeer()}>Call Peer</button>
-        <button id="dc" onClick={() => this.disconnect()}>Disconnect</button>
+        <button id="call" className="glyphicon glyphicon-facetime-video" onClick={() => this.callPeer()} />
       </div>
     );
   } 

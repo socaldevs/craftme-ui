@@ -15,6 +15,9 @@ import Paper from 'material-ui/Paper';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import Menu, { MenuItem } from 'material-ui/Menu';
+//TEST
+import TestTranslate from './TestTranslate.jsx';
+//TEST
 
 const styles = theme => ({
   root: {
@@ -67,11 +70,15 @@ class App extends Component {
           <MenuItem onClick={this.handleClose}><Link to="/login">Login</Link></MenuItem>
           <MenuItem onClick={this.handleClose}><Link to="/signup">Signup</Link></MenuItem>
           <MenuItem onClick={this.handleClose}><Link to="/chatrooms">ChatRooms</Link></MenuItem>
+          <MenuItem onClick={this.handleClose}><Link to="/testtranslate">Test Translate Component </Link></MenuItem>
+
         </Menu>
         <Switch>
     <Route path="/login" component={Login} />
     <Route path="/signup" component={Signup} />
     <Route path="/chatrooms" component={ChatRoomList} />
+    <Route path="/testtranslate" component={TestTranslate} />
+
   </Switch>
           
           </Paper>
