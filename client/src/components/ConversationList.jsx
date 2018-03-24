@@ -1,53 +1,56 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class ConversationList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      messagePerson: [],
-      lastMessage: ''
+      conversation: []
     };
-    this.setUserName = this.setUserName.bind(this);
+    this.grabConversations = this.grabConversations.bind(this);
   }
 
-  //TODO: debug, this is not working
-  setUserName(messagePerson) {
-    let user = localStorage.getItem('username');
-    let storage = [];
-    for (let i = 0; i < this.props.messages.length; i++) {
-      for (let j = 0; j < this.props.messages[i].length; j++) {
-        console.log('inside setUserName');
-        if (
-          this.props.messages[i][j].sender_id !== user &&
-          !storage.includes(this.props.messages[i][j].sender_id)
-        ) {
-          storage.push(this.props.messages[i][j].sender_id);
-        }
-      }
+  async grabConversations(e) {
+    try {
+      let id = parseInt(e.target.getAttribute('data-id'));
+      let conversations = await axios.get(
+        `http://localhost:3000/user/messages/fetchAllMessagesByConversationId/${id}`
+      );
+      this.setState({ conversation: conversations.data });
+    } catch (error) {
+      console.log('Error with grabConversations', error);
+      return;
     }
-    this.setState({
-      messagePerson: storage
-    });
   }
 
-  //TODO: debug, this is not working
-  //trying to create an array with every person conversation exists
-  componentDidMount() {
-    this.setUserName();
-  }
+  componentDidMount() {}
 
   render() {
     return (
       <div>
-        {this.props.messages.map(message => {
-          return message.map(mess => {
-            return (
-              <div>
-                {mess.sender_id} : {mess.text}
-              </div>
-            );
-          });
+        {this.props.conversations.map(conversation => {
+          return (
+            <div
+              data-id={conversation.id}
+              onClick={e => this.grabConversations(e)}
+            >
+              View your conversation with:
+              {conversation.sender}
+            </div>
+          );
         })}
+        <br />
+        <div>
+          {this.state.conversation
+            ? this.state.conversation.map(conv => {
+                return (
+                  <div>
+                    {conv.sender} : {conv.text}
+                  </div>
+                );
+              })
+            : null}
+        </div>
       </div>
     );
   }
