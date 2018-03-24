@@ -9,12 +9,15 @@ import Signup from './Signup.jsx';
 import ChatRoomList from './ChatRoomList.jsx';
 import Lessons from './Lessons.jsx';
 import Messages from './Messages.jsx';
+import Feedback from './Feedback.jsx';
 import PropTypes from 'prop-types';
+import TestTranslate from './TestTranslate.jsx';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import Menu, { MenuItem } from 'material-ui/Menu';
+import axios from 'axios';
 
 const styles = theme => ({
   root: {
@@ -41,6 +44,14 @@ class App extends Component {
   }
 
   handleClose() {
+    this.setState({ anchorEl: null });
+  }
+
+  async handleLogoutClick() {
+    await axios.get(`http://localhost:3000/auth/signout`);
+    delete localStorage.token;
+    delete localStorage.user_id;
+    delete localStorage.username;
     this.setState({ anchorEl: null });
   }
 
@@ -74,38 +85,48 @@ class App extends Component {
                   <Link to="/chatrooms">ChatRooms</Link>
                 </MenuItem>
                 <MenuItem onClick={this.handleClose}>
-                  <Link to="/lessons">Lessons</Link>
+                  <Link to="/testtranslate">Test Translate Component </Link>
                 </MenuItem>
                 <MenuItem onClick={this.handleClose}>
-                  <Link to="/messages">Messages</Link>
+                  <Link to="/lessons">Lessons</Link>
+                </MenuItem>
+                <MenuItem onClick={() => this.handleLogoutClick()}>
+                  Logout
+                </MenuItem>
+                <MenuItem onClick={this.handleClose}>
+                  <Link to="/feedback">Feedback</Link>
                 </MenuItem>
               </Menu>
               <Switch>
                 <Route path="/login" component={Login} />
                 <Route path="/signup" component={Signup} />
-                <Route path="/chatrooms" component={ChatRoomList} />
-                <Route path="/messages" component={Messages} />
-                <Route path="/lessons" component={Lessons} />
+                <Route
+                  path="/chatrooms"
+                  component={ChatRoomList}
+                  // component={props => (
+                  //   <Protected component={ChatRoomList} {...props} />
+                />
+                <Route path="/testtranslate" component={TestTranslate} />
+                <Route
+                  path="/messages"
+                  component={props => (
+                    <Protected component={Messages} {...props} />
+                  )}
+                />
+                <Route
+                  path="/lessons"
+                  component={props => (
+                    <Protected component={Lessons} {...props} />
+                  )}
+                />
+                <Route
+                  path="/feedback"
+                  component={props => (
+                    <Protected component={Feedback} {...props} />
+                  )}
+                />
               </Switch>
             </Paper>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Paper className={this.state}>xs=12 sm=6</Paper>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Paper className={this.state}>xs=12 sm=6</Paper>
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <Paper className={this.state}>xs=6 sm=3</Paper>
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <Paper className={this.state}>xs=6 sm=3</Paper>
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <Paper className={this.state}>xs=6 sm=3</Paper>
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <Paper className={this.state}>xs=6 sm=3</Paper>
           </Grid>
         </Grid>
       </div>
