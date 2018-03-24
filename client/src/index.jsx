@@ -14,11 +14,9 @@ console.log('this is what store looks like!', store.getState());
 
 ReactDOM.render(
   <BrowserRouter>
-    <MuiThemeProvider>
     <Provider store={store}>
       <App />
     </Provider>
-    </MuiThemeProvider>
   </BrowserRouter>,
   document.getElementById("app")
 );
