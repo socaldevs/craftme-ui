@@ -14,4 +14,4 @@ app.get('/*', function(req, res) {
     })
   })
 
-app.listen(1337, () => console.log('listening on 1337'));
+app.listen(8080, () => console.log('listening on 8080'));

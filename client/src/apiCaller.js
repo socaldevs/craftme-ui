@@ -1,11 +1,6 @@
 const axios = require('axios');
 
-<<<<<<< HEAD
 const SERVER = process.env.REST_PATH;
-=======
-const SERVER = 'http://localhost:3000';
-const SOCKET_SERVER = 'http://localhost:3001/';
->>>>>>> [components] added LanguageSelector.jsx and TextToTranslate.jsx
 
 
 export const fetchTeacherAvailability = async (teacher_id) => {
