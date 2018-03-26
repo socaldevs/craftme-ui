@@ -14,8 +14,14 @@ import { Switch, Route, Link } from 'react-router-dom';
 
 
 
+const StyleButton = styled(Button)`
+width: 25%;
+`;
+
+const MenuDiv = styled.div`
+margin-left: 85%;
+`;
 const StyledDiv = styled.div`
-margin-top: 20%;
 margin-left: 40%;
 margin-right: 40%;
 `;
@@ -122,11 +128,9 @@ class Search extends React.Component {
       value: '',
       suggestions: [],
       anchorEl: null,
+      anchorEl2: null,
       showModal: false
     }
-    this.handleSuggestionsFetchRequested = this.handleSuggestionsFetchRequested.bind(this);
-    this.handleSuggestionsClearRequested= this.handleSuggestionsClearRequested.bind(this);
-    this.handleChange = this.handleChange.bind(this);
     this.search = async () => {
       try {
         let data = await axios.get(process.env.REST_PATH +'/user/getAllCrafts');
@@ -142,26 +146,30 @@ class Search extends React.Component {
         return;
       }
       }
-      this.handleClick = this.handleClick.bind(this);
-      this.handleClose= this.handleClose.bind(this);
-      this.handleOpenModal = this.handleOpenModal.bind(this);
-      this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.handleSuggestionsFetchRequested = this.handleSuggestionsFetchRequested.bind(this);
+    this.handleSuggestionsClearRequested= this.handleSuggestionsClearRequested.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleKey = this.handleKey.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleClick2 = this.handleClick2.bind(this);
+    this.handleClose= this.handleClose.bind(this);
+    this.handleClose2= this.handleClose2.bind(this);
+    
   }
   handleClick(event){
     this.setState({ anchorEl: event.currentTarget });
+  };
+  handleClick2(event){
+    this.setState({ anchorEl2: event.currentTarget });
   };
 
   handleClose(){
     this.setState({ anchorEl: null });
   };
+  handleClose2(){
+    this.setState({ anchorEl2: null });
+  };
 
-  handleOpenModal () {
-    this.setState({ showModal: true });
-  };
-  
-  handleCloseModal () {
-    this.setState({ showModal: false });
-  };
 
 
   handleSuggestionsFetchRequested({ value }){
@@ -182,18 +190,52 @@ class Search extends React.Component {
     });
   };
 
+  handleKey(event){
+    if(event.key == 'Enter'){
+      console.log('enter press: ', this.state.value)
+    }
+  };
+
   componentDidMount(){
     this.search();
   }
 
   render() {
+    //console.log(localStorage.username)
+    //WELCOME! {localStorage.username}
     const { classes } = this.props;
     const anchorEl  = this.state.anchorEl;
+    const anchorEl2  = this.state.anchorEl2;
       return (
         <div>
-          <Grid container spacing={40}>
-          <Grid item xs={12}>
-            <Paper >
+          <Grid container spacing={24}>
+          <Grid item xs={12} sm={6}>
+          <Paper >
+            <Button
+                aria-owns={anchorEl2 ? 'simple-menu2' : null}
+                aria-haspopup="true"
+                onClick={this.handleClick2}
+              >
+                WELCOME! {localStorage.username}
+              </Button>
+              <Menu
+                id="simple-menu2"
+                anchorEl={anchorEl2}
+                open={Boolean(anchorEl2)}
+                onClose={this.handleClose2}
+              >
+                <MenuItem onClick={this.handleClose2}>
+                  Logout
+                </MenuItem>
+                <MenuItem onClick={this.handleClose2}>
+                  Profile
+                </MenuItem>
+              </Menu>
+          </Paper>
+        </Grid>
+          <Grid item xs={12} sm={6}>
+          <Paper>
+            <MenuDiv>
             <Button
                 aria-owns={anchorEl ? 'simple-menu' : null}
                 aria-haspopup="true"
@@ -201,6 +243,7 @@ class Search extends React.Component {
               >
                 Open Menu
               </Button>
+              
               <Menu
                 id="simple-menu"
                 anchorEl={anchorEl}
@@ -229,29 +272,19 @@ class Search extends React.Component {
                   <Link to="/feedback">Feedback</Link>
                 </MenuItem>
               </Menu>
-
+              </MenuDiv>
 
             </Paper>
           </Grid>
           </Grid>
         <StyledDiv >
         <Grid container spacing={40}>
+          <Grid item xs={6} sm={3}>
+          </Grid>
+          <h1>CraftMe</h1>
+          <img src="logo.png" alt="logo" height="300" width="303" />        
           <Grid item xs={12}>
-            <Paper >xs=12</Paper>
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <Paper ></Paper>
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <Paper ></Paper>
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <Paper ></Paper>
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <Paper ></Paper>
-          </Grid>        
-          <Grid item xs={12}>
+          
             <Autosuggest 
             theme={{
             container: classes.container,
@@ -271,8 +304,10 @@ class Search extends React.Component {
             placeholder: 'Search a Skill',
             value: this.state.value,
             onChange: this.handleChange,
+            onKeyPress: this.handleKey,
           }}
         />
+
           </Grid>
         </Grid>
       </StyledDiv>

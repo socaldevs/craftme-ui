@@ -67,7 +67,7 @@ export default class Login extends Component {
   }
 
   render() {
-    //console.log("HI", process.env.PATH)
+    //console.log(process.env.REST_PATH +'/auth/login')
     return (
       <StyledDiv>
         <h1>CraftMe</h1>
