@@ -10,13 +10,15 @@ import Grid from './Grid.jsx'
 import { Switch, Route, Link } from 'react-router-dom';
 
 
+
+
 // const StyledPopup = styled(Popup)`
 // font-size: 30px;
 // width: 200%;
 // padding: 20px 10px;
 // `;
 const StyleButton = styled(Button)`
-width: 30%;
+width: 25%;
 `;
 
 const StyledDiv = styled.div`
@@ -35,7 +37,7 @@ export default class Login extends Component {
 
     this.login = async () => {
       try {
-        let data = await axios.post('http://localhost:3000/auth/login', {
+        let data = await axios.post(process.env.REST_PATH +'/auth/login', {
           username: this.state.username,
           password: this.state.password
         });
@@ -65,6 +67,7 @@ export default class Login extends Component {
   }
 
   render() {
+    //console.log(process.env.REST_PATH +'/auth/login')
     return (
       <StyledDiv>
         <h1>CraftMe</h1>

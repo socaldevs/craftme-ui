@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const SERVER = 'http://localhost:3000';
+const SERVER = process.env.REST_PATH;
 
 
 export const fetchTeacherBookings = async (teacher_id) => {

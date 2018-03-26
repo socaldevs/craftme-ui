@@ -1,3 +1,11 @@
+body  {
+  background-color: #daa26e;
+  background-size:     cover;                     
+  background-repeat:   no-repeat;
+  background-position: center center; 
+  /* <------ background-image: url("https://ed.stanford.edu/sites/default/files/news_images/math2.jpeg");*/
+}
+
 #chat-window{
   height: 200px;
   overflow: auto;

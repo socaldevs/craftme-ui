@@ -15,7 +15,7 @@ class Chat extends Component {
     this.username = localStorage.getItem('username') || 'Kanye';
   }
   componentDidMount() { 
-    this.socket = io('http://localhost:3001/');
+    this.socket = io(process.env.SOCKET_PATH +'/');
     this.socket.on('connect', () => {
       this.socket.emit('room', this.props.roomId);
     });
@@ -59,7 +59,7 @@ class Chat extends Component {
       this.setState({ messages: [], feedback: '' });
     }
     //P2P
-    this.peer = new Peer({key: 'lwjd5qra8257b9'});
+    this.peer = new Peer({key: process.env.PEERKEY});
     this.peer.on('open', (id) => {
       this.setState({ peerId: id });
     });
@@ -86,7 +86,7 @@ class Chat extends Component {
   async saveChat () {
     const { messages } = this.state;
     try {
-      const data = await axios.post('http://localhost:3001/chat/save/', { messages });
+      const data = await axios.post(process.env.SOCKET_PATH + '/chat/save/', { messages });
     } catch(err) {
       console.log('err from saveChat', err);
     }
