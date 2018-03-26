@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client/dist/socket.io.js';
 import axios from 'axios';
+import TextToTranslate from './TextToTranslate.jsx';
+import LanguageSelector from './LanguageSelector.jsx';
 
 class Chat extends Component {
   constructor(props) {
@@ -11,8 +13,11 @@ class Chat extends Component {
       feedback: '',
       peerId: '',
       otherPeerId: '',
+      translateFrom: '',
+      translateTo: '',
     }
     this.username = localStorage.getItem('username') || 'Kanye';
+    this.selectLanguage = this.selectLanguage.bind(this);
   }
   componentDidMount() { 
     this.socket = io(process.env.SOCKET_PATH +'/');
@@ -36,7 +41,7 @@ class Chat extends Component {
         messages: [...this.state.messages, data], 
         feedback: '',
       });
-      console.log('this.state.messages',this.state.messages);
+
     })
     this.socket.on('typing', (data) => {
       this.setState({ feedback: data});
@@ -50,6 +55,7 @@ class Chat extends Component {
     this.socket.on('fetchedPeerId', (data) => {
       this.setState({ otherPeerId: data });
     });
+    
   }
 
   componentWillReceiveProps(nextProps) {
@@ -131,20 +137,33 @@ class Chat extends Component {
         console.log('Failed to get local stream', err);
       });
     } catch(err) {
-      console.log('err from callPeer', err)
+      console.log('err from callPeer', err);
     }
   }
 
+  selectLanguage(e){
+    e.target.className === 'from' ? 
+    this.setState({ translateFrom: e.target.value }) :
+    this.setState({ translateTo: e.target.value })
+  }
+
   render() {
+    console.log('from chat', this.state.translateFrom, this.state.translateTo);
     return (
       <div>
         Hello from Chat #{this.props.roomId}!
+        <LanguageSelector selectLanguage={this.selectLanguage} />
         <div id="video-container" ref={(input) => { this.videoContainer = input; }} />
         <br />
         <div id="chat-window">
           <div id="output">
             {this.state.messages.map((data,i) => {
-              return <div key={i}><strong>{data.handle}</strong>: {data.message}</div>
+              return <TextToTranslate 
+                handle={data.handle} 
+                message={data.message} 
+                translateFrom={this.state.translateFrom}
+                translateTo={this.state.translateTo}
+                key={i} />
             })}
           </div>
           <div id="feedback">{this.state.feedback}</div>
@@ -155,7 +174,7 @@ class Chat extends Component {
         <button id="call" className="glyphicon glyphicon-facetime-video" onClick={() => this.callPeer()} />
       </div>
     );
-  } 
+  }
 }
 
 export default Chat;

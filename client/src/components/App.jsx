@@ -11,7 +11,6 @@ import Lessons from './Lessons.jsx';
 import Messages from './Messages.jsx';
 //import Feedback from './Feedback.jsx';
 import PropTypes from 'prop-types';
-import TestTranslate from './TestTranslate.jsx';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Grid from './Grid.jsx';
@@ -31,7 +30,100 @@ class App extends Component {
   render() {
     //console.log(process.env.REST_PATH)
     return (
+<<<<<<< HEAD
     <div >
+=======
+      <div className={this.state}>
+        <Grid container spacing={24}>
+          <Grid item xs={12}>
+            <Paper className={this.state}>
+              <Button
+                aria-owns={anchorEl ? 'simple-menu' : null}
+                aria-haspopup="true"
+                onClick={this.handleClick}
+              >
+                Open Menu
+              </Button>
+              <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={this.handleClose}
+              >
+                <MenuItem onClick={this.handleClose}>
+                  <Link to="/login">Login</Link>
+                </MenuItem>
+                <MenuItem onClick={this.handleClose}>
+                  <Link to="/signup">Signup</Link>
+                </MenuItem>
+                <MenuItem onClick={this.handleClose}>
+                  <Link to="/chatrooms">ChatRooms</Link>
+                </MenuItem>
+                <MenuItem onClick={this.handleClose}>
+                  <Link to="/lessons">Lessons</Link>
+                </MenuItem>
+                <MenuItem onClick={() => this.handleLogoutClick()}>
+                  Logout
+                </MenuItem>
+                <MenuItem onClick={this.handleClose}>
+                  <Link to="/feedback">Feedback</Link>
+                </MenuItem>
+              </Menu>
+              <Switch>
+                <Route path="/login" component={Login} />
+                <Route path="/signup" component={Signup} />
+                <Route
+                  path="/chatrooms"
+                  component={ChatRoomList}
+                  // component={props => (
+                  //   <Protected component={ChatRoomList} {...props} />
+                />
+                <Route
+                  path="/messages"
+                  component={props => (
+                    <Protected component={Messages} {...props} />
+                  )}
+                />
+                <Route
+                  path="/lessons"
+                  component={props => (
+                    <Protected component={Lessons} {...props} />
+                  )}
+                />
+                <Route
+                  path="/feedback"
+                  component={props => (
+                    <Protected component={Feedback} {...props} />
+                  )}
+                />
+              </Switch>
+            </Paper>
+          </Grid>
+        </Grid>
+      </div>
+    );
+  }
+}
+App.propTypes = {
+  classes: PropTypes.object.isRequired
+};
+export default withStyles(styles)(App);
+
+{
+  /* <header>
+<ul>
+  <li>
+    <Link to="/login">Login</Link>
+  </li>
+  <li>
+    <Link to="/signup">Signup</Link>
+  </li>
+  <li>
+    <Link to="/chatrooms">ChatRooms</Link>
+  </li>
+</ul>
+<div>
+>>>>>>> [components] added LanguageSelector.jsx and TextToTranslate.jsx
   <Switch>
   <Route path="/messages" component={props => (<Protected component={Messages} {...props} />)}/>
   <Route path="/lessons" component={props => (<Protected component={Lessons} {...props} />)}/>
