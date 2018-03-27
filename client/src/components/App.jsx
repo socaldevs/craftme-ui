@@ -29,7 +29,7 @@ class App extends Component {
   }
 
   render() {
-    //console.log(process.env.REST_PATH)
+    console.log(process.env.REST_PATH)
     return (
     <div >
   <Switch>

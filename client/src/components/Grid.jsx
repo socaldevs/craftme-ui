@@ -97,7 +97,7 @@ class Gird extends Component {
            style={customStyles}
            ariaHideApp={false}
         >
-        <Calender/>
+        <Calendar/>
           <Button variant="raised" onClick={this.handleCloseModal}>Close Modal</Button>
         </ReactModal>
 
