@@ -8,7 +8,7 @@ import Login from './Login.jsx';
 import Signup from './Signup.jsx';
 import Lessons from './Lessons.jsx';
 import Messages from './Messages.jsx';
-//import Feedback from './Feedback.jsx';
+import Feedback from './Feedback.jsx';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
@@ -28,6 +28,7 @@ class App extends Component {
   }
 
   render() {
+<<<<<<< HEAD
     console.log(process.env.REST_PATH)
     return (
     <div >
@@ -44,6 +45,21 @@ class App extends Component {
   <Route path="/signup" component={Signup} />
   <Route path="/login" component={Login} />
   </Switch>
+=======
+    return (
+    <div >
+      <Switch>
+        <Route path="/messages" component={props => (<Protected component={Messages} {...props} />)}/>
+        <Route path="/lessons" component={props => (<Protected component={Lessons} {...props} />)}/>
+        <Route path="/feedback" component={props => (<Protected component={Feedback} {...props} />)}/>
+        <Route path="/chatrooms" render={props => (<Protected component={ChatRoomList} {...props} />)}/>
+        <Route path="/messages" component={props => (<Protected component={Messages} {...props} />)}/>
+        <Route path="/search" component={props => (<Protected component={Search} {...props} />)}/>
+        <Route path="/grid" component={Grid} />
+        <Route path="/signup" component={Signup} />
+        <Route path="/" component={Login} />
+      </Switch>
+>>>>>>> [Feedback] - Implements Feedback component and styles lessons/messages
     </div>
     
 
