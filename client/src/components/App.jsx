@@ -11,7 +11,6 @@ import Lessons from './Lessons.jsx';
 import Messages from './Messages.jsx';
 //import Feedback from './Feedback.jsx';
 import PropTypes from 'prop-types';
-import TestTranslate from './TestTranslate.jsx';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Grid from './Grid.jsx';

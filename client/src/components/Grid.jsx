@@ -91,7 +91,7 @@ class Gird extends Component {
         <Grid item xs={12} sm={6}>
           <Paper >
           <Button variant="raised" onClick={this.handleOpenModal}>Trigger Modal</Button>
-        <ReactModal 
+        {/* <ReactModal 
            isOpen={this.state.showModal}
            contentLabel="Minimal Modal Example"
            style={customStyles}
@@ -99,7 +99,7 @@ class Gird extends Component {
         >
         <Calendar/>
           <Button variant="raised" onClick={this.handleCloseModal}>Close Modal</Button>
-        </ReactModal>
+        </ReactModal> */}
 
           </Paper>
         </Grid>
