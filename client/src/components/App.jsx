@@ -42,7 +42,7 @@ class App extends Component {
   {/* <Route path="/lessonsContainer" component={LessonsContainer} /> */}
   <Route path="/grid" component={Grid} />
   <Route path="/signup" component={Signup} />
-  <Route path="/" component={Login} />
+  <Route path="/login" component={Login} />
   </Switch>
     </div>
     
