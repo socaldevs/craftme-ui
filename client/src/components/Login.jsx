@@ -8,15 +8,27 @@ import { FormControl, FormHelperText } from 'material-ui/Form';
 import Signup from './Signup.jsx';
 import Grid from './Grid.jsx'
 import { Switch, Route, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import actions from '../actions/index.jsx';
 
+const mapDispatchToProps = dispatch => ({
+  updateUser: user => dispatch(actions.updateUser(user)),
+  removeUser: () => dispatch(actions.removeUser()),
+  updateToken: token => dispatch(actions.updateToken(token)),
+  removeToken: () => dispatch(actions.removeToken()),
+  updateId: id => dispatch(actions.updateId(id)),
+  removeId: () => dispatch(actions.removeId()),
+  updateType: type => dispatch(actions.updateType(type)),
+  removeType: () => dispatch(actions.removeType())
+});
 
+const mapStateToProps = state => ({
+  currentUser: state.currentUser,
+  currentType: state.currentType,
+  currentId: state.currentId,
+  currentToken: state.currentToken
+});
 
-
-// const StyledPopup = styled(Popup)`
-// font-size: 30px;
-// width: 200%;
-// padding: 20px 10px;
-// `;
 const StyleButton = styled(Button)`
 width: 25%;
 `;
@@ -26,7 +38,7 @@ margin-top: 20%;
 margin-left: 40%;
 `;
 
-export default class Login extends Component {
+class ConnectedLogin extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,9 +54,10 @@ export default class Login extends Component {
           password: this.state.password
         });
         if (data) {
-          localStorage.setItem('token', data.data.token);
-          localStorage.setItem('username', data.data.username);
-          localStorage.setItem('user_id', data.data.id);
+          this.props.updateUser(data.data.username);
+          this.props.updateId(data.data.id);
+          this.props.updateToken(data.data.token);
+          this.props.updateType(data.data.type);
           this.props.history.push('/search');
         }
         console.log(data);
@@ -86,6 +99,10 @@ export default class Login extends Component {
     );
   }
 }
+
+const Login = connect(mapStateToProps, mapDispatchToProps)(ConnectedLogin);
+export default Login;
+
 
 {/* <StyledPopup trigger={<StyleButton variant="raised" onClick={this.login}>Login </StyleButton>} position="right center">
 <div>YOU HAVE LOGGED IN !!!</div>
