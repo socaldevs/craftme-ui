@@ -200,6 +200,16 @@ class Search extends React.Component {
     this.search();
   }
 
+  async handleLogoutClick() {
+    try {
+      let data = await axios.get(process.env.REST_PATH +'/user/getAllCrafts');
+      this.props.history.push('/');
+    } catch (error) {
+      console.log('Error with logging out', error);
+      return;
+    }
+  }
+
   render() {
     //console.log(localStorage.username)
     //WELCOME! {localStorage.username}
@@ -264,6 +274,9 @@ class Search extends React.Component {
                 </MenuItem>
                 <MenuItem onClick={this.handleClose}>
                   <Link to="/lessons">Lessons</Link>
+                </MenuItem>
+                <MenuItem onClick={this.handleClose}>
+                  <Link to="/messages">Messages</Link>
                 </MenuItem>
                 <MenuItem onClick={() => this.handleLogoutClick()}>
                   Logout

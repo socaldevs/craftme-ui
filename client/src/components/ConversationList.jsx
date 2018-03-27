@@ -28,11 +28,12 @@ class ConversationList extends Component {
   render() {
     return (
       <div>
-        {this.props.conversations.map(conversation => {
+        {this.props.conversations.map((conversation, i) => {
           return (
             <div
               data-id={conversation.id}
               onClick={e => this.grabConversations(e)}
+              key={i}
             >
               View your conversation with:
               {conversation.sender}
@@ -42,9 +43,9 @@ class ConversationList extends Component {
         <br />
         <div>
           {this.state.conversation
-            ? this.state.conversation.map(conv => {
+            ? this.state.conversation.map((conv, i) => {
                 return (
-                  <div>
+                  <div key={i}>
                     {conv.sender} : {conv.text}
                   </div>
                 );
