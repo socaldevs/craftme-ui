@@ -39,9 +39,9 @@ export default class Lessons extends Component {
   render() {
     return (
       <div>
-        {this.state.lessons.map(lesson => {
+        {this.state.lessons.map((lesson, i) => {
           return (
-            <div data-id={lesson.chat_id} onClick={e => this.grabLessons(e)}>
+            <div key={i} data-id={lesson.chat_id} onClick={e => this.grabLessons(e)}>
               {' '}
               {lesson.teacher_id}
               {lesson.notes}
@@ -51,8 +51,8 @@ export default class Lessons extends Component {
         <br />
         <div>
           {this.state.chats.length
-            ? this.state.chats.map(chat => {
-                return <div>{chat}</div>;
+            ? this.state.chats.map((chat, i) => {
+                return <div key={i}>{chat}</div>;
               })
             : null}
         </div>

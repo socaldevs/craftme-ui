@@ -35,9 +35,9 @@ class App extends Component {
   <Route path="/messages" component={props => (<Protected component={Messages} {...props} />)}/>
   <Route path="/lessons" component={props => (<Protected component={Lessons} {...props} />)}/>
   <Route path="/feedback" component={props => (<Protected component={Feedback} {...props} />)}/>
-  <Route path="/chatrooms" component={ChatRoomList} />
-  <Route path="/messages" component={Messages} />
-  <Route path="/search" component={Search} />
+  <Route path="/chatrooms" render={props => (<Protected component={ChatRoomList} {...props} />)}/>
+  <Route path="/messages" component={props => (<Protected component={Messages} {...props} />)}/>
+  <Route path="/search" component={props => (<Protected component={Search} {...props} />)}/>
   <Route path="/grid" component={Grid} />
   <Route path="/signup" component={Signup} />
   <Route path="/" component={Login} />
