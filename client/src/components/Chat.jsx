@@ -148,10 +148,8 @@ class Chat extends Component {
   }
 
   render() {
-    
     return (
       <div>
-        Hello from Chat #{this.props.roomId}!
         <div className="video-container" ref={(input) => { this.videoContainer = input; }} />
         <br />
         <LanguageSelector 
