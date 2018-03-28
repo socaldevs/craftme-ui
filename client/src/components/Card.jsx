@@ -11,25 +11,24 @@ export default class Card extends Component {
     
     const { booking } = this.props;
     // passing the booking to the chatrooms component
+    console.log('this.props', this.props.history);
     this.props.history.push('/conference', { booking });
-
   }
 
-  async grabLessons(e) {
-    try {
-      let id = e.target.getAttribute('data-id');
-      let chat = await axios.get(
-        process.env.REST_PATH +`/user/fetchMongoChatById/${id}`
-      );
-      this.setState({ chats: chat.data });
-    } catch (error) {
-      console.log('Error with grabLessons', error);
-      return;
-    }
-  }
+  // async grabLessons(e) {
+  //   try {
+  //     let id = e.target.getAttribute('data-id');
+  //     let chat = await axios.get(
+  //       process.env.REST_PATH +`/user/fetchMongoChatById/${id}`
+  //     );
+  //     this.setState({ chats: chat.data });
+  //   } catch (error) {
+  //     console.log('Error with grabLessons', error);
+  //     return;
+  //   }
+  // }
 
   render() {
-    console.log('history:', this.props.history);
     return (
       <Paper>
         <img src="" alt=""/>

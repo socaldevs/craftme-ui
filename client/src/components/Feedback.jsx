@@ -18,13 +18,14 @@ export default class Feedback extends Component {
 
   async submitFeedback() {
     try {
-      // let feedback = await axios.post(`http://localhost:3000/student/submitFeedback`, {
-      //   teacher_id,
-      //   student_id,
-      //   lesson_id,
-      //   rating: this.state.rating,
-      //   review: this.state.review
-      // })
+      let {student_id, teacher_id, id} = this.props.history.location.state; //id is lesson id
+      let feedback = await axios.post(`http://localhost:3000/student/submitFeedback`, {
+        teacher_id,
+        student_id,
+        lesson_id: id,
+        rating: this.state.rating,
+        review: this.state.review
+      })
       this.props.history.push('/lessons');
     } catch (error) {
       console.log('Error with submitFeedback', error);
@@ -33,6 +34,7 @@ export default class Feedback extends Component {
   }
 
   render() {
+    console.log('this.props.history', this.props.history);
     return (
       <div>
         This is the Feedback Component

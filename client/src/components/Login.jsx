@@ -70,7 +70,7 @@ class ConnectedLogin extends Component {
       if (data) {
         this.props.updateUser(data.data.username);
         this.props.updateId(data.data.id);
-        localStorage.setItem('token', data.data.token);
+        this.props.updateToken(data.data.token);
         this.props.updateType(data.data.type);
         this.props.history.push('/search');
       }
@@ -107,8 +107,3 @@ class ConnectedLogin extends Component {
 
 const Login = connect(mapStateToProps, mapDispatchToProps)(ConnectedLogin);
 export default Login;
-
-
-{/* <StyledPopup trigger={<StyleButton variant="raised" onClick={this.login}>Login </StyleButton>} position="right center">
-<div>YOU HAVE LOGGED IN !!!</div>
-</StyledPopup> */}
