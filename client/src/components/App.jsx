@@ -19,7 +19,7 @@ import Menu, { MenuItem } from 'material-ui/Menu';
 import axios from 'axios';
 import Search from './Search.jsx';
 import ReactModal from 'react-modal';
-
+import LessonsContainer from './LessonsContainer.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
@@ -28,7 +28,7 @@ class App extends Component {
   }
 
   render() {
-    //console.log(process.env.REST_PATH)
+    console.log(process.env.REST_PATH)
     return (
     <div >
   <Switch>
@@ -38,6 +38,9 @@ class App extends Component {
   <Route path="/chatrooms" render={props => (<Protected component={ChatRoomList} {...props} />)}/>
   <Route path="/messages" component={props => (<Protected component={Messages} {...props} />)}/>
   <Route path="/search" component={props => (<Protected component={Search} {...props} />)}/>
+  <Route path="/chat" component={props => (<Protected component={Chat} {...props} />)}/>
+  <Route path="/lessonsContainer" component={props => (<Protected component={LessonsContainer} {...props} />)}/>
+  {/* <Route path="/lessonsContainer" component={LessonsContainer} /> */}
   <Route path="/grid" component={Grid} />
   <Route path="/signup" component={Signup} />
   <Route path="/" component={Login} />

@@ -16,7 +16,7 @@ import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import ReactModal from 'react-modal';
-//import Calender from './Calender.jsx';
+import Calendar from './Calendar.jsx';
 
 const customStyles = {  //for relocating modal
   content : {
@@ -97,7 +97,7 @@ class Gird extends Component {
            style={customStyles}
            ariaHideApp={false}
         >
-        <Calender/>
+        <Calendar/>
           <Button variant="raised" onClick={this.handleCloseModal}>Close Modal</Button>
         </ReactModal> */}
 

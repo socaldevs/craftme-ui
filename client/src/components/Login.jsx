@@ -10,6 +10,8 @@ import Grid from './Grid.jsx'
 import { Switch, Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import actions from '../actions/index.jsx';
+import Card from './Card.jsx';
+
 
 const mapDispatchToProps = dispatch => ({
   updateUser: user => dispatch(actions.updateUser(user)),
