@@ -26,7 +26,6 @@ class ConversationList extends Component {
   componentDidMount() {}
 
   render() {
-    console.log('this.props', this.props);
     return (
       <div>
         <div className="wrapper">

@@ -74,7 +74,6 @@ class ConnectedLogin extends Component {
         this.props.updateType(data.data.type);
         this.props.history.push('/search');
       }
-      console.log(data);
     } catch (error) {
       console.log('error with login', error);
       return;

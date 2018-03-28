@@ -8,7 +8,6 @@ export default class Messages extends Component {
       recipient: '',
       message: '',
       conversations: [],
-      sent: false
     };
     this.sendMessage = this.sendMessage.bind(this);
   }
@@ -27,7 +26,11 @@ export default class Messages extends Component {
           recipient_id: id.data.id
         }
       );
-      this.setState({ sent: true });
+      this.setState({
+        text: '',
+        recipient: ''
+      })
+
     } catch (error) {
       console.log('Error with sendMessage', error);
       return;

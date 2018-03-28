@@ -57,7 +57,8 @@ class App extends Component {
         <Route path="/search" component={props => (<Protected component={Search} {...props} />)}/>
         <Route path="/grid" component={Grid} />
         <Route path="/signup" component={Signup} />
-        <Route path="/" component={Login} />
+        <Route path="/login" component={Login} />
+        <Route path="/" component={props => (<Protected component={Search} {...props} />)}/>
       </Switch>
 >>>>>>> [Feedback] - Implements Feedback component and styles lessons/messages
     </div>
