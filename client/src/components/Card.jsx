@@ -11,7 +11,7 @@ export default class Card extends Component {
     
     const { booking } = this.props;
     // passing the booking to the chatrooms component
-    this.props.history.push('/chatrooms', { booking });
+    this.props.history.push('/conference', { booking });
   }
 
   render() {

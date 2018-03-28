@@ -6,19 +6,21 @@ class LanguageSelector extends Component {
     super(props)
     this.state={
       languages: [],
-      from: '',
-      to: '',
     }
   }
 
   async componentDidMount() {
     try {
-      const response = await axios.get('http://localhost:3000/user/languages');
+      const response = await axios.get(`${process.env.REST_PATH}/user/languages`);
       const languages = response.data;
       this.setState({ languages });
     } catch(err) {
       console.log('err from LanguageSelector', err);
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.props = nextProps;
   }
 
   populateLanguages() {
@@ -29,19 +31,14 @@ class LanguageSelector extends Component {
     )
   }
 
-  makeSelection(e) {
-    e.target.className === 'from' ? this.setState({ from: e.target.value}) : this.setState({ to: e.target.value});
-    this.props.selectLanguage(e);
-  }
-
   render() {
     return(
       <div>
-        <select value={this.state.from} className="from" onChange={(e)=>{this.makeSelection(e)}}>
+        <select value={this.props.translateFrom} className="from" onChange={(e)=>{this.props.selectLanguage(e)}}>
           <option value="" disabled>Translate from...</option>
           {this.populateLanguages()}
         </select>
-        <select value={this.state.to} className="to" onChange={(e)=>{this.makeSelection(e)}}>
+        <select value={this.props.translateTo} className="to" onChange={(e)=>{this.props.selectLanguage(e)}}>
           <option value="" disabled>Translate to...</option>
           {this.populateLanguages()}
         </select>

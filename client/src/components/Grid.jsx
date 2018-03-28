@@ -7,7 +7,6 @@ import Protected from './Protected.jsx';
 import Login from './Login.jsx';
 import Messages from './Messages.jsx';
 import Signup from './Signup.jsx';
-import ChatRoomList from './ChatRoomList.jsx';
 import Lessons from './Lessons.jsx';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
@@ -79,7 +78,6 @@ class Gird extends Component {
         >
           <MenuItem onClick={this.handleClose}><Link to="/login">Login</Link></MenuItem>
           <MenuItem onClick={this.handleClose}><Link to="/signup">Signup</Link></MenuItem>
-          <MenuItem onClick={this.handleClose}><Link to="/chatrooms">ChatRooms</Link></MenuItem>
           <MenuItem onClick={this.handleClose}><Link to="/messages">Messages</Link></MenuItem>
         </Menu>
           
