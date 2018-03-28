@@ -264,6 +264,9 @@ class Search extends React.Component {
                   <Link to="/login">Login</Link>
                 </MenuItem>
                 <MenuItem onClick={this.handleClose}>
+                  <Link to="/lessonsContainer">Lessons Container</Link>
+                </MenuItem>
+                <MenuItem onClick={this.handleClose}>
                   <Link to="/signup">Signup</Link>
                 </MenuItem>
                 <MenuItem onClick={this.handleClose}>

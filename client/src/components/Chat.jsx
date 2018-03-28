@@ -19,7 +19,7 @@ class Chat extends Component {
     this.username = localStorage.getItem('username') || 'Kanye';
     this.selectLanguage = this.selectLanguage.bind(this);
   }
-  componentDidMount() { 
+  componentDidMount() {
     this.socket = io(process.env.SOCKET_PATH +'/');
     this.socket.on('connect', () => {
       this.socket.emit('room', this.props.roomId);

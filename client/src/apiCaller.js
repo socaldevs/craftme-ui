@@ -26,7 +26,7 @@ export const submitBookingToServer = async (booking) => {
       title
     });
     // the created booking
-    console.log('From server: created booking ==>', response.data);
+    
     return response.data;
   } catch (error) {
     console.error('Error while creating booking', error);
@@ -43,12 +43,47 @@ export const submitAvailabilityToServer = async (availability) => {
       end,
     });
     // the created availability
-    console.log('From server: created availability ==>', response.data);
     return response.data;
   } catch (error) {
     console.error('Error while creating availability', error);
     return;
   }
 };
+
+export const fetchUserUpcomingBookings = async (userId) => {
+  try {
+ 
+    const response = await axios
+      .get(`${SERVER}/user/getAllBookingsForUser/`,{
+        params: {
+          userId
+        }
+      });    
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error while fetching User Upcoming Bookings', error);
+    return;    
+  }
+
+};
+
+
+export const getUserPastLessons = async (userId) => {
+  try {
+    const response = await axios.get(`${SERVER}/user/fetchAllLessons/`,{
+      params: {
+        userId
+      }
+    });
+    console.log('chats from server', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error while getting user past lessons ', error);
+    return;
+  }
+  
+}; 
+
 
 

@@ -11,6 +11,11 @@ class ChatRoomList extends Component {
   setChatRoom(num) {
     this.setState({ room: num });
   }
+  componentDidMount(){
+    const { booking } = this.props.history.location.state;
+    console.log('props from chat', this.props);
+    console.log('this should be booking', booking);
+  }
 
   render() {
     return (
