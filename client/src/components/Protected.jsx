@@ -26,8 +26,6 @@ class ConnectedProtected extends Component {
     super(props);
   }
 
-  
-
   async componentDidMount() {
     try {
       const { exp } = await jwtDecode(localStorage.token);

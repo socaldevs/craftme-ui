@@ -6,54 +6,62 @@ body  {
   /* <------ background-image: url("https://ed.stanford.edu/sites/default/files/news_images/math2.jpeg");*/
 }
 
-#chat-window{
+.chat-window{
   height: 200px;
   overflow: auto;
   background: #fafafa;
 }
 
-#output p{
+.output p{
   padding: 14px 0px;
   margin: 0 20px;
   border-bottom: 1px solid #e9e9e9;
   color: #555;
 }
 
-#feedback p{
+.feedback p{
   color: #aaa;
   padding: 14px 0px;
   margin: 0 20px;
 }
 
-#output strong{
+.output strong{
   color: salmon;
 }
 
-#message {
+.message {
   padding: 10px 20px;
   box-sizing: border-box;
   background: #eee;
   border: 0;
   display: block;
-  width: 100%;
+  width: 85%;
   background: #fff;
   border-bottom: 1px solid #eee;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 18px;
+  display: inline-block;
 }
 
-#send{
+.send{
   background: #6f73bb;
   color: #fff;
   font-size: 18px;
   border: 0;
   padding: 12px 0;
-  width: 100%;
+  width: 15%;
   border-radius: 0 0 2px 2px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.15);
   transition: box-shadow 0.3s ease-in-out; 
+  display: inline-block;
 }
 
-#send:hover {
+.send:hover {
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
+
+.message-container {
+  width: 100%
+}
+
+

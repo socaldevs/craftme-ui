@@ -12,8 +12,6 @@ import styled from 'styled-components';
 import Button from 'material-ui/Button';
 import { Switch, Route, Link } from 'react-router-dom';
 
-
-
 const StyleButton = styled(Button)`
 width: 25%;
 `;
