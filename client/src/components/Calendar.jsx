@@ -163,6 +163,7 @@ export default class Calendar extends Component {
         let availabilities = await fetchTeacherAvailability(1);
         //datefying the string dates
         availabilities = availabilities.map((availability) => {
+         
           availability.title = 'some title';
           availability.start = new Date(availability.start);
           availability.end = new Date(availability.end);
