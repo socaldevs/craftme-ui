@@ -19,8 +19,6 @@ const styles = theme => ({
 });
 
 
-
-
 class LessonsContainer extends Component {
   constructor(props) {
     super(props);
@@ -78,8 +76,8 @@ class LessonsContainer extends Component {
     };
 
     const getLessons = async () => {
-      console.log('currentId  ====>', this.props.currentId);
-      console.log('currentType  ====>', this.props.currentType);
+      // console.log('currentId  ====>', this.props.currentId);
+      // console.log('currentType  ====>', this.props.currentType);
   
       const userId = {teacher_id: 1};
       const pastLessons = await getUserPastLessons(userId);
@@ -141,44 +139,3 @@ LessonsContainer.propTypes = {
 };
 
 export default withStyles(styles)(LessonsContainer)
-
-// export default LessonsContainer;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// class Signup extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       username: '',
-//       password: '',
-//       password2: '',
-
-//     };
-
-//         
-
-
-//             <div>
-    
-//       </div>
-
-
