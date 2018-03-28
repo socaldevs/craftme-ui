@@ -28,7 +28,7 @@ class ConnectedProtected extends Component {
 
   async componentDidMount() {
     try {
-      const { exp } = await jwtDecode(this.props.currentToken);
+      const { exp } = await jwtDecode(localStorage.token);
       console.log(exp);
       if (exp < 1) {
         this.props.history.push('/login');

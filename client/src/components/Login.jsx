@@ -70,7 +70,7 @@ class ConnectedLogin extends Component {
       if (data) {
         this.props.updateUser(data.data.username);
         this.props.updateId(data.data.id);
-        this.props.updateToken(data.data.token);
+        localStorage.setItem('token', data.data.token);
         this.props.updateType(data.data.type);
         this.props.history.push('/search');
       }

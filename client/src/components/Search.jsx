@@ -212,7 +212,6 @@ class Search extends React.Component {
   render() {
     //console.log(localStorage.username)
     //WELCOME! {localStorage.username}
-    console.log(this.props);
     const { classes } = this.props;
     const anchorEl  = this.state.anchorEl;
     const anchorEl2  = this.state.anchorEl2;
@@ -262,9 +261,6 @@ class Search extends React.Component {
               >
                 <MenuItem onClick={this.handleClose}>
                   <Link to="/login">Login</Link>
-                </MenuItem>
-                <MenuItem onClick={this.handleClose}>
-                  <Link to="/lessonsContainer">Lessons Container</Link>
                 </MenuItem>
                 <MenuItem onClick={this.handleClose}>
                   <Link to="/signup">Signup</Link>

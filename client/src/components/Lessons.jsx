@@ -24,15 +24,15 @@ export default class Lessons extends Component {
   }
 
   async componentDidMount() {
-    let id = this.props.currentId;
-    try {
-      let data = await axios.get(
-        process.env.REST_PATH +`/user/fetchAllLessons/${id}`
-      );
-      this.setState({ lessons: data.data });
-    } catch (error) {
-      console.log('Error with fetchLessons', error);
-    }
+    // let id = this.props.currentId;
+    // try {
+    //   let data = await axios.get(
+    //     process.env.REST_PATH +`/user/fetchAllLessons/${id}`
+    //   );
+    //   this.setState({ lessons: data.data });
+    // } catch (error) {
+    //   console.log('Error with fetchLessons', error);
+    // }
   }
 
   render() {

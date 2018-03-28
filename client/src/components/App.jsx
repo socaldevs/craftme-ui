@@ -28,13 +28,12 @@ class App extends Component {
   }
 
   render() {
-<<<<<<< HEAD
     console.log(process.env.REST_PATH)
     return (
     <div >
   <Switch>
   <Route path="/messages" component={props => (<Protected component={Messages} {...props} />)}/>
-  <Route path="/lessons" component={props => (<Protected component={Lessons} {...props} />)}/>
+  <Route path="/lessons" component={props => (<Protected component={LessonsContainer} {...props} />)}/>
   <Route path="/feedback" component={props => (<Protected component={Feedback} {...props} />)}/>
   <Route path="/messages" component={props => (<Protected component={Messages} {...props} />)}/>
   <Route path="/search" component={props => (<Protected component={Search} {...props} />)}/>
@@ -43,24 +42,8 @@ class App extends Component {
   {/* <Route path="/lessonsContainer" component={LessonsContainer} /> */}
   <Route path="/grid" component={Grid} />
   <Route path="/signup" component={Signup} />
-  <Route path="/login" component={Login} />
+  <Route path="/" component={Login}/>
   </Switch>
-=======
-    return (
-    <div >
-      <Switch>
-        <Route path="/messages" component={props => (<Protected component={Messages} {...props} />)}/>
-        <Route path="/lessons" component={props => (<Protected component={Lessons} {...props} />)}/>
-        <Route path="/feedback" component={props => (<Protected component={Feedback} {...props} />)}/>
-        <Route path="/chatrooms" render={props => (<Protected component={ChatRoomList} {...props} />)}/>
-        <Route path="/messages" component={props => (<Protected component={Messages} {...props} />)}/>
-        <Route path="/search" component={props => (<Protected component={Search} {...props} />)}/>
-        <Route path="/grid" component={Grid} />
-        <Route path="/signup" component={Signup} />
-        <Route path="/login" component={Login} />
-        <Route path="/" component={props => (<Protected component={Search} {...props} />)}/>
-      </Switch>
->>>>>>> [Feedback] - Implements Feedback component and styles lessons/messages
     </div>
     
 

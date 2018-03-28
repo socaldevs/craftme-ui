@@ -78,9 +78,8 @@ class LessonsContainer extends Component {
     const getLessons = async () => {
       // console.log('currentId  ====>', this.props.currentId);
       // console.log('currentType  ====>', this.props.currentType);
-  
-      const userId = {teacher_id: 1};
-      const pastLessons = await getUserPastLessons(userId);
+      const {currentId} = this.props;
+      const pastLessons = await getUserPastLessons(currentId);
       console.log('weird dude', pastLessons);
       this.setState({ pastLessons });  
     };

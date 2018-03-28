@@ -15,7 +15,7 @@ console.log('this is what store looks like!', store.getState());
 ReactDOM.render(
   <BrowserRouter>
     <Provider store={store}>
-      <App />
+        <App />
     </Provider>
   </BrowserRouter>,
   document.getElementById("app")
