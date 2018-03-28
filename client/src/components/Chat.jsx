@@ -16,7 +16,7 @@ class Chat extends Component {
       translateFrom: '',
       translateTo: '',
     }
-    this.username = localStorage.getItem('username') || 'Kanye';
+    this.username = this.props.currentUser;
     this.selectLanguage = this.selectLanguage.bind(this);
   }
   componentDidMount() { 

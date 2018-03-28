@@ -25,7 +25,7 @@ export default class Lessons extends Component {
   }
 
   async componentDidMount() {
-    let id = parseInt(localStorage.getItem('user_id'));
+    let id = this.props.currentId;
     try {
       let data = await axios.get(
         process.env.REST_PATH +`/user/fetchAllLessons/${id}`

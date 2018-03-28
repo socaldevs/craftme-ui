@@ -13,7 +13,7 @@ class LanguageSelector extends Component {
 
   async componentDidMount() {
     try {
-      const response = await axios.get('http://localhost:3000/user/languages');
+      const response = await axios.get(process.env.REST_PATH+'/user/languages');
       const languages = response.data;
       this.setState({ languages });
     } catch(err) {

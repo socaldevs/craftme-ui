@@ -211,8 +211,6 @@ class Search extends React.Component {
   }
 
   render() {
-    //console.log(localStorage.username)
-    //WELCOME! {localStorage.username}
     const { classes } = this.props;
     const anchorEl  = this.state.anchorEl;
     const anchorEl2  = this.state.anchorEl2;
@@ -226,7 +224,7 @@ class Search extends React.Component {
                 aria-haspopup="true"
                 onClick={this.handleClick2}
               >
-                WELCOME! {localStorage.username}
+                WELCOME! {this.props.currentUser}
               </Button>
               <Menu
                 id="simple-menu2"

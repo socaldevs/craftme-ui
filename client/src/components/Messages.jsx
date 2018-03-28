@@ -15,7 +15,7 @@ export default class Messages extends Component {
 
   async sendMessage() {
     try {
-      let sender_id = parseInt(localStorage.user_id);
+      let sender_id = parseInt(this.props.currentId);
       let id = await axios.get(
         process.env.REST_PATH +`/user/getIdByUsername/${this.state.recipient}`
       );
@@ -40,7 +40,7 @@ export default class Messages extends Component {
 
   async componentDidMount() {
     try {
-      let id = parseInt(localStorage.user_id);
+      let id = parseInt(this.props.currentId);
       let data = await axios.get(
         process.env.REST_PATH +`/user/messages/fetchAllConversationsById/${id}`
       );
