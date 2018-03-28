@@ -8,21 +8,49 @@ import { FormControl, FormHelperText } from 'material-ui/Form';
 import Login from './Login.jsx';
 import Grid from './Grid.jsx'
 import { Switch, Route, Link } from 'react-router-dom';
+import { withStyles } from 'material-ui/styles';
+import PropTypes from 'prop-types';
+import BottomNavigation, { BottomNavigationAction } from 'material-ui/BottomNavigation';
+import Icon from 'material-ui/Icon';
+import PersonIcon from 'material-ui-icons/Person';
+import SchoolIcon from 'material-ui-icons/School';
+import Avatar from "material-ui/Avatar";
+import classNames from "classnames";
+
 
 const StyleButton = styled(Button)`
-width: 25%;
+width: 24%;
 `;
 
 const StyledDiv = styled.div`
-margin-top: 20%;
+margin-top: 10%;
 margin-left: 40%;
 `;
-export default class Signup extends Component {
+
+const styles = theme => ({
+  root: {
+    width: 150,
+  },
+  row: {
+    display: "flex",
+    justifyContent: "center"
+  },
+  avatar: {
+    margin: 10
+  },
+  bigAvatar: {
+    width: 60,
+    height: 60
+  }
+});
+
+class Signup extends Component {
   constructor(props) {
     super(props);
     this.state = {
       username: '',
       password: '',
+<<<<<<< HEAD
       password2: ''
     };
 
@@ -39,16 +67,85 @@ export default class Signup extends Component {
         console.log('error with signup', error);
         return;
       }
+=======
+      passwordTwo: '',
+      bio: "",
+      value: 'student',
+      profile: "http://www.planystech.com/wp-content/uploads/2017/03/profile-placeholder.jpg",
+      file: null
+>>>>>>> [Front] signup complete with image render
     };
 
+    this.urlInput = this.urlInput.bind(this);
+    this.signUp = this.signUp.bind(this);
+    
     this.handleChange = (e,name) => {
       this.setState({ [name]: e.target.value });
     };
+    this.handleChangeButton = (event, value) => {
+      this.setState({ value });
+    };
   }
+
+  urlInput(event) {
+
+    let reader = new FileReader();
+    var coming = event.target.files[0];
+    
+    reader.onloadend = () => {
+      this.setState({
+        profile: reader.result,
+        file: coming
+      });
+      console.log(this.state.file)
+    }
+    reader.readAsDataURL(coming)
+
+  }
+
+  
+  async signUp(){ 
+    try {
+      let type = (this.state.value === "teacher") ? 0 : 1
+      let active = (this.state.file) ? this.state.file : ""
+
+
+      const formData = new FormData();
+      formData.append('profile_pic', active);
+      formData.append('username', this.state.username);
+      formData.append('password', this.state.password);
+      formData.append('bio', this.state.bio);
+      formData.append('type', type);
+      let data = await axios.post(process.env.REST_PATH + '/auth/signup', formData);
+      console.log(data);
+    } catch (error) {
+      console.log('error with signup', error);
+      return;
+    }
+  }
+
   render() {
+    const { classes } = this.props;
+    const { value } = this.state;
     return (
       <StyledDiv>
         <h1>CraftMe</h1>
+      <Avatar
+        alt="Adelle Charles"
+        src={this.state.profile}
+        className={classNames(classes.avatar, classes.bigAvatar)}
+      />
+        <div>
+        <form>
+          <label>
+          Display Photo:
+              <input
+              type="file" 
+              onChange={this.urlInput}
+              />
+          </label>
+        </form>
+      </div>
         <FormControl>
         <InputLabel >USERNAME</InputLabel>
         <Input type='text' value={this.state.username} onChange={e => this.handleChange(e,"username")} />
@@ -61,11 +158,30 @@ export default class Signup extends Component {
         <div> </div>
         <FormControl>
         <InputLabel >RENTER PASSWORD</InputLabel>
-        <Input type="password" value={this.state.password2} onChange={e => this.handleChange(e,"password2")} />
+        <Input type="password" value={this.state.passwordTwo} onChange={e => this.handleChange(e,"passwordTwo")} />
         </FormControl>
-        <p><StyleButton variant="raised" onClick={this.signup}>SIGNUP</StyleButton></p>
-        <p><Link to="/login">LOGIN</Link></p>
+        <div> </div>
+        <FormControl>
+        <InputLabel >BIOGRAPHY</InputLabel>
+        <Input type='text' value={this.state.bio} onChange={e => this.handleChange(e,"bio")} />
+        </FormControl>
+        <div>
+        <BottomNavigation value={value} onChange={this.handleChangeButton} className={classes.root}>
+        <BottomNavigationAction label="Student" value="student" icon={<PersonIcon />} />
+        <BottomNavigationAction label="Teacher" value="teacher" icon={<SchoolIcon />} />
+      </BottomNavigation>
+      </div>
+
+        <p><StyleButton variant="raised" onClick={this.signUp}>SIGNUP</StyleButton></p>
+
+        <p><Link to="/login">Login</Link></p>
       </StyledDiv>
-    );
+    )
   }
 }
+
+Signup.propTypes = {
+  classes: PropTypes.object
+};
+
+export default withStyles(styles)(Signup)

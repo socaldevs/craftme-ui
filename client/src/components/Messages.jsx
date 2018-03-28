@@ -14,7 +14,11 @@ export default class Messages extends Component {
 
   async sendMessage() {
     try {
+<<<<<<< HEAD
       let sender_id = this.props.currentId;
+=======
+      let sender_id = parseInt(this.props.currentId);
+>>>>>>> [Front] signup complete with image render
       let id = await axios.get(
         process.env.REST_PATH +`/user/getIdByUsername/${this.state.recipient}`
       );
@@ -43,7 +47,11 @@ export default class Messages extends Component {
 
   async componentDidMount() {
     try {
+<<<<<<< HEAD
       let id = this.props.currentId;
+=======
+      let id = parseInt(this.props.currentId);
+>>>>>>> [Front] signup complete with image render
       let data = await axios.get(
         process.env.REST_PATH +`/user/messages/fetchAllConversationsById/${id}`
       );

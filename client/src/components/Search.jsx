@@ -210,8 +210,6 @@ class Search extends React.Component {
   }
 
   render() {
-    //console.log(localStorage.username)
-    //WELCOME! {localStorage.username}
     const { classes } = this.props;
     const anchorEl  = this.state.anchorEl;
     const anchorEl2  = this.state.anchorEl2;
