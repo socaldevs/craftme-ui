@@ -27,8 +27,8 @@ class Conference extends Component {
       <Chat 
         {...this.props}
         roomId={id}
-        teacherId={teacher_id}
-        studentId={student_id}
+        teacher_id={teacher_id}
+        student_id={student_id}
       />
     )
   }

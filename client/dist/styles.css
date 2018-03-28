@@ -65,3 +65,18 @@ body  {
 }
 
 
+.wrapper {
+  overflow:auto;
+  width: 100%;
+  
+}
+
+.c1 {
+  float: left;
+  width: 70%;
+}
+
+.c2 {
+  float: right;
+  width: 30%;
+}

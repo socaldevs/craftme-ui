@@ -8,14 +8,13 @@ export default class Messages extends Component {
       recipient: '',
       message: '',
       conversations: [],
-      sent: false
     };
     this.sendMessage = this.sendMessage.bind(this);
   }
 
   async sendMessage() {
     try {
-      let sender_id = parseInt(localStorage.user_id);
+      let sender_id = this.props.currentId;
       let id = await axios.get(
         process.env.REST_PATH +`/user/getIdByUsername/${this.state.recipient}`
       );
@@ -27,7 +26,11 @@ export default class Messages extends Component {
           recipient_id: id.data.id
         }
       );
-      this.setState({ sent: true });
+      this.setState({
+        text: '',
+        recipient: ''
+      })
+
     } catch (error) {
       console.log('Error with sendMessage', error);
       return;
@@ -40,7 +43,7 @@ export default class Messages extends Component {
 
   async componentDidMount() {
     try {
-      let id = parseInt(localStorage.user_id);
+      let id = this.props.currentId;
       let data = await axios.get(
         process.env.REST_PATH +`/user/messages/fetchAllConversationsById/${id}`
       );
@@ -68,7 +71,7 @@ export default class Messages extends Component {
           onChange={e => this.handleChange(e)}
         />
         <button onClick={() => this.sendMessage()}>Send </button>
-        <ConversationList conversations={this.state.conversations} />
+        <ConversationList props={this.props} conversations={this.state.conversations} />
       </div>
     );
   }

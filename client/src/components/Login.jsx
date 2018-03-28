@@ -49,29 +49,7 @@ class ConnectedLogin extends Component {
       isLoggedIn: false
     };
 
-    this.login = async () => {
-      try {
-        let data = await axios.post(process.env.REST_PATH +'/auth/login', {
-          username: this.state.username,
-          password: this.state.password
-        });
-        if (data) {
-          this.props.updateUser(data.data.username);
-          this.props.updateId(data.data.id);
-          this.props.updateToken(data.data.token);
-          this.props.updateType(data.data.type);
-          this.props.history.push('/search');
-        }
-        console.log(data);
-      } catch (error) {
-        console.log('error with login', error);
-        return;
-      }
-    };
-
-    this.handleChange = (e,name) => {
-      this.setState({ [name]: e.target.value });
-    };
+    
     this.check = () => {
       const isLoggedIn = props.isLoggedIn;
       if (isLoggedIn) {
@@ -79,7 +57,32 @@ class ConnectedLogin extends Component {
       }
       return <h1> </h1>;
     }
+    this.login = this.login.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
+
+  async login() {
+    try {
+      let data = await axios.post(process.env.REST_PATH +'/auth/login', {
+        username: this.state.username,
+        password: this.state.password
+      });
+      if (data) {
+        this.props.updateUser(data.data.username);
+        this.props.updateId(data.data.id);
+        this.props.updateToken(data.data.token);
+        this.props.updateType(data.data.type);
+        this.props.history.push('/search');
+      }
+    } catch (error) {
+      console.log('error with login', error);
+      return;
+    }
+  };
+
+  handleChange(e, name) {
+    this.setState({ [name]: e.target.value });
+  };
 
   render() {
     //console.log(process.env.REST_PATH +'/auth/login')
@@ -104,8 +107,3 @@ class ConnectedLogin extends Component {
 
 const Login = connect(mapStateToProps, mapDispatchToProps)(ConnectedLogin);
 export default Login;
-
-
-{/* <StyledPopup trigger={<StyleButton variant="raised" onClick={this.login}>Login </StyleButton>} position="right center">
-<div>YOU HAVE LOGGED IN !!!</div>
-</StyledPopup> */}

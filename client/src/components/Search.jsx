@@ -201,7 +201,8 @@ class Search extends React.Component {
   async handleLogoutClick() {
     try {
       let data = await axios.get(process.env.REST_PATH +'/user/getAllCrafts');
-      this.props.history.push('/');
+      this.props.history.push('/login');
+      localStorage.clear();
     } catch (error) {
       console.log('Error with logging out', error);
       return;
@@ -224,7 +225,7 @@ class Search extends React.Component {
                 aria-haspopup="true"
                 onClick={this.handleClick2}
               >
-                WELCOME! {localStorage.username}
+                WELCOME! {this.props.currentUser}
               </Button>
               <Menu
                 id="simple-menu2"
@@ -260,9 +261,6 @@ class Search extends React.Component {
               >
                 <MenuItem onClick={this.handleClose}>
                   <Link to="/login">Login</Link>
-                </MenuItem>
-                <MenuItem onClick={this.handleClose}>
-                  <Link to="/lessonsContainer">Lessons Container</Link>
                 </MenuItem>
                 <MenuItem onClick={this.handleClose}>
                   <Link to="/signup">Signup</Link>

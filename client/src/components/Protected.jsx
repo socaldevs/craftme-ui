@@ -32,7 +32,7 @@ class ConnectedProtected extends Component {
       console.log(exp);
       if (exp < 1) {
         this.props.history.push('/login');
-      }
+      } 
     } catch (error) {
       console.log('Error with decoding token', error);
       this.props.history.push('/login');

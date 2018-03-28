@@ -32,7 +32,9 @@ export default class Signup extends Component {
           username: this.state.username,
           password: this.state.password
         });
-        console.log(data);
+        if (data) {
+          this.props.history.push('/login');
+        }
       } catch (error) {
         console.log('error with signup', error);
         return;
