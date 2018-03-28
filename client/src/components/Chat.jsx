@@ -18,13 +18,8 @@ class Chat extends Component {
     }
     this.username = this.props.currentUser;
   }
-<<<<<<< HEAD
-  componentDidMount() {
-    this.socket = io(process.env.SOCKET_PATH +'/');
-=======
   componentDidMount() { 
     this.socket = io(`${process.env.SOCKET_PATH}/`);
->>>>>>> [commit] before Arthurs UI booking changes
     this.socket.on('connect', () => {
       this.socket.emit('room', this.props.roomId);
     });
@@ -92,8 +87,13 @@ class Chat extends Component {
 
   async saveChat () {
     const { messages } = this.state;
+    const { teacherId, studentId } = this.props
     try {
-      const data = await axios.post(`${process.env.SOCKET_PATH}/chat/save/`, { messages });
+      const data = await axios.post(`${process.env.SOCKET_PATH}/chat/save/`, { 
+        messages,
+        teacherId,
+        studentId,
+      });
     } catch(err) {
       console.log('err from saveChat', err);
     }
@@ -148,6 +148,7 @@ class Chat extends Component {
   }
 
   render() {
+    
     return (
       <div>
         Hello from Chat #{this.props.roomId}!

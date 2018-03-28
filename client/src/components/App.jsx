@@ -6,7 +6,6 @@ import { Switch, Route, Link } from 'react-router-dom';
 import Protected from './Protected.jsx';
 import Login from './Login.jsx';
 import Signup from './Signup.jsx';
-import ChatRoomList from './ChatRoomList.jsx';
 import Lessons from './Lessons.jsx';
 import Messages from './Messages.jsx';
 //import Feedback from './Feedback.jsx';
@@ -20,6 +19,7 @@ import axios from 'axios';
 import Search from './Search.jsx';
 import ReactModal from 'react-modal';
 import LessonsContainer from './LessonsContainer.jsx';
+import Conference from './Conference.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
@@ -35,10 +35,9 @@ class App extends Component {
   <Route path="/messages" component={props => (<Protected component={Messages} {...props} />)}/>
   <Route path="/lessons" component={props => (<Protected component={Lessons} {...props} />)}/>
   <Route path="/feedback" component={props => (<Protected component={Feedback} {...props} />)}/>
-  <Route path="/chatrooms" render={props => (<Protected component={ChatRoomList} {...props} />)}/>
   <Route path="/messages" component={props => (<Protected component={Messages} {...props} />)}/>
   <Route path="/search" component={props => (<Protected component={Search} {...props} />)}/>
-  <Route path="/chat" component={props => (<Protected component={Chat} {...props} />)}/>
+  <Route path="/conference" component={props => (<Protected component={Conference} {...props} />)}/>
   <Route path="/lessonsContainer" component={props => (<Protected component={LessonsContainer} {...props} />)}/>
   {/* <Route path="/lessonsContainer" component={LessonsContainer} /> */}
   <Route path="/grid" component={Grid} />
