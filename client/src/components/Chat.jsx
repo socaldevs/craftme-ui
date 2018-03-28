@@ -17,6 +17,7 @@ class Chat extends Component {
       translateTo: '',
     }
     this.username = this.props.currentUser;
+    this.selectLanguage = this.selectLanguage.bind(this);
   }
   componentDidMount() { 
     this.socket = io(`${process.env.SOCKET_PATH}/`);
