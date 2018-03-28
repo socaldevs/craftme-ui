@@ -5,7 +5,7 @@ class ConversationList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      conversation: []
+      conversation: [],
     };
     this.grabConversations = this.grabConversations.bind(this);
   }
@@ -26,21 +26,22 @@ class ConversationList extends Component {
   componentDidMount() {}
 
   render() {
+    console.log('this.props', this.props);
     return (
       <div>
         <div className="wrapper">
           {this.props.conversations.map((conversation, i) => {
             return (
-              <div 
-                className="c1"
-                data-id={conversation.id}
-                onClick={e => this.grabConversations(e)}
-                key={i}
-              >
-                View your conversation with: {conversation.sender}
-              </div>
-            );
-          })}
+                <div 
+                  className="c1"
+                  data-id={conversation.id}
+                  onClick={e => this.grabConversations(e)}
+                  key={i}
+                >
+                  View your conversation with: {conversation.sender !== this.props.props.currentUser ? conversation.sender : conversation.recipient}
+                </div>
+            )}
+          )}
           <br />
           <div className="c2">
             {this.state.conversation
