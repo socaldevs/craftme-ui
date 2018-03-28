@@ -14,7 +14,7 @@ export default class Messages extends Component {
 
   async sendMessage() {
     try {
-      let sender_id = parseInt(this.props.currentId);
+      let sender_id = this.props.currentId;
       let id = await axios.get(
         process.env.REST_PATH +`/user/getIdByUsername/${this.state.recipient}`
       );
