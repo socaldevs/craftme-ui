@@ -50,30 +50,11 @@ class Signup extends Component {
     this.state = {
       username: '',
       password: '',
-<<<<<<< HEAD
-      password2: ''
-    };
-
-    this.signup = async () => {
-      try {
-        let data = await axios.post(process.env.REST_PATH + '/auth/signup', {
-          username: this.state.username,
-          password: this.state.password
-        });
-        if (data) {
-          this.props.history.push('/login');
-        }
-      } catch (error) {
-        console.log('error with signup', error);
-        return;
-      }
-=======
       passwordTwo: '',
       bio: "",
       value: 'student',
       profile: "http://www.planystech.com/wp-content/uploads/2017/03/profile-placeholder.jpg",
       file: null
->>>>>>> [Front] signup complete with image render
     };
 
     this.urlInput = this.urlInput.bind(this);
