@@ -125,8 +125,6 @@ class Search extends React.Component {
     this.state = {
       value: '',
       suggestions: [],
-      anchorEl: null,
-      anchorEl2: null,
       showModal: false
     }
     this.search = async () => {
@@ -148,26 +146,8 @@ class Search extends React.Component {
     this.handleSuggestionsClearRequested= this.handleSuggestionsClearRequested.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleKey = this.handleKey.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.handleClick2 = this.handleClick2.bind(this);
-    this.handleClose= this.handleClose.bind(this);
-    this.handleClose2= this.handleClose2.bind(this);
     
   }
-  handleClick(event){
-    this.setState({ anchorEl: event.currentTarget });
-  };
-  handleClick2(event){
-    this.setState({ anchorEl2: event.currentTarget });
-  };
-
-  handleClose(){
-    this.setState({ anchorEl: null });
-  };
-  handleClose2(){
-    this.setState({ anchorEl2: null });
-  };
-
 
 
   handleSuggestionsFetchRequested({ value }){
@@ -198,82 +178,11 @@ class Search extends React.Component {
     this.search();
   }
 
-  async handleLogoutClick() {
-    try {
-      let data = await axios.get(process.env.REST_PATH +'/user/getAllCrafts');
-      this.props.history.push('/login');
-      localStorage.clear();
-    } catch (error) {
-      console.log('Error with logging out', error);
-      return;
-    }
-  }
 
   render() {
     const { classes } = this.props;
-    const anchorEl  = this.state.anchorEl;
-    const anchorEl2  = this.state.anchorEl2;
       return (
         <div>
-          <Grid container spacing={24}>
-          <Grid item xs={12} sm={6}>
-          <Paper >
-            <Button
-                aria-owns={anchorEl2 ? 'simple-menu2' : null}
-                aria-haspopup="true"
-                onClick={this.handleClick2}
-              >
-                WELCOME! {this.props.currentUser}
-              </Button>
-              <Menu
-                id="simple-menu2"
-                anchorEl={anchorEl2}
-                open={Boolean(anchorEl2)}
-                onClose={this.handleClose2}
-              >
-                <MenuItem onClick={this.handleClose2}>
-                  Logout
-                </MenuItem>
-                <MenuItem onClick={this.handleClose2}>
-                  Profile
-                </MenuItem>
-              </Menu>
-          </Paper>
-        </Grid>
-          <Grid item xs={12} sm={6}>
-          <Paper>
-            <MenuDiv>
-            <Button
-                aria-owns={anchorEl ? 'simple-menu' : null}
-                aria-haspopup="true"
-                onClick={this.handleClick}
-              >
-                Open Menu
-              </Button>
-              <Menu
-                id="simple-menu"
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={this.handleClose}
-              >
-                <MenuItem onClick={this.handleClose}>
-                  <Link to="/chatrooms">ChatRooms</Link>
-                </MenuItem>
-                <MenuItem onClick={this.handleClose}>
-                  <Link to="/lessons">Lessons</Link>
-                </MenuItem>
-                <MenuItem onClick={this.handleClose}>
-                  <Link to="/messages">Messages</Link>
-                </MenuItem>
-                <MenuItem onClick={() => this.handleLogoutClick()}>
-                  Logout
-                </MenuItem>
-              </Menu>
-              </MenuDiv>
-
-            </Paper>
-          </Grid>
-          </Grid>
         <StyledDiv >
         <Grid container spacing={40}>
           <Grid item xs={6} sm={3}>
