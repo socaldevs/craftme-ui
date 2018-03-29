@@ -26,12 +26,18 @@ class LessonsContainer extends Component {
       navbarValue: 'upcoming',
       upcomingBookings: [],
       pastLessons: [],
+      chats: []
     }
     this.changeView = this.changeView.bind(this);
     this.renderUpcomingLessons = this.renderUpcomingLessons.bind(this);
     this.renderPastLessons = this.renderPastLessons.bind(this);
+    this.switchChat = this.switchChat.bind(this);
   }
-
+  
+  switchChat(chats){
+    this.setState({chats});
+    console.log('chats are: ', chats);
+  }
   changeView(event, value) {
     console.log(value);
     this.setState({ navbarValue: value });
@@ -50,9 +56,27 @@ class LessonsContainer extends Component {
   renderPastLessons(){
     let pastLessons = this.state.pastLessons || [];
     return (
-      pastLessons.map((pastLesson)=>{
-        return <Card key={pastLesson.id} pastLesson={pastLesson} centered />;
+      <div>
+      {pastLessons.map((pastLesson)=>{
+        return (
+          <div> 
+            <Card key={pastLesson.id} 
+            reactToClick={this.switchChat} 
+            pastLesson={pastLesson} centered />
+           
+          </div>
+        )
       })
+      }
+        <div> {
+          this.state.chats.map(chat => {
+            return ( 
+              <p> {chat.handle} : {chat.message} </p>
+            )
+          })
+        } 
+      </div>
+    </div>
     );
   }
 
