@@ -45,11 +45,10 @@ class ConnectedProtected extends Component {
   {
     const { component: Component } = this.props;
   return (
-  <div>
-  <MenuNav />
-  <Component {...this.props} />
-
-  </div>
+    <div>
+      <MenuNav {...this.props} />
+      <Component {...this.props} />
+    </div>
   
   )}
 }

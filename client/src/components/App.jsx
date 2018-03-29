@@ -38,8 +38,6 @@ class App extends Component {
   <Route path="/messages" component={props => (<Protected component={Messages} {...props} />)}/>
   <Route path="/search" component={props => (<Protected component={Search} {...props} />)}/>
   <Route path="/conference" component={props => (<Protected component={Conference} {...props} />)}/>
-  {/* <Route path="/lessonsContainer" component={props => (<Protected component={LessonsContainer} {...props} />)}/> */}
-  {/* <Route path="/lessonsContainer" component={LessonsContainer} /> */}
   <Route path="/grid" component={Grid} />
   <Route path="/signup" component={Signup} />
   <Route path="/login" component={Login} />

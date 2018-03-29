@@ -3,7 +3,7 @@ export default function currentToken(state = null, action) {
     case 'UPDATE_TOKEN':
       return action.payload;
     case 'REMOVE_TOKEN':
-      return (state.currentUser = action.payload);
+      return null;
     default:
       return state;
   }

@@ -8,6 +8,16 @@ import Grid from 'material-ui/Grid';
 import styled from 'styled-components';
 import Button from 'material-ui/Button';
 import { Switch, Route, Link } from 'react-router-dom';
+import actions from '../actions/index.jsx';
+import { connect } from 'react-redux';
+
+
+const mapDispatchToProps = dispatch => ({
+  removeUser: () => dispatch(actions.removeUser()),
+  removeToken: () => dispatch(actions.removeToken()),
+  removeId: () => dispatch(actions.removeId()),
+  removeType: () => dispatch(actions.removeType())
+});
 
 const StyleButton = styled(Button)`
 width: 25%;
@@ -44,7 +54,7 @@ const styles = theme => ({
   },
 });
 
-class MenuNav extends React.Component {
+class ConnectedMenuNav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -56,6 +66,7 @@ class MenuNav extends React.Component {
     this.handleClickUser = this.handleClickUser.bind(this);
     this.handleClose= this.handleClose.bind(this);
     this.handleCloseUser= this.handleCloseUser.bind(this);
+    this.handleLogoutClick = this.handleLogoutClick.bind(this);
     
   }
   handleClick(event){
@@ -75,9 +86,12 @@ class MenuNav extends React.Component {
 
   async handleLogoutClick() {
     try {
-      let data = await axios.get(process.env.REST_PATH +'/user/getAllCrafts');
+      let data = await axios.get(process.env.REST_PATH +'/auth/signout');
       this.props.history.push('/login');
-      localStorage.clear();
+      this.props.removeToken();
+      this.props.removeUser();
+      this.props.removeId();
+      this.props.removeType();
     } catch (error) {
       console.log('Error with logging out', error);
       return;
@@ -130,9 +144,6 @@ class MenuNav extends React.Component {
                 open={Boolean(anchorEl)}
                 onClose={this.handleClose}
               >
-                 <MenuItem onClick={this.handleClose}>
-                  <Link to="/chatrooms">ChatRooms</Link>
-                </MenuItem>
                 <MenuItem onClick={this.handleClose}>
                   <Link to="/lessons">Lessons</Link>
                 </MenuItem>
@@ -151,5 +162,7 @@ class MenuNav extends React.Component {
       );
     }
 }
+
+const MenuNav = connect(null, mapDispatchToProps)(ConnectedMenuNav);
 
 export default withStyles(styles)(MenuNav);

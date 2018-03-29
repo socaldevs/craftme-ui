@@ -46,17 +46,7 @@ class ConnectedLogin extends Component {
     this.state = {
       username: '',
       password: '',
-      isLoggedIn: false
     };
-
-    
-    this.check = () => {
-      const isLoggedIn = props.isLoggedIn;
-      if (isLoggedIn) {
-        return <Grid />;
-      }
-      return <h1> </h1>;
-    }
     this.login = this.login.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
@@ -106,4 +96,5 @@ class ConnectedLogin extends Component {
 }
 
 const Login = connect(mapStateToProps, mapDispatchToProps)(ConnectedLogin);
+
 export default Login;

@@ -3,7 +3,7 @@ export default function currentUser(state = null, action) {
     case 'UPDATE_USER':
       return action.payload;
     case 'REMOVE_USER':
-      return (state.currentUser = action.payload);
+      return null;
     default:
       return state;
   }

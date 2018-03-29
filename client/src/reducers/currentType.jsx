@@ -3,7 +3,7 @@ export default function currentType(state = null, action) {
     case 'UPDATE_TYPE':
       return action.payload;
     case 'REMOVE_TYPE':
-      return (state.currentUser = action.payload);
+      return null;
     default:
       return state;
   }
