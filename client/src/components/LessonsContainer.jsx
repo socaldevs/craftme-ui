@@ -111,7 +111,12 @@ class LessonsContainer extends Component {
   //   ) 
   // }
   render(){
-    return(
+    let viewController = {
+      upcoming: this.renderUpcomingLessons,
+      past: this.renderPastLessons
+      // chats: this.renderChats
+    }
+    return (
       <Grid container spacing={24}>  
         <Grid item xs={12}>
           {/* <Paper className={this.props.classes.root}> */}
@@ -124,8 +129,7 @@ class LessonsContainer extends Component {
         </Grid>
         <Grid item xs={12}>
           {
-            this.state.navbarValue === 'upcoming' ?
-            this.renderUpcomingLessons() : this.renderPastLessons()
+            viewController[this.state.navbarValue]()
           } 
         </Grid>              
     </Grid>
