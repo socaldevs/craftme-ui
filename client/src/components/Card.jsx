@@ -9,6 +9,7 @@ export default class Card extends Component {
     this.clickHandler = this.clickHandler.bind(this);
   }
 
+<<<<<<< HEAD
   async clickHandler(){
     const { reactToClick } = this.props;
     const { booking } = this.props;
@@ -26,6 +27,11 @@ export default class Card extends Component {
         return;
       }
     }
+=======
+  clickHandler(){
+    const { booking } = this.props;
+    this.props.history.push('/conference', { booking });
+>>>>>>> [new branch] to setup simplepeer
   }
   
 
