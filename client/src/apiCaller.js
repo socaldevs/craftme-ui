@@ -76,7 +76,6 @@ export const getUserPastLessons = async (userId) => {
         userId
       }
     });
-    console.log('chats from server', response.data);
     return response.data;
   } catch (error) {
     console.error('Error while getting user past lessons ', error);
@@ -84,6 +83,18 @@ export const getUserPastLessons = async (userId) => {
   }
   
 }; 
+
+export const getChatFromLesson = async (chatId) => {
+  try {
+    let chat = await axios.get(
+      process.env.REST_PATH +`/user/fetchMongoChatById/${chatId}`
+    );
+    return chat.data;
+  } catch (error) {
+    console.log('Error with getChatFromLesson', error);
+    return;
+  }
+}
 
 
 

@@ -1,39 +1,42 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import Paper from 'material-ui/Paper';
+import axios from 'axios';
+import {getChatFromLesson} from '../apiCaller.js';
 export default class Card extends Component {
   constructor(props) {
     super(props);
     this.clickHandler = this.clickHandler.bind(this);
   }
 
-  clickHandler(){
-    
+  async clickHandler(){
+    const { reactToClick } = this.props;
     const { booking } = this.props;
     // passing the booking to the chatrooms component
-    console.log('this.props', this.props.history);
-    this.props.history.push('/conference', { booking });
+    if (this.props.booking) {
+      this.props.history.push('/conference', { booking });
+    }
+    if (this.props.pastLesson) {
+      try {
+        const {chat_id} = this.props.pastLesson;
+        const {messages} = await getChatFromLesson(chat_id);
+        reactToClick(messages);
+      } catch (error) {
+        console.log('Error with rendering pastLessons', error);
+        return;
+      }
+    }
   }
-
-  // async grabLessons(e) {
-  //   try {
-  //     let id = e.target.getAttribute('data-id');
-  //     let chat = await axios.get(
-  //       process.env.REST_PATH +`/user/fetchMongoChatById/${id}`
-  //     );
-  //     this.setState({ chats: chat.data });
-  //   } catch (error) {
-  //     console.log('Error with grabLessons', error);
-  //     return;
-  //   }
-  // }
+  
 
   render() {
     return (
       <Paper>
         <img src="" alt=""/>
-        <h3>{this.props.booking && this.props.booking.title} title</h3>
-        <p>{this.props.pastLesson && this.props.pastLesson.notes}</p>
+        {this.props.booking ? <h3>{this.props.booking && this.props.booking.title} title</h3>
+        : 
+        <div> {this.props.pastLesson && this.props.pastLesson.notes} </div>
+        }
         <button type="button" onClick={this.clickHandler}>Button</button>
       </Paper>
     )

@@ -26,12 +26,18 @@ class LessonsContainer extends Component {
       navbarValue: 'upcoming',
       upcomingBookings: [],
       pastLessons: [],
+      chats: []
     }
     this.changeView = this.changeView.bind(this);
     this.renderUpcomingLessons = this.renderUpcomingLessons.bind(this);
     this.renderPastLessons = this.renderPastLessons.bind(this);
+    this.switchChat = this.switchChat.bind(this);
   }
-
+  
+  switchChat(chats){
+    this.setState({chats});
+    console.log('chats are: ', chats);
+  }
   changeView(event, value) {
     console.log(value);
     this.setState({ navbarValue: value });
@@ -50,9 +56,27 @@ class LessonsContainer extends Component {
   renderPastLessons(){
     let pastLessons = this.state.pastLessons || [];
     return (
-      pastLessons.map((pastLesson)=>{
-        return <Card key={pastLesson.id} pastLesson={pastLesson} centered />;
+      <div>
+      {pastLessons.map((pastLesson)=>{
+        return (
+          <div> 
+            <Card key={pastLesson.id} 
+            reactToClick={this.switchChat} 
+            pastLesson={pastLesson} centered />
+           
+          </div>
+        )
       })
+      }
+        <div> {
+          this.state.chats.map(chat => {
+            return ( 
+              <p> {chat.handle} : {chat.message} </p>
+            )
+          })
+        } 
+      </div>
+    </div>
     );
   }
 
@@ -90,42 +114,24 @@ class LessonsContainer extends Component {
     
   }
 
-  // render(){
-  //   return(
-  //     <Grid container spacing={24}>
-  //       <Grid cenetered item xs={12}>
-  //         <BottomNavigation value={this.state.navbarValue}
-  //          onChange={this.changeView} className={this.props.classes.root}>
-  //           <BottomNavigationAction label="" value="upcoming" icon={'upcoming'} />
-  //           <BottomNavigationAction label="" value="past" icon={'Past'} />
-  //         </BottomNavigation>      
-  //       </Grid>
-        // <Grid item xs={12}>
-        //   {
-        //     this.state.navbarValue === 'upcoming' ?
-        //     <Card /> : 'something'
-        //   }
-          
-        // </Grid>      
-  //     </Grid>
-  //   ) 
-  // }
   render(){
-    return(
+    let viewController = {
+      upcoming: this.renderUpcomingLessons,
+      past: this.renderPastLessons
+      // chats: this.renderChats
+    }
+    return (
       <Grid container spacing={24}>  
         <Grid item xs={12}>
-          {/* <Paper className={this.props.classes.root}> */}
             <Tabs value={this.state.navbarValue} onChange={this.changeView}
               indicatorColor="primary" textColor="primary" centered >
               <Tab label="upcoming" value="upcoming"/>
               <Tab label="Past" value="past"/>
             </Tabs>
-          {/* </Paper> */}
         </Grid>
         <Grid item xs={12}>
           {
-            this.state.navbarValue === 'upcoming' ?
-            this.renderUpcomingLessons() : this.renderPastLessons()
+            viewController[this.state.navbarValue]()
           } 
         </Grid>              
     </Grid>

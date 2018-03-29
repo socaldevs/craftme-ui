@@ -34,7 +34,6 @@ export default class Feedback extends Component {
   }
 
   render() {
-    console.log('this.props.history', this.props.history);
     return (
       <div>
         This is the Feedback Component

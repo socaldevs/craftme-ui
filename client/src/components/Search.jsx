@@ -250,7 +250,6 @@ class Search extends React.Component {
               >
                 Open Menu
               </Button>
-              
               <Menu
                 id="simple-menu"
                 anchorEl={anchorEl}
@@ -258,16 +257,7 @@ class Search extends React.Component {
                 onClose={this.handleClose}
               >
                 <MenuItem onClick={this.handleClose}>
-                  <Link to="/login">Login</Link>
-                </MenuItem>
-                <MenuItem onClick={this.handleClose}>
-                  <Link to="/signup">Signup</Link>
-                </MenuItem>
-                <MenuItem onClick={this.handleClose}>
                   <Link to="/chatrooms">ChatRooms</Link>
-                </MenuItem>
-                <MenuItem onClick={this.handleClose}>
-                  <Link to="/testtranslate">Test Translate Component </Link>
                 </MenuItem>
                 <MenuItem onClick={this.handleClose}>
                   <Link to="/lessons">Lessons</Link>
@@ -277,9 +267,6 @@ class Search extends React.Component {
                 </MenuItem>
                 <MenuItem onClick={() => this.handleLogoutClick()}>
                   Logout
-                </MenuItem>
-                <MenuItem onClick={this.handleClose}>
-                  <Link to="/feedback">Feedback</Link>
                 </MenuItem>
               </Menu>
               </MenuDiv>
