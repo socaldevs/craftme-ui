@@ -117,12 +117,15 @@ class Chat extends Component {
 
   async saveChat () {
     const { messages } = this.state;
-    const { teacher_id, student_id } = this.props
+    const { teacher_id, student_id, title } = this.props
+    
+    console.log('this.props', this.props);
     try {
       const {data} = await axios.post(`${process.env.REST_PATH}/user/saveLesson/`, { 
         messages,
         teacher_id,
         student_id,
+        title
       });
       if (data) {
         console.log('data', data);
