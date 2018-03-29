@@ -114,26 +114,6 @@ class LessonsContainer extends Component {
     
   }
 
-  // render(){
-  //   return(
-  //     <Grid container spacing={24}>
-  //       <Grid cenetered item xs={12}>
-  //         <BottomNavigation value={this.state.navbarValue}
-  //          onChange={this.changeView} className={this.props.classes.root}>
-  //           <BottomNavigationAction label="" value="upcoming" icon={'upcoming'} />
-  //           <BottomNavigationAction label="" value="past" icon={'Past'} />
-  //         </BottomNavigation>      
-  //       </Grid>
-        // <Grid item xs={12}>
-        //   {
-        //     this.state.navbarValue === 'upcoming' ?
-        //     <Card /> : 'something'
-        //   }
-          
-        // </Grid>      
-  //     </Grid>
-  //   ) 
-  // }
   render(){
     let viewController = {
       upcoming: this.renderUpcomingLessons,
@@ -143,13 +123,11 @@ class LessonsContainer extends Component {
     return (
       <Grid container spacing={24}>  
         <Grid item xs={12}>
-          {/* <Paper className={this.props.classes.root}> */}
             <Tabs value={this.state.navbarValue} onChange={this.changeView}
               indicatorColor="primary" textColor="primary" centered >
               <Tab label="upcoming" value="upcoming"/>
               <Tab label="Past" value="past"/>
             </Tabs>
-          {/* </Paper> */}
         </Grid>
         <Grid item xs={12}>
           {
