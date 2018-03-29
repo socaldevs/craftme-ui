@@ -14,11 +14,11 @@ export default class Messages extends Component {
 
   async sendMessage() {
     try {
-      let sender_id = this.props.currentId;
-      let id = await axios.get(
+      const sender_id = this.props.currentId;
+      const id = await axios.get(
         process.env.REST_PATH +`/user/getIdByUsername/${this.state.recipient}`
       );
-      let message = await axios.post(
+      const message = await axios.post(
         process.env.REST_PATH +`/user/messages/sendMessage`,
         {
           text: this.state.message,
@@ -27,7 +27,7 @@ export default class Messages extends Component {
         }
       );
       this.setState({
-        text: '',
+        message: '',
         recipient: ''
       })
 
@@ -43,8 +43,8 @@ export default class Messages extends Component {
 
   async componentDidMount() {
     try {
-      let id = this.props.currentId;
-      let data = await axios.get(
+      const id = this.props.currentId;
+      const data = await axios.get(
         process.env.REST_PATH +`/user/messages/fetchAllConversationsById/${id}`
       );
       this.setState({ conversations: data.data });

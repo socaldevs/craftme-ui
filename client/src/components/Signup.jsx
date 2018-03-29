@@ -98,6 +98,9 @@ class Signup extends Component {
       formData.append('bio', this.state.bio);
       formData.append('type', type);
       let data = await axios.post(process.env.REST_PATH + '/auth/signup', formData);
+      if (data) {
+        this.props.history.push('/login');
+      }
       console.log(data);
     } catch (error) {
       console.log('error with signup', error);

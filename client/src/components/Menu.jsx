@@ -144,9 +144,6 @@ class ConnectedMenuNav extends React.Component {
                 open={Boolean(anchorEl)}
                 onClose={this.handleClose}
               >
-                 <MenuItem onClick={this.handleClose}>
-                  <Link to="/chatrooms">ChatRooms</Link>
-                </MenuItem>
                 <MenuItem onClick={this.handleClose}>
                   <Link to="/lessons">Lessons</Link>
                 </MenuItem>

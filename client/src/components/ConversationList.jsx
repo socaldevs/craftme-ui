@@ -12,8 +12,8 @@ class ConversationList extends Component {
 
   async grabConversations(e) {
     try {
-      let id = parseInt(e.target.getAttribute('data-id'));
-      let conversations = await axios.get(
+      const id = parseInt(e.target.getAttribute('data-id'));
+      const conversations = await axios.get(
         process.env.REST_PATH + `/user/messages/fetchAllMessagesByConversationId/${id}`
       );
       this.setState({ conversation: conversations.data });
@@ -22,8 +22,6 @@ class ConversationList extends Component {
       return;
     }
   }
-
-  componentDidMount() {}
 
   render() {
     return (
@@ -37,7 +35,10 @@ class ConversationList extends Component {
                   onClick={e => this.grabConversations(e)}
                   key={i}
                 >
-                  View your conversation with: {conversation.sender !== this.props.props.currentUser ? conversation.sender : conversation.recipient}
+                  View your conversation with: 
+                  {conversation.sender !== this.props.props.currentUser 
+                    ? conversation.sender : 
+                    conversation.recipient}
                 </div>
             )}
           )}

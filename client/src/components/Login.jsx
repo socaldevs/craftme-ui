@@ -46,7 +46,6 @@ class ConnectedLogin extends Component {
     this.state = {
       username: '',
       password: '',
-      isLoggedIn: false
     };
     this.login = this.login.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -97,4 +96,5 @@ class ConnectedLogin extends Component {
 }
 
 const Login = connect(mapStateToProps, mapDispatchToProps)(ConnectedLogin);
+
 export default Login;

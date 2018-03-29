@@ -34,7 +34,7 @@ class LessonsContainer extends Component {
     this.switchChat = this.switchChat.bind(this);
   }
   
-  switchChat(chats){
+  switchChat(chats) {
     this.setState({chats});
     console.log('chats are: ', chats);
   }
@@ -43,7 +43,7 @@ class LessonsContainer extends Component {
     this.setState({ navbarValue: value });
   };
 
-  renderUpcomingLessons(){
+  renderUpcomingLessons() {
     let bookings = this.state.upcomingBookings || [];
     console.log('props from conatiner', this.props);
     return (
@@ -53,7 +53,7 @@ class LessonsContainer extends Component {
     );
   }
 
-  renderPastLessons(){
+  renderPastLessons() {
     let pastLessons = this.state.pastLessons || [];
     return (
       <div>
@@ -69,9 +69,9 @@ class LessonsContainer extends Component {
       })
       }
         <div> {
-          this.state.chats.map(chat => {
+          this.state.chats.map((chat, i) => {
             return ( 
-              <p> {chat.handle} : {chat.message} </p>
+              <p key={i}> {chat.handle} : {chat.message} </p>
             )
           })
         } 
@@ -80,7 +80,7 @@ class LessonsContainer extends Component {
     );
   }
 
-  componentDidMount(){
+  componentDidMount() {
 
     console.log('currentId  ====>', this.props.currentId);
     console.log('currentType  ====>', this.props.currentType);
@@ -114,7 +114,7 @@ class LessonsContainer extends Component {
     
   }
 
-  render(){
+  render() {
     let viewController = {
       upcoming: this.renderUpcomingLessons,
       past: this.renderPastLessons
