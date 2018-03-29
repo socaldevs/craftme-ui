@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import jwtDecode from 'jwt-decode';
 import { connect } from 'react-redux';
 import actions from '../actions/index.jsx';
+import MenuNav from './Menu.jsx';
 
 const mapDispatchToProps = dispatch => ({
   updateUser: user => dispatch(actions.updateUser(user)),
@@ -40,10 +41,17 @@ class ConnectedProtected extends Component {
     }
   }
 
-  render() {
+  render() 
+  {
     const { component: Component } = this.props;
-    return <Component {...this.props} />;
-  }
+  return (
+  <div>
+  <MenuNav />
+  <Component {...this.props} />
+
+  </div>
+  
+  )}
 }
 
 const Protected = connect(mapStateToProps, mapDispatchToProps)(ConnectedProtected);
