@@ -20,6 +20,7 @@ import Search from './Search.jsx';
 import ReactModal from 'react-modal';
 import LessonsContainer from './LessonsContainer.jsx';
 import Conference from './Conference.jsx';
+import SearchResults from './SearchResults.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
@@ -38,6 +39,9 @@ class App extends Component {
   <Route path="/messages" component={props => (<Protected component={Messages} {...props} />)}/>
   <Route path="/search" component={props => (<Protected component={Search} {...props} />)}/>
   <Route path="/conference" component={props => (<Protected component={Conference} {...props} />)}/>
+  {/* <Route path="/lessonsContainer" component={props => (<Protected component={LessonsContainer} {...props} />)}/> */}
+  {/* <Route path="/lessonsContainer" component={LessonsContainer} /> */}
+  <Route path="/searchResults" component={props => (<Protected component={SearchResults} {...props} />)}/>
   <Route path="/grid" component={Grid} />
   <Route path="/signup" component={Signup} />
   <Route path="/login" component={Login} />

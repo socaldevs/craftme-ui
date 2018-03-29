@@ -1,9 +1,9 @@
 import { withStyles } from 'material-ui/styles';
 import PropTypes from 'prop-types';
 import BottomNavigation, { BottomNavigationAction } from 'material-ui/BottomNavigation';
-import Icon from 'material-ui/Icon';
-import PersonIcon from 'material-ui-icons/Person';
-import SchoolIcon from 'material-ui-icons/School';
+// import Icon from 'material-ui/Icon';
+// import PersonIcon from 'material-ui-icons/Person';
+// import SchoolIcon from 'material-ui-icons/School';
 import React, { Component } from 'react';
 import Grid from 'material-ui/Grid';
 import Card from './Card.jsx';

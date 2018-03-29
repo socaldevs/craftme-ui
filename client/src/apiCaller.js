@@ -87,4 +87,14 @@ export const getChatFromLesson = async (chatId) => {
 }
 
 
+export const fetchRemoteTeachersForCraft = async (craft_id) => {
+  try {
+    const { data } = await axios.get(`${SERVER}/student/fetchAllTeachersForCraft/${craft_id}`);
+    // getting the teachers out of the queried craft_teachers table result
+    return data[0]['users'];
+  } catch (error) {
+    console.error('Error while getting teachers for craft', error);
+  }
+};
+
 
