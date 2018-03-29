@@ -4,7 +4,6 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import allReducers from "./reducers/index.jsx";
-import { composeWithDevTools } from "redux-devtools-extension";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { PersistGate } from 'redux-persist/es/integration/react'
 

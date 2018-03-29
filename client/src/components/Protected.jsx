@@ -46,7 +46,7 @@ class ConnectedProtected extends Component {
     const { component: Component } = this.props;
   return (
   <div>
-  <MenuNav />
+  <MenuNav {...this.props} />
   <Component {...this.props} />
 
   </div>
