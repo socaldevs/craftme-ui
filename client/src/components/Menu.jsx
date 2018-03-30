@@ -164,13 +164,9 @@ class ConnectedMenuNav extends React.Component {
       );
     }
 }
-<<<<<<< HEAD
 
-const MenuNav = connect(null, mapDispatchToProps)(ConnectedMenuNav);
-
-=======
 MenuNav.propTypes = {
   classes: PropTypes.object.isRequired
 };
->>>>>>> [Front] functional avatar load and pull
+const MenuNav = connect(null, mapDispatchToProps)(ConnectedMenuNav);
 export default withStyles(styles)(MenuNav);
