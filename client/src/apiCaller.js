@@ -83,7 +83,27 @@ export const getChatFromLesson = async (chatId) => {
     console.log('Error with getChatFromLesson', error);
     return;
   }
-}
+};
+
+export const fetchRatingsForTeacher = async (teacher_id) => {
+  try {
+    const ratings = await axios.get(process.env.REST_PATH + `/user/fetchRatingsForTeacher/${teacher_id}`);
+    return ratings;
+  } catch (error) {
+    console.log('Error with fetchRatingsForTeacher', error);
+    return;
+  }
+};
+
+export const fetchFeedbackForLesson = async (lesson_id) => {
+  try {
+    const feedback = await axios.get(process.env.REST_PATH + `/user/fetchFeedbackForLesson/${lesson_id}`);
+    return feedback;
+  } catch (error) {
+    console.log('Error with fetchFeedbackForLesson', error);
+    return;
+  }
+};
 
 
 export const fetchRemoteTeachersForCraft = async (craft_id) => {
