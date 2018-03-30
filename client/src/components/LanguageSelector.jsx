@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 class LanguageSelector extends Component {
-  constructor(props){
-    super(props)
-    this.state={
+  constructor(props) {
+    super(props);
+    this.state = {
       languages: [],
-    }
+    };
   }
 
   async componentDidMount() {
