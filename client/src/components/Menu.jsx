@@ -8,16 +8,9 @@ import Grid from 'material-ui/Grid';
 import styled from 'styled-components';
 import Button from 'material-ui/Button';
 import { Switch, Route, Link } from 'react-router-dom';
-import actions from '../actions/index.jsx';
-import { connect } from 'react-redux';
-
-
-const mapDispatchToProps = dispatch => ({
-  removeUser: () => dispatch(actions.removeUser()),
-  removeToken: () => dispatch(actions.removeToken()),
-  removeId: () => dispatch(actions.removeId()),
-  removeType: () => dispatch(actions.removeType())
-});
+import Avatar from "material-ui/Avatar";
+import PropTypes from 'prop-types';
+import classNames from "classnames";
 
 const StyleButton = styled(Button)`
 width: 25%;
@@ -52,6 +45,13 @@ const styles = theme => ({
     padding: 0,
     listStyleType: 'none',
   },
+  avatar: {
+    margin: 10
+  },
+  bigAvatar: {
+    width: 60,
+    height: 60
+  }
 });
 
 class ConnectedMenuNav extends React.Component {
@@ -67,6 +67,9 @@ class ConnectedMenuNav extends React.Component {
     this.handleClose= this.handleClose.bind(this);
     this.handleCloseUser= this.handleCloseUser.bind(this);
     this.handleLogoutClick = this.handleLogoutClick.bind(this);
+
+    console.log("my info: ", this.props )
+
     
   }
   handleClick(event){
@@ -92,6 +95,7 @@ class ConnectedMenuNav extends React.Component {
       this.props.removeUser();
       this.props.removeId();
       this.props.removeType();
+      this.props.removeUrl();
     } catch (error) {
       console.log('Error with logging out', error);
       return;
@@ -101,6 +105,7 @@ class ConnectedMenuNav extends React.Component {
   render() {
     const anchorEl  = this.state.anchorEl;
     const anchorElUser  = this.state.anchorElUser;
+    const { classes } = this.props;
       return (
           <Grid container spacing={24}>
           <Grid item xs={12} sm={6}>
@@ -118,7 +123,9 @@ class ConnectedMenuNav extends React.Component {
                 open={Boolean(anchorElUser)}
                 onClose={this.handleCloseUser}
               >
-                <MenuItem onClick={this.handleCloseUser}>
+                        <Avatar src={this.props.currentUrl} className={classNames(classes.avatar)}/>
+
+                <MenuItem onClick={() => this.handleLogoutClick()}>
                   Logout
                 </MenuItem>
                 <MenuItem onClick={this.handleCloseUser}>
@@ -150,9 +157,6 @@ class ConnectedMenuNav extends React.Component {
                 <MenuItem onClick={this.handleClose}>
                   <Link to="/messages">Messages</Link>
                 </MenuItem>
-                <MenuItem onClick={() => this.handleLogoutClick()}>
-                  Logout
-                </MenuItem>
               </Menu>
               </MenuDiv>
 
@@ -163,6 +167,8 @@ class ConnectedMenuNav extends React.Component {
     }
 }
 
+MenuNav.propTypes = {
+  classes: PropTypes.object.isRequired
+};
 const MenuNav = connect(null, mapDispatchToProps)(ConnectedMenuNav);
-
 export default withStyles(styles)(MenuNav);
