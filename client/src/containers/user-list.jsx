@@ -5,7 +5,7 @@ import selectUser from '../actions/index.jsx';
 
 class UserList extends Component {
   createListItems() {
-    return this.props.users.map((user, i) => {
+    return this.props.users.map((user) => {
       return (
         <li key={user.id} onClick={() => this.props.selectUser(user)}>
           {user.first}
