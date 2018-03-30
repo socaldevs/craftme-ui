@@ -115,7 +115,6 @@ class Signup extends Component {
       <StyledDiv>
         <h1>CraftMe</h1>
       <Avatar
-        alt="Adelle Charles"
         src={this.state.profile}
         className={classNames(classes.avatar, classes.bigAvatar)}
       />
@@ -165,7 +164,7 @@ class Signup extends Component {
 }
 
 Signup.propTypes = {
-  classes: PropTypes.object
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(Signup)
