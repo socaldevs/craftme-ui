@@ -66,7 +66,7 @@ class ConnectedLogin extends Component {
         this.props.updateId(data.data.id);
         this.props.updateToken(data.data.token);
         this.props.updateType(data.data.type);
-        this.props.updateUrl(data.data.url);
+        this.props.updateUrl(data.data.profile_pic_url);
         this.props.history.push('/search');
       }
     } catch (error) {
