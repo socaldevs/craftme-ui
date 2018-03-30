@@ -7,12 +7,14 @@ import currentId from './currentId.jsx';
 import currentToken from './currentToken.jsx';
 import currentType from './currentType.jsx';
 import currentUser from './currentUser.jsx';
+import currentUrl from './currentUrl.jsx';
 
 export default combineReducers({
   currentId,
   currentToken,
   currentType,
-  currentUser
+  currentUser,
+  currentUrl
 });
 
 // reducers take in actions and update part of application's state, sends to store
