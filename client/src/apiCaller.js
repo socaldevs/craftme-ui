@@ -52,14 +52,8 @@ export const submitAvailabilityToServer = async (availability) => {
 
 export const fetchUserUpcomingBookings = async (userId) => {
   try {
- 
     const response = await axios
-      .get(`${SERVER}/user/getAllBookingsForUser/`,{
-        params: {
-          userId
-        }
-      });    
-    
+      .get(`${SERVER}/user/getAllBookingsForUser/${userId}`);    
     return response.data;
   } catch (error) {
     console.error('Error while fetching User Upcoming Bookings', error);
@@ -71,11 +65,7 @@ export const fetchUserUpcomingBookings = async (userId) => {
 
 export const getUserPastLessons = async (userId) => {
   try {
-    const response = await axios.get(`${SERVER}/user/fetchAllLessons/`,{
-      params: {
-        userId
-      }
-    });
+    const response = await axios.get(`${SERVER}/user/fetchAllLessons/${userId}`);
     return response.data;
   } catch (error) {
     console.error('Error while getting user past lessons ', error);
