@@ -11,6 +11,10 @@
 const actions = {
   updateUser: user => ({type: 'UPDATE_USER', payload: user}),
   removeUser: () => ({type: 'REMOVE_USER', payload: null}),
+
+  updateUrl: url => ({type: 'UPDATE_URL', payload: url}),
+  removeUrl: () => ({type: 'REMOVE_URL', payload: null}),
+
   updateToken: token => ({type: 'UPDATE_TOKEN', payload: token}),
   removeToken: () => ({type: 'REMOVE_TOKEN', payload: null}),
   updateId: id => ({type: 'UPDATE_ID', payload: id}),

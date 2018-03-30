@@ -12,14 +12,17 @@ const mapDispatchToProps = dispatch => ({
   updateId: id => dispatch(actions.updateId(id)),
   removeId: () => dispatch(actions.removeId()),
   updateType: type => dispatch(actions.updateType(type)),
-  removeType: () => dispatch(actions.removeType())
+  removeType: () => dispatch(actions.removeType()),
+  updateUrl: url => dispatch(actions.updateUrl(url)),
+  removeUrl: () => dispatch(actions.removeUrl())
 });
 
 const mapStateToProps = state => ({
   currentUser: state.currentUser,
   currentType: state.currentType,
   currentId: state.currentId,
-  currentToken: state.currentToken
+  currentToken: state.currentToken,
+  currentUrl: state.currentUrl
 });
 
 class ConnectedProtected extends Component {
@@ -45,10 +48,11 @@ class ConnectedProtected extends Component {
   {
     const { component: Component } = this.props;
   return (
-    <div>
-      <MenuNav {...this.props} />
-      <Component {...this.props} />
-    </div>
+  <div>
+  <MenuNav key={'1'}{...this.props}  />
+  <Component key={'2'}{...this.props} />
+
+  </div>
   
   )}
 }
