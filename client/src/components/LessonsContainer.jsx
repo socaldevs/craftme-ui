@@ -89,13 +89,13 @@ class LessonsContainer extends Component {
       console.log('currentId  ====>', this.props.currentId);
       console.log('currentType  ====>', this.props.currentType);
       
-      const userId = {teacher_id: 1};
+      const {currentId} = this.props;
       // if(type === 0){
       //   userId['teacher_id'] = this.props.currentId;    
       // } else if (type === 1){
       //   userId['student_id'] = this.props.currentId;    
       // }
-      const upcomingBookings = await fetchUserUpcomingBookings(userId);
+      const upcomingBookings = await fetchUserUpcomingBookings(currentId);
       this.setState({ upcomingBookings });  
     };
 
@@ -103,6 +103,7 @@ class LessonsContainer extends Component {
       // console.log('currentId  ====>', this.props.currentId);
       // console.log('currentType  ====>', this.props.currentType);
       const {currentId} = this.props;
+      console.log('currentID is ================>', currentId);
       const pastLessons = await getUserPastLessons(currentId);
       console.log('weird dude', pastLessons);
       this.setState({ pastLessons });  
