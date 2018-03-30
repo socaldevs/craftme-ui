@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client/dist/socket.io.js';
 import axios from 'axios';
+import Peer from 'simple-peer';
 import TextToTranslate from './TextToTranslate.jsx';
 import LanguageSelector from './LanguageSelector.jsx';
 
@@ -106,7 +107,12 @@ class Chat extends Component {
     //     console.log('Failed to get local stream', err);
     //   });
     // });
-    this.videoContainer.innerHTML = '';
+    
+  }
+
+  componentWillUnmount() {
+    // this.videoContainer.innerHTML = '';
+    this.peer.destroy();
   }
 
   async saveChat () {
