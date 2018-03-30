@@ -66,6 +66,7 @@ class ConnectedMenuNav extends React.Component {
     this.handleClickUser = this.handleClickUser.bind(this);
     this.handleClose= this.handleClose.bind(this);
     this.handleCloseUser= this.handleCloseUser.bind(this);
+    this.handleLogoutClick = this.handleLogoutClick.bind(this);
 
     console.log("my info: ", this.props )
 
@@ -94,6 +95,7 @@ class ConnectedMenuNav extends React.Component {
       this.props.removeUser();
       this.props.removeId();
       this.props.removeType();
+      this.props.removeUrl();
     } catch (error) {
       console.log('Error with logging out', error);
       return;
