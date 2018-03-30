@@ -47,7 +47,7 @@ class LessonsContainer extends Component {
     let bookings = this.state.upcomingBookings || [];
     console.log('props from conatiner', this.props);
     return (
-      bookings.map((booking)=>{
+      bookings.map((booking,i)=>{
         return <Card key={booking.id} booking={booking} history={this.props.history}centered />;
       })
     );
@@ -57,7 +57,7 @@ class LessonsContainer extends Component {
     let pastLessons = this.state.pastLessons || [];
     return (
       <div>
-      {pastLessons.map((pastLesson)=>{
+      {pastLessons.map((pastLesson,i)=>{
         return (
           <div> 
             <Card key={pastLesson.id} 
@@ -69,9 +69,9 @@ class LessonsContainer extends Component {
       })
       }
         <div> {
-          this.state.chats.map(chat => {
+          this.state.chats.map((item, i)=> {
             return ( 
-              <p> {chat.handle} : {chat.message} </p>
+              <div key={i}> <p> {chat.handle} : {chat.message} </p> </div>
             )
           })
         } 

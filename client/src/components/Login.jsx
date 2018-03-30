@@ -21,14 +21,17 @@ const mapDispatchToProps = dispatch => ({
   updateId: id => dispatch(actions.updateId(id)),
   removeId: () => dispatch(actions.removeId()),
   updateType: type => dispatch(actions.updateType(type)),
-  removeType: () => dispatch(actions.removeType())
+  removeType: () => dispatch(actions.removeType()),
+  updateUrl: url => dispatch(actions.updateUrl(url)),
+  removeUrl: () => dispatch(actions.removeUrl()),
 });
 
 const mapStateToProps = state => ({
   currentUser: state.currentUser,
   currentType: state.currentType,
   currentId: state.currentId,
-  currentToken: state.currentToken
+  currentToken: state.currentToken,
+  currentUrl: state.currentUrl
 });
 
 const StyleButton = styled(Button)`
@@ -68,10 +71,12 @@ class ConnectedLogin extends Component {
         password: this.state.password
       });
       if (data) {
+        console.log("data: ", data)
         this.props.updateUser(data.data.username);
         this.props.updateId(data.data.id);
         this.props.updateToken(data.data.token);
         this.props.updateType(data.data.type);
+        this.props.updateUrl(data.data.url);
         this.props.history.push('/search');
       }
     } catch (error) {
