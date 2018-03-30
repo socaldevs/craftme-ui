@@ -87,7 +87,7 @@ export const getChatFromLesson = async (chatId) => {
 
 export const fetchRatingsForTeacher = async (teacher_id) => {
   try {
-    const ratings = await axios.get(process.env.REST_PATH + `/user/fetchRatingsForTeacher/${teacher_id}`);
+    const ratings = await axios.get(process.env.REST_PATH + `/user/calculateAverageRatingForTeacher/${teacher_id}`);
     return ratings;
   } catch (error) {
     console.log('Error with fetchRatingsForTeacher', error);
