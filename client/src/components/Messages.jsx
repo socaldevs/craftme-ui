@@ -58,20 +58,24 @@ export default class Messages extends Component {
   render() {
     return (
       <div>
-        Recipient:{' '}
-        <input
-          type="text"
-          name="recipient"
-          value={this.state.recipient}
-          onChange={e => this.handleChange(e)}
-        />{' '}
-        <input
-          type="text"
-          name="message"
-          value={this.state.message}
-          onChange={e => this.handleChange(e)}
-        />
-        <button onClick={() => this.sendMessage()}>Send </button>
+        <div class="speech-bubble">
+          Recipient:{' '}
+          <input
+            type="text"
+            name="recipient"
+            value={this.state.recipient}
+            onChange={e => this.handleChange(e)}
+          />{' '}
+          <br />
+          Message:{' '}
+          <input
+            type="text"
+            name="message"
+            value={this.state.message}
+            onChange={e => this.handleChange(e)}
+          />
+          <button onClick={() => this.sendMessage()}>Send </button>
+        </div>
         <ConversationList props={this.props} conversations={this.state.conversations} />
       </div>
     );

@@ -28,6 +28,7 @@ class ConnectedNavbar extends Component {
       this.props.removeUser();
       this.props.removeId();
       this.props.removeType();
+      this.props.removeUrl();
       this.props.history.push('/login');
     } catch (error) {
       console.log('Error with logging out', error);
@@ -44,8 +45,7 @@ class ConnectedNavbar extends Component {
         <Link to="/search" className="item">Search</Link>
         <Link to="/lessons" className="item">Lessons</Link>
         <Link to="/messages" className="item">Messages</Link>
-        {/* <a href="/login" className="item" onClick={this.handleLogoutClick}> Logout </a> */}
-        <Link to="/search" className="item" onClick={this.handleLogoutClick}>Logout</Link>
+        <Link to="/search" className="item" onClick={this.handleLogoutClick}>Logout</Link> />
       </ul>
     )
   }
