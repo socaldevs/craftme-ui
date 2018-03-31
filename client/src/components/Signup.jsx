@@ -1,21 +1,16 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Button from 'material-ui/Button';
-import Popup from "reactjs-popup";
 import styled from 'styled-components';
 import Input, { InputLabel } from 'material-ui/Input';
-import { FormControl, FormHelperText } from 'material-ui/Form';
-import Login from './Login.jsx';
-import Grid from './Grid.jsx'
-import { Switch, Route, Link } from 'react-router-dom';
+import { FormControl } from 'material-ui/Form';
+import { Link } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
-import PropTypes from 'prop-types';
 import BottomNavigation, { BottomNavigationAction } from 'material-ui/BottomNavigation';
-import Icon from 'material-ui/Icon';
 import PersonIcon from 'material-ui-icons/Person';
 import SchoolIcon from 'material-ui-icons/School';
-import Avatar from "material-ui/Avatar";
-import classNames from "classnames";
+import Avatar from 'material-ui/Avatar';
+import classNames from 'classnames';
 
 
 const StyleButton = styled(Button)`
@@ -32,16 +27,16 @@ const styles = theme => ({
     width: 150,
   },
   row: {
-    display: "flex",
-    justifyContent: "center"
+    display: 'flex',
+    justifyContent: 'center'
   },
   avatar: {
-    margin: 10
+    margin: 10,
   },
   bigAvatar: {
     width: 60,
-    height: 60
-  }
+    height: 60,
+  },
 });
 
 class Signup extends Component {
@@ -51,16 +46,16 @@ class Signup extends Component {
       username: '',
       password: '',
       passwordTwo: '',
-      bio: "",
+      bio: '',
       value: 'student',
-      profile: "http://www.planystech.com/wp-content/uploads/2017/03/profile-placeholder.jpg",
+      profile: 'http://www.planystech.com/wp-content/uploads/2017/03/profile-placeholder.jpg',
       file: null
     };
 
     this.urlInput = this.urlInput.bind(this);
     this.signUp = this.signUp.bind(this);
-    
-    this.handleChange = (e,name) => {
+
+    this.handleChange = (e, name) => {
       this.setState({ [name]: e.target.value });
     };
     this.handleChangeButton = (event, value) => {
@@ -72,7 +67,7 @@ class Signup extends Component {
 
     let reader = new FileReader();
     var coming = event.target.files[0];
-    
+
     reader.onloadend = () => {
       this.setState({
         profile: reader.result,
@@ -84,11 +79,11 @@ class Signup extends Component {
 
   }
 
-  
-  async signUp(){ 
+
+  async signUp() {
     try {
-      let type = (this.state.value === "teacher") ? 0 : 1
-      let active = (this.state.file) ? this.state.file : ""
+      let type = (this.state.value === 'teacher') ? 0 : 1;
+      let active = (this.state.file) ? this.state.file : '';
 
 
       const formData = new FormData();
@@ -97,14 +92,13 @@ class Signup extends Component {
       formData.append('password', this.state.password);
       formData.append('bio', this.state.bio);
       formData.append('type', type);
-      let data = await axios.post(process.env.REST_PATH + '/auth/signup', formData);
+      const data = await axios.post(`${process.env.REST_PATH}/auth/signup`, formData);
       if (data) {
         this.props.history.push('/login');
       }
       console.log(data);
     } catch (error) {
       console.log('error with signup', error);
-      return;
     }
   }
 
@@ -114,57 +108,51 @@ class Signup extends Component {
     return (
       <StyledDiv>
         <h1>CraftMe</h1>
-      <Avatar
-        src={this.state.profile}
-        className={classNames(classes.avatar, classes.bigAvatar)}
-      />
+        <Avatar
+          src={this.state.profile}
+          className={classNames(classes.avatar, classes.bigAvatar)}
+        />
         <div>
-        <form>
-          <label>
-          Display Photo:
-              <input
-              type="file" 
-              onChange={this.urlInput}
-              />
-          </label>
-        </form>
-      </div>
+          <form>
+            <label>
+              Display Photo:
+              <input type="file" onChange={this.urlInput} />
+            </label>
+          </form>
+        </div>
         <FormControl>
-        <InputLabel >USERNAME</InputLabel>
-        <Input type='text' value={this.state.username} onChange={e => this.handleChange(e,"username")} />
+          <InputLabel >USERNAME</InputLabel>
+          <Input type='text' value={this.state.username} onChange={e => this.handleChange(e, "username")} />
         </FormControl>
         <div> </div>
         <FormControl>
-        <InputLabel >PASSWORD</InputLabel>
-        <Input type="password" value={this.state.password} onChange={e => this.handleChange(e,"password")} />
+          <InputLabel >PASSWORD</InputLabel>
+          <Input type="password" value={this.state.password} onChange={e => this.handleChange(e, "password")} />
         </FormControl>
         <div> </div>
         <FormControl>
-        <InputLabel >RENTER PASSWORD</InputLabel>
-        <Input type="password" value={this.state.passwordTwo} onChange={e => this.handleChange(e,"passwordTwo")} />
+          <InputLabel >RENTER PASSWORD</InputLabel>
+          <Input type="password" value={this.state.passwordTwo} onChange={e => this.handleChange(e, "passwordTwo")} />
         </FormControl>
         <div> </div>
         <FormControl>
-        <InputLabel >BIOGRAPHY</InputLabel>
-        <Input type='text' value={this.state.bio} onChange={e => this.handleChange(e,"bio")} />
+          <InputLabel >BIOGRAPHY</InputLabel>
+          <Input type='text' value={this.state.bio} onChange={e => this.handleChange(e, "bio")} />
         </FormControl>
         <div>
-        <BottomNavigation value={value} onChange={this.handleChangeButton} className={classes.root}>
-        <BottomNavigationAction label="Student" value="student" icon={<PersonIcon />} />
-        <BottomNavigationAction label="Teacher" value="teacher" icon={<SchoolIcon />} />
-      </BottomNavigation>
-      </div>
+          <BottomNavigation value={value} onChange={this.handleChangeButton} className={classes.root}>
+            <BottomNavigationAction label="Student" value="student" icon={<PersonIcon />} />
+            <BottomNavigationAction label="Teacher" value="teacher" icon={<SchoolIcon />} />
+          </BottomNavigation>
+        </div>
 
         <p><StyleButton variant="raised" onClick={this.signUp}>SIGNUP</StyleButton></p>
 
         <p><Link to="/login">Login</Link></p>
       </StyledDiv>
-    )
+    );
   }
 }
 
-Signup.propTypes = {
-  classes: PropTypes.object.isRequired
-};
 
 export default withStyles(styles)(Signup)

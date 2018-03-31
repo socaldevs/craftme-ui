@@ -52,7 +52,7 @@ class ConnectedLogin extends Component {
 
   async login() {
     try {
-      const data = await axios.post(`${process.env.REST_PATH} '/auth/login`, {
+      const data = await axios.post(`${process.env.REST_PATH}/auth/login`, {
         username: this.state.username,
         password: this.state.password,
       });
