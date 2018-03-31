@@ -5,26 +5,18 @@ import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
-import Menu, { MenuItem } from 'material-ui/Menu';
+import { MenuItem } from 'material-ui/Menu';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import styled from 'styled-components';
-import Button from 'material-ui/Button';
-import { Switch, Route, Link } from 'react-router-dom';
+/* import Button from 'material-ui/Button'; */
 
-const StyleButton = styled(Button)`
-width: 25%;
-`;
-
-const MenuDiv = styled.div`
-margin-left: 85%;
-`;
 const StyledDiv = styled.div`
 margin-left: 40%;
 margin-right: 40%;
 `;
 
-var suggestions = [];
+let suggestions = [];
 
 function renderInput(inputProps) {
   const { classes, ref, ...other } = inputProps;
@@ -125,115 +117,110 @@ class Search extends React.Component {
     this.state = {
       value: '',
       suggestions: [],
-      showModal: false
-    }
+    };
     this.search = async () => {
       try {
-        let data = await axios.get(process.env.REST_PATH +'/user/getAllCrafts');
+        const data = await axios.get(`${process.env.REST_PATH}/user/getAllCrafts`);
         if (data) {
           let newPull = [];
-          for(var element of data.data){
-            newPull.push({label: element.name, craft: element})
+          for (var element of data.data) {
+            newPull.push({ label: element.name, craft: element })
           }
           suggestions = newPull;
         }
       } catch (error) {
         console.log('error with search data:', error);
-        return;
       }
-      }
+    };
     this.handleSuggestionsFetchRequested = this.handleSuggestionsFetchRequested.bind(this);
-    this.handleSuggestionsClearRequested= this.handleSuggestionsClearRequested.bind(this);
+    this.handleSuggestionsClearRequested = this.handleSuggestionsClearRequested.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleKey = this.handleKey.bind(this);
-    
+  }
+  componentDidMount() {
+    this.search();
   }
 
-
-  handleSuggestionsFetchRequested({ value }){
+  handleSuggestionsFetchRequested({ value }) {
     this.setState({
       suggestions: getSuggestions(value),
     });
-  };
+  }
 
-  handleSuggestionsClearRequested(){
+  handleSuggestionsClearRequested() {
     this.setState({
       suggestions: [],
     });
-  };
+  }
 
-  handleChange(event, { newValue }){
+  handleChange(event, { newValue }) {
     this.setState({
       value: newValue,
     });
-  };
+  }
 
-  handleKey(event){
-    if(event.key == 'Enter'){
+  handleKey(event) {
+    if (event.key == 'Enter') {
       // the only part written by fireArthur
       //find a match in the crafts array
-      const matchedCraftIndex = suggestions.findIndex((craftSuggestion)=>{
+      const matchedCraftIndex = suggestions.findIndex((craftSuggestion) => {
         return craftSuggestion.label === this.state.value;
       });
       // if match not found
-      if(matchedCraftIndex < 0){
-        console.error(`match not found for ${this.state.value}` );
+      if (matchedCraftIndex < 0) {
+        console.error(`match not found for ${this.state.value}`);
       } else {
         // redirect to searchResults and pass the matched craft
         const matchedCraft = suggestions[matchedCraftIndex].craft;
         this.props.history.push('/searchResults', { matchedCraft });
       }
-     
-    }
-  };
 
-  componentDidMount(){
-    this.search();
+    }
   }
 
 
   render() {
     const { classes } = this.props;
-      return (
-        <div>
+    return (
+      <div>
         <StyledDiv >
-        <Grid container spacing={40}>
-          <Grid item xs={6} sm={3}>
-          </Grid>
-          <h1>CraftMe</h1>
-          <img src="logo.png" alt="logo" height="300" width="303" />        
-          <Grid item xs={12}>
-          
-            <Autosuggest 
-            theme={{
-            container: classes.container,
-            suggestionsContainerOpen: classes.suggestionsContainerOpen,
-            suggestionsList: classes.suggestionsList,
-            suggestion: classes.suggestion,
-            }}
-          renderInputComponent={renderInput}
-          suggestions={this.state.suggestions}
-          onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
-          renderSuggestionsContainer={renderSuggestionsContainer}
-          getSuggestionValue={getSuggestionValue}
-          renderSuggestion={renderSuggestion}
-          inputProps={{
-            classes,
-            placeholder: 'Search a Skill',
-            value: this.state.value,
-            onChange: this.handleChange,
-            onKeyPress: this.handleKey,
-          }}
-        />
+          <Grid container spacing={40}>
+            <Grid item xs={6} sm={3}>
+            </Grid>
+            <h1>CraftMe</h1>
+            <img src="logo.png" alt="logo" height="300" width="303" />
+            <Grid item xs={12}>
 
+              <Autosuggest
+                theme={{
+                  container: classes.container,
+                  suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                  suggestionsList: classes.suggestionsList,
+                  suggestion: classes.suggestion,
+                }}
+                renderInputComponent={renderInput}
+                suggestions={this.state.suggestions}
+                onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
+                onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
+                renderSuggestionsContainer={renderSuggestionsContainer}
+                getSuggestionValue={getSuggestionValue}
+                renderSuggestion={renderSuggestion}
+                inputProps={{
+                  classes,
+                  placeholder: 'Search a Skill',
+                  value: this.state.value,
+                  onChange: this.handleChange,
+                  onKeyPress: this.handleKey,
+                }}
+              />
+
+            </Grid>
           </Grid>
-        </Grid>
-      </StyledDiv>
+        </StyledDiv>
       </div>
-  
-      );
-    }
+
+    );
+  }
 }
 
 export default withStyles(styles)(Search);
