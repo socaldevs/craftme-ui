@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client/dist/socket.io.js';
 import axios from 'axios';
+import Peer from 'simple-peer';
 import TextToTranslate from './TextToTranslate.jsx';
 import LanguageSelector from './LanguageSelector.jsx';
 
@@ -11,12 +12,13 @@ class Chat extends Component {
       message: '',
       messages: [],
       feedback: '',
-      peerId: '',
-      otherPeerId: '',
       translateFrom: '',
       translateTo: '',
+      // peerId: '',
+      // otherPeerId: '',
     }
     this.username = this.props.currentUser;
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
   }
   componentDidMount() { 
     this.socket = io(`${process.env.SOCKET_PATH}/`);
@@ -44,15 +46,19 @@ class Chat extends Component {
     this.socket.on('typing', (data) => {
       this.setState({ feedback: data});
     })
-    this.socket.on('getOtherPeerId', (data) => {
-      this.socket.emit('fetchedPeerId', {
-        peerId: this.state.peerId,
-        room: this.props.roomId,
-      });
+
+    this.socket.on('offer', (offer) => {
+      this.peer.signal(JSON.parse(offer));
     });
-    this.socket.on('fetchedPeerId', (data) => {
-      this.setState({ otherPeerId: data });
-    });
+    // this.socket.on('getOtherPeerId', (data) => {
+    //   this.socket.emit('fetchedPeerId', {
+    //     peerId: this.state.peerId,
+    //     room: this.props.roomId,
+    //   });
+    // });
+    // this.socket.on('fetchedPeerId', (data) => {
+    //   this.setState({ otherPeerId: data });
+    // });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -61,28 +67,52 @@ class Chat extends Component {
       this.socket.emit('room', nextProps.roomId);
       this.setState({ messages: [], feedback: '' });
     }
-    this.peer = new Peer({ key: process.env.PEERKEY });
-    this.peer.on('open', (id) => {
-      this.setState({ peerId: id });
-    });
-    this.peer.on('call', (call) => {
-      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-      navigator.getUserMedia({video: true, audio: true}, (stream) => {
-        call.answer(stream); 
-        call.on('stream', (remoteStream) => {
-          let video = document.createElement('video');
-          this.videoContainer.append(video);
-          video.src = window.URL.createObjectURL(remoteStream);
-          video.play();
-        });
-        this.socket.on('endCall', () => {
-          call.close();
-        })
-      }, (err) => {
-        console.log('Failed to get local stream', err);
+    navigator.getUserMedia({ video: true, audio: false }, (stream) => {
+      this.peer = new Peer({
+        initiator: false, //who is the first peer?
+        trickle: false,
+        stream: stream
       });
-    });
-    this.videoContainer.innerHTML = '';
+      this.peer.on('signal', (data) => {
+        this.socket.emit('answer', {
+          room: this.props.roomId,
+          answer: JSON.stringify(data),
+        });
+      });
+      this.peer.on('stream', (stream) => {
+        let video = document.createElement('video');
+        this.videoContainer.append(video);
+        video.src = window.URL.createObjectURL(stream);
+        video.play();
+      })
+    }, (err) => console.log('err', err));
+    // this.peer = new Peer({ key: process.env.PEERKEY });
+    // this.peer.on('open', (id) => {
+    //   this.setState({ peerId: id });
+    // });
+    // this.peer.on('call', (call) => {
+    //   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+    //   navigator.getUserMedia({video: true, audio: true}, (stream) => {
+    //     call.answer(stream); 
+    //     call.on('stream', (remoteStream) => {
+    //       let video = document.createElement('video');
+    //       this.videoContainer.append(video);
+    //       video.src = window.URL.createObjectURL(remoteStream);
+    //       video.play();
+    //     });
+    //     this.socket.on('endCall', () => {
+    //       call.close();
+    //     })
+    //   }, (err) => {
+    //     console.log('Failed to get local stream', err);
+    //   });
+    // });
+    
+  }
+
+  componentWillUnmount() {
+    // this.videoContainer.innerHTML = '';
+    this.peer.destroy();
   }
 
   async saveChat () {
@@ -120,30 +150,56 @@ class Chat extends Component {
     this.setState({ message: '' });
   }
 
-  async callPeer() { 
-    const peer = this.peer;
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-    try {
-      let getOtherPeerId = await this.socket.emit('getOtherPeerId', this.props.roomId);
-      let videoCall = await navigator.getUserMedia({video: true, audio: true}, (stream) => {
-        this.call = peer.call(this.state.otherPeerId, stream);
-        this.call.on('stream', (remoteStream) => {
-          let video = document.createElement('video');
-          this.videoContainer.append(video);
-          video.src = window.URL.createObjectURL(remoteStream);
-          video.play();
-        });
-        this.socket.on('endCall', () => {
-          this.call.close();
-          //stream.stop();
-        })
-      }, (err) => {
-        console.log('Failed to get local stream', err);
+  callPeer() {
+    navigator.getUserMedia({ video: true, audio: false }, (stream) => {
+      this.peer = new Peer({
+        initiator: true, 
+        trickle: false,
+        stream: stream
       });
-    } catch(err) {
-      console.log('err from callPeer', err);
-    }
+      this.peer.on('signal', (data) => {
+        this.socket.emit('offer', {
+          room: this.props.roomId,
+          offer: JSON.stringify(data),
+        })
+      });
+      this.socket.on('answer', (answer) => {
+        this.peer.signal(JSON.parse(answer))
+      });
+      this.peer.on('connect', () => console.log('PEER CONNECTED'))
+      this.peer.on('stream', (stream) => {
+        let video = document.createElement('video');
+        this.videoContainer.append(video);
+        video.src = window.URL.createObjectURL(stream);
+        video.play();
+      });
+    }, (err) => console.log('err', err));
   }
+
+  // async callPeer() { 
+  //   const peer = this.peer;
+  //   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+  //   try {
+  //     let getOtherPeerId = await this.socket.emit('getOtherPeerId', this.props.roomId);
+  //     let videoCall = await navigator.getUserMedia({video: true, audio: true}, (stream) => {
+  //       this.call = peer.call(this.state.otherPeerId, stream);
+  //       this.call.on('stream', (remoteStream) => {
+  //         let video = document.createElement('video');
+  //         this.videoContainer.append(video);
+  //         video.src = window.URL.createObjectURL(remoteStream);
+  //         video.play();
+  //       });
+  //       this.socket.on('endCall', () => {
+  //         this.call.close();
+  //         //stream.stop();
+  //       })
+  //     }, (err) => {
+  //       console.log('Failed to get local stream', err);
+  //     });
+  //   } catch(err) {
+  //     console.log('err from callPeer', err);
+  //   }
+  // }
 
   selectLanguage(e){
     e.target.className === 'from' ? 
@@ -187,3 +243,4 @@ class Chat extends Component {
 }
 
 export default Chat;
+
