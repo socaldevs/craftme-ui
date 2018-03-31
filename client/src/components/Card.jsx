@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import Paper from 'material-ui/Paper';
-import axios from 'axios';
 import { getChatFromLesson } from '../apiCaller.js';
 export default class Card extends Component {
   constructor(props) {

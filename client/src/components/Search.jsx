@@ -170,7 +170,7 @@ class Search extends React.Component {
 
   handleKey(event){
     if(event.key == 'Enter'){
-      
+      // the only part written by fireArthur
       //find a match in the crafts array
       const matchedCraftIndex = suggestions.findIndex((craftSuggestion)=>{
         return craftSuggestion.label === this.state.value;

@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment';
-import { fetchTeacherAvailability, submitBookingToServer, submitAvailabilityToServer } from './../apiCaller.js';
+import { 
+  fetchTeacherAvailability, 
+  submitBookingToServer, 
+  submitAvailabilityToServer,
+  fetchUserUpcomingBookings,
+} from './../apiCaller.js';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 
@@ -14,7 +19,8 @@ export default class Calendar extends Component {
     this.state = {
       teacher_id: 0,
       student_id: 0,
-      availabilities: [],
+      events: [],
+      events: [],
       start: '',
       end: '',
       selected_availability_id: 0,
@@ -27,15 +33,29 @@ export default class Calendar extends Component {
     this.submitAvailability = this.submitAvailability.bind(this);
     this.renderStudentElements = this.renderStudentElements.bind(this);
     this.renderTeacherElements = this.renderTeacherElements.bind(this);
+    this.getTeacherAppointments = this.getTeacherAppointments.bind(this);
+    this.getTeacherAvailability = this.getTeacherAvailability.bind(this);      
   }
 
 
   async submitAvailability() {
-    
+    // Teachers are directed to search to add a craft on login
+    // after they add it they're directed to calendar submit availability
+  
+
+
+
+    // submit availability is a feature only teachers can use
+    // so it assumes that the logged in usertype is teacher and
+    // it grabs the currentId as the teacher id 
     const { start, end } = this.state;
-    
+    const { currentId } = this.props.currentId;
+    // this is used when the redirection to calendar from teacher account
+    // is implemented
+    // const { currentId } = this.props.history.location.state;
+  
     try {
-      conosle.log('what follows is harded coded');           
+      console.log('what follows is harded coded ( teacher_id: 1 )');           
       const availabilityToSend  = {
         teacher_id: 1,
         start,
@@ -43,11 +63,11 @@ export default class Calendar extends Component {
       };
       const availability  = await submitAvailabilityToServer(availabilityToSend);        
       //datefying the string date
-      availability.title = 'Other title';
+      availability.title = 'Open';
       availability.start = new Date(availability.start);
       availability.end = new Date(availability.end);
-      // updating the availabilities on the calendar
-      await this.setState({ availabilities: [...this.state.availabilities, availability]});
+      // updating the events on the calendar
+      await this.setState({ events: [...this.state.events, availability]});
     } catch (error) {
       console.error('error while trying to submit availability', error);
     }  
@@ -61,8 +81,8 @@ export default class Calendar extends Component {
     const title = `${matchedCraft.name} | Teacher: ${teacher.username} | Student: ${student.currentUser}`;
     try {
       const bookingToSend  = {
-        // student_id: student.currentId,
-        student_id: 5,
+        student_id: student.currentId,
+        // student_id: 5,
         teacher_id: teacher.id,
         title,
         start,
@@ -77,7 +97,7 @@ export default class Calendar extends Component {
       booking.start = new Date(booking.start);
       booking.end = new Date(booking.end);
       
-      const updatedAvailabilities = this.state.availabilities.filter((availability) => {
+      const updatedAvailabilities = this.state.events.filter((availability) => {
         // getting rid of the booked slot
         if(availability.id === bookingToSend.selected_availability_id){
           return false;
@@ -91,7 +111,7 @@ export default class Calendar extends Component {
         //   return true;
         // }
       });
-      await this.setState({availabilities: updatedAvailabilities});
+      await this.setState({events: updatedAvailabilities});
       // redirect to lessons after a successful booking
       this.props.history.push('/lessons');
     } catch (error) {
@@ -120,6 +140,7 @@ export default class Calendar extends Component {
         await this.setState({ buttonStatus:true });
         console.log('this is unavailable');  
       } else {
+        // if the user is a teacher        
         console.log('this is available, timeslot: ', timeslot );
         const { start, end } = timeslot;
         await this.setState({ start, end, buttonStatus:false });          
@@ -157,33 +178,101 @@ export default class Calendar extends Component {
         </button>
       </div>  
     );
+    
   }
+
+  // for student user
+  // as a student the user is going to be directed to this page from
+  // the search results page so the next line receives the student (current user) id
+  // and the teacher he's interested in from the state that was passed from the
+  // the search results page
+  async getTeacherAvailability(studentId, teacher) {
+    try {
+
+      await this.setState({
+        student_id: studentId,
+        teacher_id: teacher.id
+      });
+
+      let availabilities = await fetchTeacherAvailability(this.state.teacher_id);
+      //datefying the string dates
+      availabilities = availabilities.map((availability) => {
+        availability.title = 'Open';
+        availability.taken = false;
+        availability.start = new Date(availability.start);
+        availability.end = new Date(availability.end);
+        return availability;
+      });
+      await this.setState({events: [...this.state.events, ...availabilities]});
+      console.log('just finished excuting teacher availability and the state is', this.state.events);
+    } catch (error) {
+      console.error('error while trying to set the state from server availabilities', error);
+    }
+  }
+
+  // Teacher feature
+  // getting the appointments aleardy set for this teacher
+  // assuming that the logged in usertype is teacher and
+  // and the currentId in this case is a teacher id 
+  async getTeacherAppointments(studentId, teacher) {
+    // const { currentId } = this.props;
+    // map their titles to be like Craft with Student and proper date
+    // add them to the events array
+    try {
+      // get bookings from bookings table for the logged in teacher
+      console.log('hard coded input at fetchUserUpcomingBookings');
+      let appointments = await fetchUserUpcomingBookings(1);
+
+      console.log(appointments[0]);
+      // console.log(appointments[1]);
+      // console.log(appointments[2]);          
+      appointments = appointments.map((appointment) => {
+        // appointment.title = 'Taken';
+        appointment.taken = true;
+        appointment.start = new Date(appointment.start);
+        appointment.end = new Date(appointment.end);
+        return appointment;
+      });
+      console.log('state before setting ==>', this.state.events);
+      await this.setState({ events: [...this.state.events, ...appointments] });  
+      console.log('state ==>', this.state.events);
+    } catch (error) {
+      console.error('error while trying to get appointments from server', error);
+    }
+  }
+
+  eventStyleGetter (event, start, end, isSelected) {
+    console.log('event ====>', event);
+    let backgroundColor;
+    if(event.taken){
+      backgroundColor = '#d9534f';
+    } else {
+      backgroundColor = '#5cb85c';
+    }
+
+    const style = {
+        // backgroundColor: backgroundColor,
+        backgroundColor,        
+        // borderRadius: '0px',
+        // opacity: 0.8,
+        // color: 'black',
+        // border: '0px',
+        // display: 'block'
+    };
+    return { style };
+  }
+
+
   componentDidMount(){
     const { studentId, teacher } = this.props.history.location.state;
   
-    const getBookings = async () => {
-      try {
+    // for student user
+    this.getTeacherAvailability(studentId, teacher);
 
-        await this.setState({
-          student_id: studentId,
-          teacher_id: teacher.id
-        });
-
-        let availabilities = await fetchTeacherAvailability(this.state.teacher_id);
-        //datefying the string dates
-        availabilities = availabilities.map((availability) => {
-          availability.title = 'Open';
-          availability.start = new Date(availability.start);
-          availability.end = new Date(availability.end);
-          return availability;
-        });
-        await  this.setState({availabilities});
-      } catch (error) {
-        console.error('error while trying to set the state from server availabilities', error);
-      }
-    };
-    
-    getBookings();    
+    // if user type is not student (it's teacher)
+    if(this.state.userType !== 's'){
+      this.getTeacherAppointments(studentId, teacher);
+    }
   }
 
   render(){
@@ -204,12 +293,13 @@ export default class Calendar extends Component {
             localizer.format(date, 'dd MM/DD', culture),
         
           }}
-          events={ this.state.availabilities }
+          events={ this.state.events }
           defaultView="week"
           scrollToTime={ new Date(1970, 1, 1, 6) }
           defaultDate={ new Date() }
           onSelectEvent={ this.timeSlotSelected }
           onSelectSlot={ this.timeSlotSelected }
+          eventPropGetter={ this.eventStyleGetter }
           />
       </React.Fragment>
     );

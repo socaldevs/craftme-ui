@@ -6,7 +6,6 @@ const SERVER = process.env.REST_PATH;
 export const fetchTeacherAvailability = async (teacher_id) => {
   try {
     const response = await axios.get(`${SERVER}/student/viewTeacherAvailability/${teacher_id}`);
-    console.log('this is the bookings from server: ', response.data);
     return response.data;
   } catch (error) {
     console.error('Error while fetching the teacher bookings', error);
