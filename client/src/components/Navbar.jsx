@@ -16,10 +16,15 @@ const mapDispatchToProps = dispatch => ({
 class ConnectedNavbar extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      expand: false,
+    }
 
   this.handleLogoutClick = this.handleLogoutClick.bind(this);
+  this.renderImage = this.renderImage.bind(this);
   }
 
+  
   async handleLogoutClick() {
     try {
       let data = await axios.get(process.env.REST_PATH +'/auth/signout');
@@ -35,17 +40,24 @@ class ConnectedNavbar extends Component {
       return;
     }
   }
-
+  
+  renderImage() {
+    this.setState({
+      expand: !this.state.expand,
+    })
+  }
 
   render() {
     return (
       <ul className="navbar">
-        <Link to="#" className="item" style={{ textDecoration: 'none' }}>Welcome {this.props.currentUser}! </Link>
-        <Link to="#" className="item" style={{ textDecoration: 'none' }}> Image goes here {this.props.currentUrl} </Link>
-        <Link to="/search" className="item" style={{ textDecoration: 'none' }}>Search</Link>
-        <Link to="/lessons" className="item" style={{ textDecoration: 'none' }}>Lessons</Link>
-        <Link to="/messages" className="item" style={{ textDecoration: 'none' }}>Messages</Link>
-        <Link to="/search" className="item" style={{ textDecoration: 'none' }} onClick={this.handleLogoutClick}>Logout</Link> />
+        <Link to="#" className="navbar-item" style={{ textDecoration: 'none' }} onMouseEnter={this.renderImage} onMouseLeave={this.renderImage}>
+          {this.state.expand === false ? <div> Welcome {this.props.currentUser}! </div> 
+          : <img className="p-p" src={this.props.currentUrl} alt="You don't have a profile picture"/>}
+        </Link>
+        <Link to="/search" className="navbar-item" style={{ textDecoration: 'none' }}>Search</Link>
+        <Link to="/lessons" className="navbar-item" style={{ textDecoration: 'none' }}>Lessons</Link>
+        <Link to="/messages" className="navbar-item" style={{ textDecoration: 'none' }}>Messages</Link>
+        <Link to="/search" className="navbar-item" style={{ textDecoration: 'none' }} onClick={this.handleLogoutClick}>Logout</Link> />
       </ul>
     )
   }

@@ -147,20 +147,22 @@ body  {
   background-color: #333;
 }
 
-.item {
+.navbar-item {
   padding: 0.3em;
   align-items: flex-end;
   display: block;
   float: left;
-  width: 16%;
+  width: 20%;
+  height: 20%;
   color: white;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
   outline: 0;
+  position: relative;
 }
 
-.item:hover {
+.navbar-item:hover {
   background-color: #111;
   color:white;
 }
@@ -199,3 +201,9 @@ body  {
     z-index:1;
     border-bottom-color:rgba(0,0,0,0.095);
 }
+
+.p-p {
+  max-width: 100%;
+  max-height: 50px;
+}
+
