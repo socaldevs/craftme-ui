@@ -28,13 +28,14 @@ class ConnectedNavbar extends Component {
   async handleLogoutClick() {
     try {
       let data = await axios.get(process.env.REST_PATH +'/auth/signout');
-      this.props.history.push('/login');
       this.props.removeToken();
       this.props.removeUser();
       this.props.removeId();
       this.props.removeType();
       this.props.removeUrl();
-      this.props.history.push('/login');
+      if (data) {
+        this.props.history.push('/login');
+      }
     } catch (error) {
       console.log('Error with logging out', error);
       return;
