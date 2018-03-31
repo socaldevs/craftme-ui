@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import Paper from 'material-ui/Paper';
-import axios from 'axios';
-import {getChatFromLesson} from '../apiCaller.js';
+import { getChatFromLesson } from '../apiCaller.js';
 export default class Card extends Component {
   constructor(props) {
     super(props);
@@ -10,34 +9,51 @@ export default class Card extends Component {
   }
 
   async clickHandler(){
+    // parent component ( LessonsContainer ) reaction to the click
     const { reactToClick } = this.props;
-    const { booking } = this.props;
-    // passing the booking to the chatrooms component
+
+    // upcoming lessons case
+    // redirect to conference
     if (this.props.booking) {
+      const { booking } = this.props;
+      // at this case ( upcoming lessons ) redirect to conference and pass booking 
       this.props.history.push('/conference', { booking });
-    }
-    if (this.props.pastLesson) {
+    } // past lessons case 
+      // render chats and chatlog
+    else if (this.props.pastLesson) {
       try {
-        const {chat_id} = this.props.pastLesson;
-        const {messages} = await getChatFromLesson(chat_id);
+        const { chat_id } = this.props.pastLesson;
+        const { messages } = await getChatFromLesson(chat_id);
         reactToClick(messages);
       } catch (error) {
-        console.log('Error with rendering pastLessons', error);
+        console.error('Error with rendering pastLessons', error);
         return;
       }
+    }
+    // search results case
+    // render teachers for a specific craft
+    else if(this.props.teacher){
+      const { teacher, student, matchedCraft, } = this.props;
+      this.props.history.push('/calendar', { teacher, student, matchedCraft});
     }
   }
   
 
   render() {
+    const { booking, pastLesson, buttonName, teacher } = this.props;
     return (
       <Paper>
         <img src="" alt=""/>
-        {this.props.booking ? <h3>{this.props.booking && this.props.booking.title} title</h3>
-        : 
-        <div> {this.props.pastLesson && this.props.pastLesson.notes} </div>
+        <h3>
+        {
+          ( booking && booking.title ) || 
+          ( pastLesson && pastLesson.title ) || 
+          ( teacher && teacher.username ) || 
+          'no title'
         }
-        <button type="button" onClick={this.clickHandler}>Button</button>
+        </h3>
+        <p> { ( pastLesson && pastLesson.notes ) || ( teacher && teacher.bio ) } </p>
+        <button type="button" onClick={this.clickHandler}>{buttonName}</button>
       </Paper>
     )
   }

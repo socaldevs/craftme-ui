@@ -1,14 +1,10 @@
 import { withStyles } from 'material-ui/styles';
 import PropTypes from 'prop-types';
-import BottomNavigation, { BottomNavigationAction } from 'material-ui/BottomNavigation';
-import Icon from 'material-ui/Icon';
-import PersonIcon from 'material-ui-icons/Person';
-import SchoolIcon from 'material-ui-icons/School';
 import React, { Component } from 'react';
+import Tabs, { Tab } from 'material-ui/Tabs';
 import Grid from 'material-ui/Grid';
 import Card from './Card.jsx';
-import Paper from 'material-ui/Paper';
-import Tabs, { Tab } from 'material-ui/Tabs';
+
 import { fetchUserUpcomingBookings, getUserPastLessons } from '../apiCaller.js';
 
 const styles = theme => ({
@@ -26,53 +22,58 @@ class LessonsContainer extends Component {
       navbarValue: 'upcoming',
       upcomingBookings: [],
       pastLessons: [],
-      chats: []
-    }
+      chats: [],
+    };
     this.changeView = this.changeView.bind(this);
     this.renderUpcomingLessons = this.renderUpcomingLessons.bind(this);
     this.renderPastLessons = this.renderPastLessons.bind(this);
     this.switchChat = this.switchChat.bind(this);
   }
-  
+
   switchChat(chats) {
-    this.setState({chats});
+    this.setState({ chats });
     console.log('chats are: ', chats);
   }
   changeView(event, value) {
     console.log(value);
     this.setState({ navbarValue: value });
-  };
+  }
 
   renderUpcomingLessons() {
     let bookings = this.state.upcomingBookings || [];
     console.log('props from conatiner', this.props);
     return (
-      bookings.map((booking,i)=>{
-        return <Card key={booking.id} booking={booking} history={this.props.history}centered />;
+      bookings.map((booking)=>{
+        return <Card key={booking.id} booking={booking} buttonName="Start Lesson" 
+          history={this.props.history} centered />;
       })
     );
   }
 
   renderPastLessons() {
-    let pastLessons = this.state.pastLessons || [];
+    const pastLessons = this.state.pastLessons || [];
     return (
       <div>
-      {pastLessons.map((pastLesson,i)=>{
-        return (
-          <div> 
-            <Card key={pastLesson.id} 
-            reactToClick={this.switchChat} 
-            pastLesson={pastLesson} centered />
-           
-          </div>
-        )
-      })
-      }
+        {
+        pastLessons.map((pastLesson) => {
+          return (
+            <div>
+              <Card 
+                key={pastLesson.id}
+                buttonName="View Chat"
+                reactToClick={this.switchChat}
+                pastLesson={pastLesson}
+                centered
+              />
+            </div>
+          );
+        })
+        }
         <div> {
           this.state.chats.map((chat, i) => {
-            return ( 
+            return (
               <p key={i}> {chat.handle} : {chat.message} </p>
-            )
+            );
           })
         } 
       </div>
@@ -81,15 +82,12 @@ class LessonsContainer extends Component {
   }
 
   componentDidMount() {
-
-    console.log('currentId  ====>', this.props.currentId);
-    console.log('currentType  ====>', this.props.currentType);
-
+    //gettng the upcoming lessons for the logged in user
+    const { currentId } = this.props;
+    // const userId = {teacher_id: 1};    
     const getBookings = async () => {
-      console.log('currentId  ====>', this.props.currentId);
-      console.log('currentType  ====>', this.props.currentType);
       
-      const {currentId} = this.props;
+      // const userId = {teacher_id: 1};
       // if(type === 0){
       //   userId['teacher_id'] = this.props.currentId;    
       // } else if (type === 1){
@@ -100,12 +98,8 @@ class LessonsContainer extends Component {
     };
 
     const getLessons = async () => {
-      // console.log('currentId  ====>', this.props.currentId);
-      // console.log('currentType  ====>', this.props.currentType);
-      const {currentId} = this.props;
-      console.log('currentID is ================>', currentId);
+      
       const pastLessons = await getUserPastLessons(currentId);
-      console.log('weird dude', pastLessons);
       this.setState({ pastLessons });  
     };
 

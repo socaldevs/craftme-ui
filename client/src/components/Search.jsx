@@ -133,7 +133,7 @@ class Search extends React.Component {
         if (data) {
           let newPull = [];
           for(var element of data.data){
-            newPull.push({label: element.name})
+            newPull.push({label: element.name, craft: element})
           }
           suggestions = newPull;
         }
@@ -170,7 +170,20 @@ class Search extends React.Component {
 
   handleKey(event){
     if(event.key == 'Enter'){
-      console.log('enter press: ', this.state.value)
+      // the only part written by fireArthur
+      //find a match in the crafts array
+      const matchedCraftIndex = suggestions.findIndex((craftSuggestion)=>{
+        return craftSuggestion.label === this.state.value;
+      });
+      // if match not found
+      if(matchedCraftIndex < 0){
+        console.error(`match not found for ${this.state.value}` );
+      } else {
+        // redirect to searchResults and pass the matched craft
+        const matchedCraft = suggestions[matchedCraftIndex].craft;
+        this.props.history.push('/searchResults', { matchedCraft });
+      }
+     
     }
   };
 
