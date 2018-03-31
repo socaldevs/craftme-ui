@@ -12,6 +12,25 @@ export default class Messages extends Component {
     this.sendMessage = this.sendMessage.bind(this);
   }
 
+  
+
+  async componentDidMount() {
+    try {
+      const id = this.props.currentId;
+      const data = await axios.get(
+        process.env.REST_PATH +`/user/messages/fetchAllConversationsById/${id}`
+      );
+      this.setState({ conversations: data.data });
+    } catch (error) {
+      console.log('Error with fetchAllMessages on front end', error);
+      return;
+    }
+  }
+
+  handleChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+  
   async sendMessage() {
     try {
       const sender_id = this.props.currentId;
@@ -30,26 +49,8 @@ export default class Messages extends Component {
         message: '',
         recipient: ''
       })
-
     } catch (error) {
       console.log('Error with sendMessage', error);
-      return;
-    }
-  }
-
-  handleChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-  }
-
-  async componentDidMount() {
-    try {
-      const id = this.props.currentId;
-      const data = await axios.get(
-        process.env.REST_PATH +`/user/messages/fetchAllConversationsById/${id}`
-      );
-      this.setState({ conversations: data.data });
-    } catch (error) {
-      console.log('Error with fetchAllMessages on front end', error);
       return;
     }
   }

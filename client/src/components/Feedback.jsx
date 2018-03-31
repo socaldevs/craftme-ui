@@ -13,20 +13,22 @@ export default class Feedback extends Component {
   }
 
   handleChange(e) {
-    this.setState({[e.target.name]: e.target.value});
+    this.setState({ [e.target.name]: e.target.value });
   }
 
   async submitFeedback() {
     try {
-      const {student_id, teacher_id, id} = this.props.history.location.state; //id is lesson id
-      const feedback = await axios.post(`http://localhost:3000/student/submitFeedback`, {
+      const { student_id, teacher_id, id } = this.props.history.location.state; //id is lesson id
+      await axios.post(`http://localhost:3000/student/submitFeedback`, {
         teacher_id,
         student_id,
         lesson_id: id,
         rating: this.state.rating,
-        review: this.state.review
+        review: this.state.review,
       })
-      await axios.get(`http://localhost:3000/user/calculateAverageRatingForTeacher/${teacher_id}`)
+      await axios.put(`http://localhost:3000/user/calculateAverageRatingForTeacher/`, {
+        teacher_id,
+      })
       this.props.history.push('/lessons');
     } catch (error) {
       console.log('Error with submitFeedback', error);
@@ -37,7 +39,7 @@ export default class Feedback extends Component {
   render() {
     return (
       <div>
-        This is the Feedback Component
+        Please review your lesson:
         <div> 
           Please submit your rating (1-5): <input name="rating" onChange={this.handleChange} value={this.state.rating}/>
         </div>

@@ -14,7 +14,7 @@ export default combineReducers({
   currentToken,
   currentType,
   currentUser,
-  currentUrl
+  currentUrl,
 });
 
 // reducers take in actions and update part of application's state, sends to store

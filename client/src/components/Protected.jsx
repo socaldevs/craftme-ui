@@ -22,7 +22,7 @@ const mapStateToProps = state => ({
   currentType: state.currentType,
   currentId: state.currentId,
   currentToken: state.currentToken,
-  currentUrl: state.currentUrl
+  currentUrl: state.currentUrl,
 });
 
 class ConnectedProtected extends Component {
@@ -44,16 +44,15 @@ class ConnectedProtected extends Component {
   }
 
   render() 
-  {
-    const { component: Component } = this.props;
-  return (
-  <div>
-  <MenuNav key={'1'}{...this.props}  />
-  <Component key={'2'}{...this.props} />
-
-  </div>
-  
-  )}
+    {
+      const { component: Component } = this.props;
+    return (
+      <div>
+        <MenuNav key={'1'}{...this.props}  />
+        <Component key={'2'}{...this.props} />
+      </div>
+    )
+  }
 }
 
 const Protected = connect(mapStateToProps, mapDispatchToProps)(ConnectedProtected);

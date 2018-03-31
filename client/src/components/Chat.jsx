@@ -115,6 +115,15 @@ class Chat extends Component {
     this.peer.destroy();
   }
 
+  
+  setText(e) {
+    this.setState({ message: e.target.value });
+    this.socket.emit('typing', {
+      room: this.props.roomId,
+      feedback: `${this.username} is typing...`,
+    });
+  }
+
   async saveChat () {
     const { messages } = this.state;
     const { teacher_id, student_id, title } = this.props
@@ -136,19 +145,11 @@ class Chat extends Component {
     }
   }
 
-  setText(e) {
-    this.setState({ message: e.target.value });
-    this.socket.emit('typing', {
-      room: this.props.roomId,
-      feedback: `${this.username} is typing...`,
-    });
-  }
-
   sendChat() {
     this.socket.emit('chat', {
       room: this.props.roomId,
       handle: this.username,
-      message: this.state.message
+      message: this.state.message,
     });
     this.setState({ message: '' });
   }
@@ -158,7 +159,7 @@ class Chat extends Component {
       this.peer = new Peer({
         initiator: true, 
         trickle: false,
-        stream: stream
+        stream: stream,
       });
       this.peer.on('signal', (data) => {
         this.socket.emit('offer', {
