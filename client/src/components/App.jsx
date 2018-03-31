@@ -30,8 +30,8 @@ class App extends Component {
   }
 
   render() {
-    console.log(process.env.REST_PATH)
     return (
+<<<<<<< HEAD
     <div >
   <Switch>
   <Route path="/messages" component={props => (<Protected component={Messages} {...props} />)}/>
@@ -52,7 +52,24 @@ class App extends Component {
     </div>
     
 
+=======
+      <div>
+        <Switch>
+          <Route path="/messages" component={props => (<Protected component={Messages} {...props} />)}/>
+          <Route path="/lessons" component={props => (<Protected component={LessonsContainer} {...props} />)}/>
+          <Route path="/feedback" component={props => (<Protected component={Feedback} {...props} />)}/>
+          <Route path="/messages" component={props => (<Protected component={Messages} {...props} />)}/>
+          <Route path="/search" component={props => (<Protected component={Search} {...props} />)}/>
+          <Route path="/conference" component={props => (<Protected component={Conference} {...props} />)}/>
+          <Route path="/grid" component={Grid} />
+          <Route path="/signup" component={Signup} />
+          <Route path="/login" component={Login} />
+          <Route path="/" component={props => (<Protected component={Search} {...props} />)}/>
+        </Switch>
+      </div> 
+>>>>>>> [Feedback] - Submits feedback and updates
     );
   }
 }
+
 export default App

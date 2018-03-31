@@ -18,14 +18,15 @@ export default class Feedback extends Component {
 
   async submitFeedback() {
     try {
-      let {student_id, teacher_id, id} = this.props.history.location.state; //id is lesson id
-      let feedback = await axios.post(`http://localhost:3000/student/submitFeedback`, {
+      const {student_id, teacher_id, id} = this.props.history.location.state; //id is lesson id
+      const feedback = await axios.post(`http://localhost:3000/student/submitFeedback`, {
         teacher_id,
         student_id,
         lesson_id: id,
         rating: this.state.rating,
         review: this.state.review
       })
+      await axios.get(`http://localhost:3000/user/calculateAverageRatingForTeacher/${teacher_id}`)
       this.props.history.push('/lessons');
     } catch (error) {
       console.log('Error with submitFeedback', error);
