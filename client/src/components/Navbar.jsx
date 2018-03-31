@@ -40,12 +40,12 @@ class ConnectedNavbar extends Component {
   render() {
     return (
       <ul className="navbar">
-        <Link to="#" className="item">Welcome {this.props.currentUser}! </Link>
-        <Link to="#" className="item"> Image goes here {this.props.currentUrl} </Link>
-        <Link to="/search" className="item">Search</Link>
-        <Link to="/lessons" className="item">Lessons</Link>
-        <Link to="/messages" className="item">Messages</Link>
-        <Link to="/search" className="item" onClick={this.handleLogoutClick}>Logout</Link> />
+        <Link to="#" className="item" style={{ textDecoration: 'none' }}>Welcome {this.props.currentUser}! </Link>
+        <Link to="#" className="item" style={{ textDecoration: 'none' }}> Image goes here {this.props.currentUrl} </Link>
+        <Link to="/search" className="item" style={{ textDecoration: 'none' }}>Search</Link>
+        <Link to="/lessons" className="item" style={{ textDecoration: 'none' }}>Lessons</Link>
+        <Link to="/messages" className="item" style={{ textDecoration: 'none' }}>Messages</Link>
+        <Link to="/search" className="item" style={{ textDecoration: 'none' }} onClick={this.handleLogoutClick}>Logout</Link> />
       </ul>
     )
   }

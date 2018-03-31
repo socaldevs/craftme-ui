@@ -66,27 +66,27 @@ body  {
 
 
 .wrapper {
-  overflow:auto;
   width: 100%;
-  
 }
 
 .c1 {
   float: left;
   width: 70%;
+  overflow: auto;
 }
 
 .c2 {
   float: right;
   width: 30%;
+  overflow: auto;
 }
 
 .conversation {
   position: relative;
   width: 200px;
-  height: 100px;
+  height: 30px;
   text-align: center;
-  line-height: 100px;
+  line-height: 15px;
   background-color: #fff;
   border: 8px solid #666;
   -webkit-border-radius: 30px;
@@ -98,7 +98,7 @@ body  {
 }
 
 .thoughtbubble {
-  position:relative; /*see the support section below for more info*/
+  position:relative; 
   width:400px; /*size of the bubble*/
   padding:20px 40px;
   /* margin:10px 10px 80px 40px; */
@@ -128,12 +128,12 @@ body  {
   bottom:-40px; /*distance from the bottom of the bubble*/
   left:20px; /*distance from the left edge of the bubble*/
   background:#f3961c;
-  width:30px; /*same as the height*/
-  height:30px; /*same as the width*/
+  width:20px; /*same as the height*/
+  height:20px; /*same as the width*/
   /*add a curve to the corners the same size as the height and width*/
-  -webkit-border-radius:30px;
-  -moz-border-radius:30px;
-  border-radius:30px;
+  -webkit-border-radius:20px;
+  -moz-border-radius:20px;
+  border-radius:20px;
   /*add a drop shadow*/
   -webkit-box-shadow: -3px 3px 4px #989898;
   -moz-box-shadow: -3px 3px 4px #989898;
@@ -157,10 +157,12 @@ body  {
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
+  outline: 0;
 }
 
 .item:hover {
   background-color: #111;
+  color:white;
 }
 
 .speech-bubble {

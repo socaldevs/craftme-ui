@@ -58,7 +58,7 @@ export default class Messages extends Component {
   render() {
     return (
       <div>
-        <div class="speech-bubble">
+        <div className="speech-bubble">
           Recipient:{' '}
           <input
             type="text"
@@ -76,7 +76,7 @@ export default class Messages extends Component {
           />
           <button onClick={() => this.sendMessage()}>Send </button>
         </div>
-        <ConversationList props={this.props} conversations={this.state.conversations} />
+        <ConversationList key={0} props={this.props} conversations={this.state.conversations} />
       </div>
     );
   }
