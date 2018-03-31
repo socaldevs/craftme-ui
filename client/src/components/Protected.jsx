@@ -3,6 +3,7 @@ import jwtDecode from 'jwt-decode';
 import { connect } from 'react-redux';
 import actions from '../actions/index.jsx';
 import MenuNav from './Menu.jsx';
+import Navbar from './Navbar.jsx';
 
 const mapDispatchToProps = dispatch => ({
   updateUser: user => dispatch(actions.updateUser(user)),
@@ -48,7 +49,8 @@ class ConnectedProtected extends Component {
       const { component: Component } = this.props;
     return (
       <div>
-        <MenuNav key={'1'}{...this.props}  />
+        <Navbar key={'1'} {...this.props} />
+        {/* <MenuNav key={'1'}{...this.props}  /> */}
         <Component key={'2'}{...this.props} />
       </div>
     )
