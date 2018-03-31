@@ -80,3 +80,26 @@ body  {
   float: right;
   width: 30%;
 }
+
+.navbar {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  background-color: #333;
+}
+
+.item {
+  padding: 0.3em;
+  align-items: flex-end;
+  display: block;
+  float: left;
+  width: 16%;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.item:hover {
+  background-color: #111;
+}
