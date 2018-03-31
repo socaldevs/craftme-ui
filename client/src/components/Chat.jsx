@@ -79,6 +79,7 @@ class Chat extends Component {
           answer: JSON.stringify(data),
         });
       });
+      this.peer.on('connect', () => console.log('PEER CONNECTED'))
       this.peer.on('stream', (stream) => {
         let video = document.createElement('video');
         this.videoContainer.append(video);
@@ -110,10 +111,10 @@ class Chat extends Component {
     
   }
 
-  componentWillUnmount() {
-    // this.videoContainer.innerHTML = '';
-    this.peer.destroy();
-  }
+  // componentWillUnmount() {
+  //   // this.videoContainer.innerHTML = '';
+  //   this.peer.destroy();
+  // }
 
   
   setText(e) {
@@ -157,7 +158,7 @@ class Chat extends Component {
     this.setState({ message: '' });
   }
 
-  callPeer() {
+  async callPeer() {
     navigator.getUserMedia({ video: true, audio: false }, (stream) => {
       this.peer = new Peer({
         initiator: true, 
