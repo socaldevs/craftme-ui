@@ -23,6 +23,7 @@ class SearchResults extends Component {
       navbarValue: 'remote',
       remoteTeachers: [],
       inPersonTeachers: [],
+      matchedCraft: null,
     }
     this.changeView = this.changeView.bind(this);
     this.renderRemoteTeachers = this.renderRemoteTeachers.bind(this);
@@ -30,16 +31,22 @@ class SearchResults extends Component {
   }
 
   changeView(event, value) {
-    console.log(value);
     this.setState({ navbarValue: value });
   };
 
   renderRemoteTeachers(){
     const remoteTeachers = this.state.remoteTeachers || [];
-    console.log('props from conatiner', this.props);
     return (
       remoteTeachers.map((teacher)=>{
-        return <Card key={teacher.id} teacher={teacher} history={this.props.history}centered />;
+        // currentId in search results always refers to a student cause only students
+        // would be looking to learn a new skill
+        const { currentId, currentUser } = this.props;  
+        return <Card key={teacher.id} teacher={teacher} buttonName="View Availability"
+        history={this.props.history} student={{ currentId, currentUser }} 
+        matchedCraft={ this.state.matchedCraft } centered />;
+
+        // return <Card key={teacher.id} teacher={teacher} buttonName="View Availability"
+        // studentId={this.props.currentId} matchedCraft={ this.state.matchedCraft } centered />;
       })
     );
   }
@@ -56,14 +63,11 @@ class SearchResults extends Component {
 
   componentDidMount(){
 
-    console.log('currentId  ====>', this.props.currentId);
-    console.log('currentType  ====>', this.props.currentType);
-
+    const { matchedCraft } = this.props.history.location.state;
+    console.log('proops from search results router', matchedCraft);  
     const getRemotes = async () => {
-      console.log('currentId  ====>', this.props.currentId);
-      console.log('currentType  ====>', this.props.currentType);
-      
-      const  craft_id = 1 ;
+      await this.setState({ matchedCraft });
+      const  craft_id = matchedCraft.id ;
 
       const remoteTeachers = await fetchRemoteTeachersForCraft(craft_id);
       

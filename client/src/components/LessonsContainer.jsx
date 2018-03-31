@@ -47,8 +47,9 @@ class LessonsContainer extends Component {
     let bookings = this.state.upcomingBookings || [];
     console.log('props from conatiner', this.props);
     return (
-      bookings.map((booking,i)=>{
-        return <Card key={booking.id} booking={booking} history={this.props.history}centered />;
+      bookings.map((booking)=>{
+        return <Card key={booking.id} booking={booking} buttonName="Start Lesson" 
+          history={this.props.history} centered />;
       })
     );
   }
@@ -60,7 +61,8 @@ class LessonsContainer extends Component {
       {pastLessons.map((pastLesson,i)=>{
         return (
           <div> 
-            <Card key={pastLesson.id} 
+            <Card key={pastLesson.id}
+            buttonName="View Chat" 
             reactToClick={this.switchChat} 
             pastLesson={pastLesson} centered />
            
@@ -82,14 +84,9 @@ class LessonsContainer extends Component {
 
   componentDidMount() {
 
-    console.log('currentId  ====>', this.props.currentId);
-    console.log('currentType  ====>', this.props.currentType);
-
     const getBookings = async () => {
-      console.log('currentId  ====>', this.props.currentId);
-      console.log('currentType  ====>', this.props.currentType);
-      
-      const {currentId} = this.props;
+
+      const userId = {teacher_id: 1};
       // if(type === 0){
       //   userId['teacher_id'] = this.props.currentId;    
       // } else if (type === 1){
@@ -100,12 +97,8 @@ class LessonsContainer extends Component {
     };
 
     const getLessons = async () => {
-      // console.log('currentId  ====>', this.props.currentId);
-      // console.log('currentType  ====>', this.props.currentType);
-      const {currentId} = this.props;
-      console.log('currentID is ================>', currentId);
+      const { currentId } = this.props;
       const pastLessons = await getUserPastLessons(currentId);
-      console.log('weird dude', pastLessons);
       this.setState({ pastLessons });  
     };
 

@@ -21,7 +21,7 @@ export default class Card extends Component {
       this.props.history.push('/conference', { booking });
     } // past lessons case 
       // render chats and chatlog
-      else if (this.props.pastLesson) {
+    else if (this.props.pastLesson) {
       try {
         const { chat_id } = this.props.pastLesson;
         const { messages } = await getChatFromLesson(chat_id);
@@ -31,17 +31,30 @@ export default class Card extends Component {
         return;
       }
     }
+    // search results case
+    // render teachers for a specific craft
+    else if(this.props.teacher){
+      const { teacher, student, matchedCraft, } = this.props;
+      this.props.history.push('/calendar', { teacher, student, matchedCraft});
+    }
   }
   
 
   render() {
-    const { booking, pastLesson } = this.props;
+    const { booking, pastLesson, buttonName, teacher } = this.props;
     return (
       <Paper>
         <img src="" alt=""/>
-        <h3>{( booking && booking.title ) || ( pastLesson && pastLesson.title ) || 'no title'}</h3>
-        <p> { pastLesson && pastLesson.notes } </p>
-        <button type="button" onClick={this.clickHandler}>Button</button>
+        <h3>
+        {
+          ( booking && booking.title ) || 
+          ( pastLesson && pastLesson.title ) || 
+          ( teacher && teacher.username ) || 
+          'no title'
+        }
+        </h3>
+        <p> { ( pastLesson && pastLesson.notes ) || ( teacher && teacher.bio ) } </p>
+        <button type="button" onClick={this.clickHandler}>{buttonName}</button>
       </Paper>
     )
   }

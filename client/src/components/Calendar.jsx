@@ -30,73 +30,76 @@ export default class Calendar extends Component {
   }
 
 
-  submitAvailability() {
+  async submitAvailability() {
     
-    const getSubmittedAvailability = async () => {
-      const { start, end } = this.state;
-     
-      try {   
-        const availabilityToSend  = {
-          teacher_id: 1,
-          start,
-          end
-        };
-        const availability  = await submitAvailabilityToServer(availabilityToSend);        
-        //datefying the string date
-        availability.title = 'Other title';
-        availability.start = new Date(availability.start);
-        availability.end = new Date(availability.end);
-        // updating the availabilities on the calendar
-        this.setState({availabilities: [...this.state.availabilities, availability]});
-      } catch (error) {
-        console.error('error while trying to submit availability', error);
-      }
-    };
-    getSubmittedAvailability();
+    const { start, end } = this.state;
+    
+    try {
+      conosle.log('what follows is harded coded');           
+      const availabilityToSend  = {
+        teacher_id: 1,
+        start,
+        end
+      };
+      const availability  = await submitAvailabilityToServer(availabilityToSend);        
+      //datefying the string date
+      availability.title = 'Other title';
+      availability.start = new Date(availability.start);
+      availability.end = new Date(availability.end);
+      // updating the availabilities on the calendar
+      await this.setState({ availabilities: [...this.state.availabilities, availability]});
+    } catch (error) {
+      console.error('error while trying to submit availability', error);
+    }  
   }
 
-  submitBooking() {
-    
-    const getSubmittedBooking = async () => {
-      const { start, end, selected_availability_id } = this.state;
-      // const { student_id, teacher_id } = this.props;
-      const title = 'Some title';
-      try {
-        // let booking = await submitBookingToServer(student_id, teacher_id, start, end);
-        const bookingToSend  = {
-          student_id: 5,
-          teacher_id: 1,
-          title,
-          start,
-          end,
-          selected_availability_id
-        };
-        
-        
-        let booking = await submitBookingToServer(bookingToSend);        
-        //datefying the string date
-        
-        booking.title = 'Teacher name and student name'
-        booking.start = new Date(booking.start);
-        booking.end = new Date(booking.end);
-        const updatedAvailabilities = this.state.availabilities.filter((availability) => {
-          // getting rid of the booked slot
-          if(String(availability.start) === String(booking.start) && 
-          String(availability.end) === String(booking.end)){
-            return false;
-          } else {
-            return true;
-          }
-        });
-        this.setState({availabilities: updatedAvailabilities});
-      } catch (error) {
-        console.error('error while trying to submit booking', error);
-      }
-    };
-    getSubmittedBooking();
+  async submitBooking() {
+
+    const { start, end, selected_availability_id } = this.state;
+    const { teacher, student, matchedCraft } = this.props.history.location.state;
+    console.log('teacher', teacher, 'student', student, 'matched', matchedCraft);
+    const title = `${matchedCraft.name} | Teacher: ${teacher.username} | Student: ${student.currentUser}`;
+    try {
+      const bookingToSend  = {
+        // student_id: student.currentId,
+        student_id: 5,
+        teacher_id: teacher.id,
+        title,
+        start,
+        end,
+        selected_availability_id
+      };
+      
+      // TO DO: create a confirmation modal popup to and fill it with the booking
+      let booking = await submitBookingToServer(bookingToSend);        
+      //datefying the string date
+      booking.title = title;
+      booking.start = new Date(booking.start);
+      booking.end = new Date(booking.end);
+      
+      const updatedAvailabilities = this.state.availabilities.filter((availability) => {
+        // getting rid of the booked slot
+        if(availability.id === bookingToSend.selected_availability_id){
+          return false;
+        } else {
+          return true;  
+        }
+        // if(String(availability.start) === String(booking.start) && 
+        // String(availability.end) === String(booking.end)){
+        //   return false;
+        // } else {
+        //   return true;
+        // }
+      });
+      await this.setState({availabilities: updatedAvailabilities});
+      // redirect to lessons after a successful booking
+      this.props.history.push('/lessons');
+    } catch (error) {
+      console.error('error while trying to submit booking', error);
+    }
   }
 
-  timeSlotSelected(timeslot){
+  async timeSlotSelected(timeslot){
     //TODO: check if the range hits an occupied slot
     // Check if the slot has a teacher_id ( it has an availability record)
     if(timeslot.hasOwnProperty('teacher_id')){
@@ -104,22 +107,22 @@ export default class Calendar extends Component {
         // if the user is a student
         console.log('this is available, timeslot: ', timeslot );
         const { start, end, id } = timeslot;
-        this.setState({start, end, buttonStatus:false, selected_availability_id: id});          
+        await this.setState({start, end, buttonStatus:false, selected_availability_id: id});          
       } else {
         // if the user is a teacher
-        this.setState({ buttonStatus:true });
+        await this.setState({ buttonStatus:true });
         console.log('You have an appointment at this time');   
       }
 
     } else if (timeslot.hasOwnProperty('slots')) {
       // if the user is a student
       if(this.state.userType === 's'){
-        this.setState({ buttonStatus:true });
+        await this.setState({ buttonStatus:true });
         console.log('this is unavailable');  
       } else {
         console.log('this is available, timeslot: ', timeslot );
         const { start, end } = timeslot;
-        this.setState({ start, end, buttonStatus:false });          
+        await this.setState({ start, end, buttonStatus:false });          
       }
       //maybe show an error message saying you cant book this because its taken  
     }
@@ -156,24 +159,30 @@ export default class Calendar extends Component {
     );
   }
   componentDidMount(){
-    // TODO: Grabbing the teacher_id and student_id from the state
+    const { studentId, teacher } = this.props.history.location.state;
+  
     const getBookings = async () => {
       try {
-        // let availabilities = await fetchTeacherAvailability(this.state.teacher_id);
-        let availabilities = await fetchTeacherAvailability(1);
+
+        await this.setState({
+          student_id: studentId,
+          teacher_id: teacher.id
+        });
+
+        let availabilities = await fetchTeacherAvailability(this.state.teacher_id);
         //datefying the string dates
-        availabilities = availabilities.map((availability, i) => {
-          key = i;
-          availability.title = 'some title';
+        availabilities = availabilities.map((availability) => {
+          availability.title = 'Open';
           availability.start = new Date(availability.start);
           availability.end = new Date(availability.end);
           return availability;
         });
-        this.setState({availabilities});
+        await  this.setState({availabilities});
       } catch (error) {
         console.error('error while trying to set the state from server availabilities', error);
       }
     };
+    
     getBookings();    
   }
 
