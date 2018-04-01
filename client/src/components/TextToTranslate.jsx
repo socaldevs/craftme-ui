@@ -14,7 +14,7 @@ class TextToTranslate extends Component {
   async translateText(text) {
     const { translateFrom, translateTo } = this.props;
     try {
-      const response = await axios.post(`${process.env.REST_PAT}/user/translate`, {
+      const response = await axios.post(`${process.env.REST_PATH}/user/translate`, {
         text,
         translateFrom,
         translateTo,

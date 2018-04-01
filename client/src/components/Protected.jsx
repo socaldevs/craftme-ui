@@ -45,6 +45,7 @@ class ConnectedProtected extends Component {
   }
 
   render() 
+<<<<<<< HEAD
     {
       const { component: Component } = this.props;
     return (
@@ -55,6 +56,18 @@ class ConnectedProtected extends Component {
       </div>
     )
   }
+=======
+  {
+    const { component: Component } = this.props;
+  return (
+  <div className="protected-wrapper">
+  <MenuNav key={'1'}{...this.props}  />
+  <Component key={'2'}{...this.props} />
+
+  </div>
+  
+  )}
+>>>>>>> [FLEXBOX] styled conference component
 }
 
 const Protected = connect(mapStateToProps, mapDispatchToProps)(ConnectedProtected);

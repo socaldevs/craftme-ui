@@ -46,8 +46,8 @@ class Chat extends Component {
     this.socket.on('typing', (data) => {
       this.setState({ feedback: data});
     })
-
     this.socket.on('offer', (offer) => {
+      console.log('am I receiving offer?', offer);
       this.peer.signal(JSON.parse(offer));
     });
     // this.socket.on('getOtherPeerId', (data) => {
@@ -80,13 +80,14 @@ class Chat extends Component {
         });
       });
       this.peer.on('connect', () => console.log('PEER CONNECTED'))
-      this.peer.on('stream', (stream) => {
-        let video = document.createElement('video');
-        this.videoContainer.append(video);
-        video.src = window.URL.createObjectURL(stream);
-        video.play();
-      })
+      // this.peer.on('stream', (stream) => {
+      //   let video = document.createElement('video');
+      //   this.videoContainer.append(video);
+      //   video.src = window.URL.createObjectURL(stream);
+      //   video.play();
+      // })
     }, (err) => console.log('err', err));
+
     // this.peer = new Peer({ key: process.env.PEERKEY });
     // this.peer.on('open', (id) => {
     //   this.setState({ peerId: id });
@@ -111,10 +112,11 @@ class Chat extends Component {
     
   }
 
-  // componentWillUnmount() {
-  //   // this.videoContainer.innerHTML = '';
-  //   this.peer.destroy();
-  // }
+  componentWillUnmount() {
+    this.peer.destroy();
+    //ungetusermedia
+    this.videoContainer.innerHTML = '';
+  }
 
   
   setText(e) {
@@ -210,6 +212,7 @@ class Chat extends Component {
   // }
 
   selectLanguage(e){
+    console.log('kkkkkkkhello');
     e.target.className === 'from' ? 
     this.setState({ translateFrom: e.target.value }) :
     this.setState({ translateTo: e.target.value })
@@ -217,34 +220,50 @@ class Chat extends Component {
 
   render() {
     return (
-      <div>
-        <div className="video-container" ref={(input) => { this.videoContainer = input; }} />
-        <br />
-        <LanguageSelector 
-          selectLanguage={this.selectLanguage.bind(this)} 
-          translateFrom={this.state.translateFrom}
-          translateTo={this.state.translateTo}
-        />
-        <div className="chat-window">
-          <div className="output">
-            {this.state.messages.map((data,i) => {
-              return <TextToTranslate 
-                handle={data.handle} 
-                message={data.message} 
+      <div className="conference-container">
+        <div className="upper-container">
+          <div className="video-container" ref={(input) => { this.videoContainer = input; }} />
+          <div className="info-container"> 
+            <button className="call" className="glyphicon glyphicon-facetime-video" onClick={() => this.callPeer()} />
+          </div>
+        </div>
+        <div className="message-container">
+          <div className="message-topbar">
+            <div className="message-title">MESSAGES</div>
+            <div className="language-selector">
+              <LanguageSelector 
+                selectLanguage={(e) => this.selectLanguage(e)} 
                 translateFrom={this.state.translateFrom}
                 translateTo={this.state.translateTo}
-                key={i} 
               />
-            })}
+            </div>
+            <button className="save" onClick={() => this.saveChat()}>SAVE CHAT</button>
           </div>
-          <div className="feedback">{this.state.feedback}</div>
-        </div>
-          <div className="message-container">
-            <input className="message" type="text" placeholder="Message" value={this.state.message} onChange={e => this.setText(e)}/>
+          <div className="chat-window">
+            <div className="output">
+              {this.state.messages.map((data,i) => {
+                return <TextToTranslate 
+                  handle={data.handle} 
+                  message={data.message} 
+                  translateFrom={this.state.translateFrom}
+                  translateTo={this.state.translateTo}
+                  key={i} 
+                />
+              })}
+            </div>
+            <div className="feedback">{this.state.feedback}</div>
+          </div>
+          <div className="message-send">
+            <input className="message" 
+                   type="text" placeholder="Message" 
+                   value={this.state.message} 
+                   onChange={e => this.setText(e)}
+                   onKeyPress={ifEnter(() => this.sendChat())}
+            />
             <button className="send" onClick={() => this.sendChat()}>SEND</button>
           </div>
-        <button className="save" onClick={() => this.saveChat()}>SAVE CHAT</button>
-        <button className="call" className="glyphicon glyphicon-facetime-video" onClick={() => this.callPeer()} />
+          
+        </div>
       </div>
     );
   }
@@ -252,3 +271,10 @@ class Chat extends Component {
 
 export default Chat;
 
+function ifEnter(cb) {
+  return function(e) {
+    if (e.key == 'Enter') {
+      return cb();
+    }
+  };
+}
