@@ -14,8 +14,6 @@ class Chat extends Component {
       feedback: '',
       translateFrom: '',
       translateTo: '',
-      // peerId: '',
-      // otherPeerId: '',
     }
     this.username = this.props.currentUser;
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
@@ -73,15 +71,6 @@ class Chat extends Component {
         video.play();
       })
     }, (err) => console.log('err', err));
-    // this.socket.on('getOtherPeerId', (data) => {
-    //   this.socket.emit('fetchedPeerId', {
-    //     peerId: this.state.peerId,
-    //     room: this.props.roomId,
-    //   });
-    // });
-    // this.socket.on('fetchedPeerId', (data) => {
-    //   this.setState({ otherPeerId: data });
-    // });
   }
 
   // componentWillReceiveProps(nextProps) {
