@@ -34,6 +34,8 @@ body, html, div#app, .protected-wrapper {
     .video-container{
       height: 480px;
       width: 640px;
+      flex-grow: 2;
+      
     }
 
     .info-container{

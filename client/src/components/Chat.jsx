@@ -47,27 +47,13 @@ class Chat extends Component {
       this.setState({ feedback: data});
     })
     this.socket.on('offer', (offer) => {
-      console.log('am I receiving offer?', offer);
+      console.log('am I receiving offer?')
       this.peer.signal(JSON.parse(offer));
     });
-    // this.socket.on('getOtherPeerId', (data) => {
-    //   this.socket.emit('fetchedPeerId', {
-    //     peerId: this.state.peerId,
-    //     room: this.props.roomId,
-    //   });
-    // });
-    // this.socket.on('fetchedPeerId', (data) => {
-    //   this.setState({ otherPeerId: data });
-    // });
-  }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.roomId !== nextProps.roomId) { 
-      this.socket.emit('exit', this.props.roomId);
-      this.socket.emit('room', nextProps.roomId);
-      this.setState({ messages: [], feedback: '' });
-    }
-    navigator.getUserMedia({ video: true, audio: false }, (stream) => {
+    navigator.getUserMedia({ video: true, audio: false}, (stream) => {
+      this.stream = stream;
+
       this.peer = new Peer({
         initiator: false, //who is the first peer?
         trickle: false,
@@ -80,13 +66,31 @@ class Chat extends Component {
         });
       });
       this.peer.on('connect', () => console.log('PEER CONNECTED'))
-      // this.peer.on('stream', (stream) => {
-      //   let video = document.createElement('video');
-      //   this.videoContainer.append(video);
-      //   video.src = window.URL.createObjectURL(stream);
-      //   video.play();
-      // })
+      this.peer.on('stream', (stream) => {
+        let video = document.createElement('video');
+        this.videoContainer.append(video);
+        video.src = window.URL.createObjectURL(stream);
+        video.play();
+      })
     }, (err) => console.log('err', err));
+    // this.socket.on('getOtherPeerId', (data) => {
+    //   this.socket.emit('fetchedPeerId', {
+    //     peerId: this.state.peerId,
+    //     room: this.props.roomId,
+    //   });
+    // });
+    // this.socket.on('fetchedPeerId', (data) => {
+    //   this.setState({ otherPeerId: data });
+    // });
+  }
+
+  // componentWillReceiveProps(nextProps) {
+  //   if (this.props.roomId !== nextProps.roomId) { 
+  //     this.socket.emit('exit', this.props.roomId);
+  //     this.socket.emit('room', nextProps.roomId);
+  //     this.setState({ messages: [], feedback: '' });
+  //   }
+
 
     // this.peer = new Peer({ key: process.env.PEERKEY });
     // this.peer.on('open', (id) => {
@@ -110,12 +114,12 @@ class Chat extends Component {
     //   });
     // });
     
-  }
+  // }
 
   componentWillUnmount() {
+    this.stream.getTracks().forEach(track => track.stop())
     this.peer.destroy();
-    //ungetusermedia
-    this.videoContainer.innerHTML = '';
+    
   }
 
   
@@ -168,16 +172,19 @@ class Chat extends Component {
         stream: stream,
       });
       this.peer.on('signal', (data) => {
+        console.log('SIGNAL FROM INITIATOR')
         this.socket.emit('offer', {
           room: this.props.roomId,
           offer: JSON.stringify(data),
         })
       });
       this.socket.on('answer', (answer) => {
+        console.log('on answer from callpeer f')
         this.peer.signal(JSON.parse(answer))
       });
-      this.peer.on('connect', () => console.log('PEER CONNECTED'))
+      this.peer.on('connect', () => console.log('PEER CONNECTED from callpeer f'))
       this.peer.on('stream', (stream) => {
+        this.remoteStream = stream;
         let video = document.createElement('video');
         this.videoContainer.append(video);
         video.src = window.URL.createObjectURL(stream);
@@ -212,7 +219,6 @@ class Chat extends Component {
   // }
 
   selectLanguage(e){
-    console.log('kkkkkkkhello');
     e.target.className === 'from' ? 
     this.setState({ translateFrom: e.target.value }) :
     this.setState({ translateTo: e.target.value })
