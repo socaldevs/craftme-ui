@@ -47,6 +47,7 @@ export default class Calendar extends Component {
     super(props);
     
     this.state = {
+<<<<<<< HEAD
       currentUserId: 0, // either a student or a teacher 
       events: [],
       start: false,
@@ -54,6 +55,16 @@ export default class Calendar extends Component {
       selected_availability_id: 0,
       buttonStatus: true,
       userType: 1,    
+=======
+      teacher_id: 0,
+      student_id: 0,
+      events: [],
+      start: '',
+      end: '',
+      selected_availability_id: 0,
+      buttonStatus: true,
+      userType: null,    
+>>>>>>> [Messages] - Updates messages live
     };
 
     this.submitBooking = this.submitBooking.bind(this);
@@ -145,7 +156,24 @@ export default class Calendar extends Component {
     }
   }
 
+<<<<<<< HEAD
   async timeSlotSelected(timeslot){
+=======
+  async timeSlotSelected(timeslot) {
+    //TODO: check if the range hits an occupied slot
+    // Check if the slot has a teacher_id ( it has an availability record)
+    if (timeslot.hasOwnProperty('teacher_id')) {
+      if (this.state.userType === 1) {
+        // if the user is a student
+        console.log('this is available, timeslot: ', timeslot );
+        const { start, end, id } = timeslot;
+        await this.setState({start, end, buttonStatus:false, selected_availability_id: id});          
+      } else {
+        // if the user is a teacher
+        await this.setState({ buttonStatus:true });
+        console.log('You have an appointment at this time');   
+      }
+>>>>>>> [Messages] - Updates messages live
 
     const { userType } = this.state;
 
@@ -168,6 +196,7 @@ export default class Calendar extends Component {
         console.log('its an event');
       }
       // if the user is a student
+<<<<<<< HEAD
     } else if(userType === 1) {
       // check if the event is clicked
       // events (availabilities) have a teacher id on them
@@ -175,6 +204,11 @@ export default class Calendar extends Component {
         const { start, end, id } = timeslot;
         // enable the button and allow the student to book the availability
         await this.setState({start, end, buttonStatus:false, selected_availability_id: id}); 
+=======
+      if (this.state.userType === 1) {
+        await this.setState({ buttonStatus:true });
+        console.log('this is unavailable');  
+>>>>>>> [Messages] - Updates messages live
       } else {
         // it's not an event (availability) so
         // disable the button
@@ -184,11 +218,15 @@ export default class Calendar extends Component {
     }  
   }
 
+<<<<<<< HEAD
   renderStudentElements(){
     const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' };    
     const start = new Date(this.state.start).toLocaleTimeString('en-US', options);
     const end = new Date(this.state.end).toLocaleTimeString('en-US', options);
 
+=======
+  renderStudentElements() {
+>>>>>>> [Messages] - Updates messages live
     return (
       <div>
         <h3 className="callout">
@@ -295,6 +333,7 @@ export default class Calendar extends Component {
   }
 
 
+<<<<<<< HEAD
   async componentDidMount(){
     console.log('this is comp', this.props.currentId);
     const { teacher } = this.props.history.location.state || {teacher: {id: this.props.currentId}}; 
@@ -304,6 +343,22 @@ export default class Calendar extends Component {
     // if user type is teacher get their appointments
     if(this.props.currentType === 0){
       this.getTeacherAppointments(teacher);
+=======
+  componentDidMount(){
+    this.setState({
+      userType: this.props.currentType
+    })
+    if (this.props.currentType === 1) {
+      const { studentId, teacher } = this.props.history.location.state;
+      
+      // for student user
+      this.getTeacherAvailability(studentId, teacher);
+      
+      // if user type is not student (it's teacher)
+      if(this.state.userType !== 1){
+        this.getTeacherAppointments(studentId, teacher);
+      }
+>>>>>>> [Messages] - Updates messages live
     }
 
     await this.setState({ userType: this.props.currentType });

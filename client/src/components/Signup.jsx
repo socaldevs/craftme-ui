@@ -48,8 +48,13 @@ class Signup extends Component {
       passwordTwo: '',
       bio: '',
       value: 'student',
+<<<<<<< HEAD
       profile: 'http://www.planystech.com/wp-content/uploads/2017/03/profile-placeholder.jpg',
       file: null
+=======
+      profile: "http://www.planystech.com/wp-content/uploads/2017/03/profile-placeholder.jpg",
+      file: null,
+>>>>>>> [Messages] - Updates messages live
     };
 
     this.urlInput = this.urlInput.bind(this);

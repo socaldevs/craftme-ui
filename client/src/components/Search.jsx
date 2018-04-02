@@ -169,14 +169,23 @@ class Search extends React.Component {
       });
       // if match not found
       if (matchedCraftIndex < 0) {
+<<<<<<< HEAD
         console.error(`match not found for ${this.state.value}`);
+=======
+        console.error(`match not found for ${this.state.value}` );
+>>>>>>> [Messages] - Updates messages live
       } else {
         // redirect to searchResults and pass the matched craft
         const matchedCraft = suggestions[matchedCraftIndex].craft;
         this.props.history.push('/searchResults', { matchedCraft });
       }
 
+<<<<<<< HEAD
     }
+=======
+  componentDidMount() {
+    this.search();
+>>>>>>> [Messages] - Updates messages live
   }
 
 
