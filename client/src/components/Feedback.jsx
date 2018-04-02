@@ -1,7 +1,41 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
+import Button from 'material-ui/Button';
+import styled from 'styled-components';
+import { withStyles } from 'material-ui/styles';
+import TextField from 'material-ui/TextField';
+import Paper from 'material-ui/Paper';
 
-export default class Feedback extends Component {
+
+const StyleButton = styled(Button)`
+width: 100%;
+`;
+
+const StyledDiv = styled.div`
+margin-top: 10%;
+margin-left: 40%;
+margin-right: 35%;
+`;
+
+const styles = theme => ({
+  root: {
+    width: 150,
+  },
+  row: {
+    display: 'flex',
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+});
+
+class Feedback extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -37,6 +71,7 @@ export default class Feedback extends Component {
   }
 
   render() {
+    const { classes } = this.props;
     return (
       <div>
         Please review your lesson:
@@ -44,10 +79,39 @@ export default class Feedback extends Component {
           Please submit your rating (1-5): <input name="rating" onChange={this.handleChange} value={this.state.rating}/>
         </div>
         <div>
-          Please state your reasons for your review: <input name="review" onChange={this.handleChange} value={this.state.review}/>
+          This is the Feedback Component
+          <div>
+          </div>
+
+                <TextField
+        label="RATING"
+        id="margin-dense"
+        onChange={this.handleChange}
+        value={this.state.rating}
+        className={classes.textField}
+        helperText="Please submit your rating (1-5)"
+        margin="dense"
+      />
+          <div>
+          </div>
+
+        <TextField
+        label="REASONS"
+        id="margin-dense"
+        onChange={this.handleChange}
+        value={this.state.review}
+        className={classes.textField}
+        helperText="Please state your reasons for your review"
+        margin="dense"
+      />
+        <div>
+          </div>
+
+          <StyleButton onClick={this.submitFeedback} >Submit </StyleButton>
         </div>
-        <button onClick={this.submitFeedback} >Submit </button>
-      </div>
-    )
+        </Paper>
+      </StyledDiv>
+    );
   }
 }
+export default withStyles(styles)(Feedback);
