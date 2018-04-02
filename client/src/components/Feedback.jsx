@@ -1,41 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Button from 'material-ui/Button';
-import styled from 'styled-components';
-import { withStyles } from 'material-ui/styles';
-import TextField from 'material-ui/TextField';
-import Paper from 'material-ui/Paper';
 
-
-const StyleButton = styled(Button)`
-width: 100%;
-`;
-
-const StyledDiv = styled.div`
-margin-top: 10%;
-margin-left: 40%;
-margin-right: 35%;
-`;
-
-const styles = theme => ({
-  root: {
-    width: 150,
-  },
-  row: {
-    display: 'flex',
-  },
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 200,
-  },
-});
-
-class Feedback extends Component {
+export default class Feedback extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -53,14 +19,14 @@ class Feedback extends Component {
   async submitFeedback() {
     try {
       const { student_id, teacher_id, id } = this.props.history.location.state; //id is lesson id
-      await axios.post(`http://localhost:3000/student/submitFeedback`, {
+      await axios.post(`${process.env.REST_PATH}/student/submitFeedback`, {
         teacher_id,
         student_id,
         lesson_id: id,
         rating: this.state.rating,
         review: this.state.review,
       })
-      await axios.put(`http://localhost:3000/user/calculateAverageRatingForTeacher/`, {
+      await axios.put(`${process.env.REST_PATH}/user/calculateAverageRatingForTeacher/`, {
         teacher_id,
       })
       this.props.history.push('/lessons');
@@ -71,7 +37,6 @@ class Feedback extends Component {
   }
 
   render() {
-    const { classes } = this.props;
     return (
       <div>
         Please review your lesson:
@@ -79,39 +44,10 @@ class Feedback extends Component {
           Please submit your rating (1-5): <input name="rating" onChange={this.handleChange} value={this.state.rating}/>
         </div>
         <div>
-          This is the Feedback Component
-          <div>
-          </div>
-
-                <TextField
-        label="RATING"
-        id="margin-dense"
-        onChange={this.handleChange}
-        value={this.state.rating}
-        className={classes.textField}
-        helperText="Please submit your rating (1-5)"
-        margin="dense"
-      />
-          <div>
-          </div>
-
-        <TextField
-        label="REASONS"
-        id="margin-dense"
-        onChange={this.handleChange}
-        value={this.state.review}
-        className={classes.textField}
-        helperText="Please state your reasons for your review"
-        margin="dense"
-      />
-        <div>
-          </div>
-
-          <StyleButton onClick={this.submitFeedback} >Submit </StyleButton>
+          Please state your reasons for your review: <input name="review" onChange={this.handleChange} value={this.state.review}/>
         </div>
-        </Paper>
-      </StyledDiv>
-    );
+        <button onClick={this.submitFeedback} >Submit </button>
+      </div>
+    )
   }
 }
-export default withStyles(styles)(Feedback);
