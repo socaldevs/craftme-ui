@@ -3,7 +3,7 @@ export default function currentUrl(state = null, action) {
     case 'UPDATE_URL':
       return action.payload;
     case 'REMOVE_URL':
-      return (state.currentUrl = action.payload);
+      return null;
     default:
       return state;
   }

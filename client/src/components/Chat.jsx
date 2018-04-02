@@ -115,27 +115,7 @@ class Chat extends Component {
     this.peer.destroy();
   }
 
-  async saveChat () {
-    const { messages } = this.state;
-    const { teacher_id, student_id, title } = this.props
-    
-    console.log('this.props', this.props);
-    try {
-      const {data} = await axios.post(`${process.env.REST_PATH}/user/saveLesson/`, { 
-        messages,
-        teacher_id,
-        student_id,
-        title
-      });
-      if (data) {
-        console.log('data', data);
-        this.props.history.push('/feedback', data);
-      }
-    } catch(err) {
-      console.log('err from saveChat', err);
-    }
-  }
-
+  
   setText(e) {
     this.setState({ message: e.target.value });
     this.socket.emit('typing', {
@@ -144,11 +124,30 @@ class Chat extends Component {
     });
   }
 
+  async saveChat () {
+    const { messages } = this.state;
+    const { teacher_id, student_id, roomId, title } = this.props
+    try {
+      const {data} = await axios.post(`${process.env.REST_PATH}/user/saveLesson/`, { 
+        messages,
+        teacher_id,
+        student_id,
+        title,
+        roomId,
+      });
+      if (data) { 
+        this.props.history.push('/feedback', data);
+      }
+    } catch(err) {
+      console.log('err from saveChat', err);
+    }
+  }
+
   sendChat() {
     this.socket.emit('chat', {
       room: this.props.roomId,
       handle: this.username,
-      message: this.state.message
+      message: this.state.message,
     });
     this.setState({ message: '' });
   }
@@ -158,7 +157,7 @@ class Chat extends Component {
       this.peer = new Peer({
         initiator: true, 
         trickle: false,
-        stream: stream
+        stream: stream,
       });
       this.peer.on('signal', (data) => {
         this.socket.emit('offer', {

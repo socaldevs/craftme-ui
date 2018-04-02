@@ -30,7 +30,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(process.env.REST_PATH)
     return (
     <div >
   <Switch>
@@ -55,4 +54,5 @@ class App extends Component {
     );
   }
 }
+
 export default App
