@@ -9,6 +9,7 @@ import { MenuItem } from 'material-ui/Menu';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import styled from 'styled-components';
+import SearchIcon from 'material-ui-icons/Search'
 /* import Button from 'material-ui/Button'; */
 
 const StyledDiv = styled.div`
