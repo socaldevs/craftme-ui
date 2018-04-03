@@ -9,8 +9,16 @@ import { MenuItem } from 'material-ui/Menu';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import styled from 'styled-components';
-import SearchIcon from 'material-ui-icons/Search'
+import SearchIcon from 'material-ui-icons/Search';
+import Input, { InputLabel } from 'material-ui/Input';
+import { FormControl } from 'material-ui/Form';
+import Button from 'material-ui/Button';
+
 /* import Button from 'material-ui/Button'; */
+
+const StyleButton = styled(Button)`
+width: 24%;
+`;
 
 const StyledDiv = styled.div`
 margin-left: 40%;
@@ -118,6 +126,8 @@ class Search extends React.Component {
     this.state = {
       value: '',
       suggestions: [],
+      craft: '',
+      description: '',
     };
     this.search = async () => {
       try {
@@ -175,14 +185,33 @@ class Search extends React.Component {
         const matchedCraft = suggestions[matchedCraftIndex].craft;
         this.props.history.push('/searchResults', { matchedCraft });
       }
-
     }
   }
 
+  setInputValue(e) {
+    e.target.id === 'enter-craft' ? 
+    this.setState({ craft: e.target.value }) :
+    this.setState({ description: e.target.value });
+  }
+
+  async submitCraft() {
+    const { craft, description } = this.state;
+    const { currentId } = this.props;
+    try {
+      const craftSubmission = await axios.post(`${process.env.REST_PATH}/teacher/submitCraft`, {
+        name: craft,
+        description,
+        userId: currentId,
+      });
+      console.log('what do I get back', craftSubmission);
+    } catch(err) {
+      console.log('err from submitCraft', err);
+    }
+  }
 
   render() {
-    const { classes } = this.props;
-    return (
+    const { classes, currentType } = this.props;
+    return currentType === 0 ? (
       <div>
         <StyledDiv >
           <Grid container spacing={40}>
@@ -191,7 +220,40 @@ class Search extends React.Component {
             <h1>CraftMe</h1>
             <img src="logo.png" alt="logo" height="300" width="303" />
             <Grid item xs={12}>
-
+            <div>
+              <FormControl>
+                <InputLabel>What's your Craft?</InputLabel>
+                <Input id="enter-craft" 
+                       type="text" 
+                       value={this.state.craft} 
+                       onChange={e => this.setInputValue(e)} 
+                />
+              </FormControl>
+            </div>
+            <div> 
+              <FormControl>
+                <InputLabel >Desciption</InputLabel>
+                <Input id="description" 
+                       type="text" 
+                       value={this.state.description} 
+                       onChange={e => this.setInputValue(e)} 
+                />
+              </FormControl>
+            </div>
+            <p><StyleButton variant="raised" onClick={() => this.submitCraft()}>Submit</StyleButton></p>
+            </Grid>
+          </Grid>
+        </StyledDiv>
+      </div>
+    ) : (
+      <div>
+        <StyledDiv >
+          <Grid container spacing={40}>
+            <Grid item xs={6} sm={3}>
+            </Grid>
+            <h1>CraftMe</h1>
+            <img src="logo.png" alt="logo" height="300" width="303" />
+            <Grid item xs={12}>
               <Autosuggest
                 theme={{
                   container: classes.container,
@@ -214,12 +276,10 @@ class Search extends React.Component {
                   onKeyPress: this.handleKey,
                 }}
               />
-
             </Grid>
           </Grid>
         </StyledDiv>
       </div>
-
     );
   }
 }

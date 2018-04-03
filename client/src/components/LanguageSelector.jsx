@@ -25,14 +25,14 @@ class LanguageSelector extends Component {
 
   populateLanguages() {
     return (
-      this.state.languages.map((language,i) => {
-        return <option value={language.language} key={i}>{language.name}</option>
+      this.state.languages.map((language, i) => {
+        return <option value={language.language} key={i}>{language.name}</option>;
       })
-    )
+    );
   }
 
   render() {
-    return(
+    return (
       <div>
         <select value={this.props.translateFrom} className="from" onChange={(e)=>{this.props.selectLanguage(e)}}>
           <option value="" disabled>Translate from...</option>

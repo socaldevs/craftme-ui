@@ -6,11 +6,121 @@ body  {
   /* <------ background-image: url("https://ed.stanford.edu/sites/default/files/news_images/math2.jpeg");*/
 }
 
-.chat-window{
+body, html, div#app, .protected-wrapper {
+  height: 100%;
+}
+
+.MuiGrid-typeContainer-7.MuiGrid-spacing-xs-24-30 {
+  flex-shrink: 0;
+}
+
+.protected-wrapper{
+  display: flex;
+  flex-direction: column;
+}
+
+.conference-container{
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+}
+
+  .upper-container{
+    display: flex;
+    flex-direction: column;
+  }
+
+    .video-container{
+      height: 480px;
+      width: 640px;
+    }
+
+    .info-container{
+      display: flex;
+      flex-grow: 1;
+      justify-content: flex-end;
+      flex-direction: column;
+      padding: 15px;
+      align-items: center;
+      background-color: #eae6e6;
+      border-left: 1px solid #383838;
+    }
+
+      .info-container  > button {
+        margin: 15px;
+        min-width: 50px;
+        display: block;
+      }
+
+  .message-container{
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    border-left: 1px solid #383838;
+  }
+    .message-topbar{
+      display: flex;
+      flex-shrink: 0;
+      flex-direction: row;
+      padding: 8px;
+      align-items: center;
+      border-top: 1px solid #383838;
+      border-bottom: 1px solid #383838;
+      background-color: #6D748C;
+    }
+      .message-title{
+        flex-grow: 4;
+      }
+      .language-selector{
+        flex-grow: 1;
+        justify-content: flex-end;
+        display: flex;
+      }
+      .message-topbar button.save {
+        margin-left: 16px;
+      }
+    
+    .chat-window{
+      flex-grow: 1;
+      overflow: auto;
+      background-color: #eae6e6;
+    }
+    .message-send{
+      display: flex;
+      flex-direction: row;
+      flex-shrink: 0;
+    }
+      .message{
+        flex-grow: 5;
+      }
+      .send{
+        flex-grow: 1;
+      }
+
+.hidden-element {
+  opacity: 0;
+  transition: opacity 1s linear;
+}
+      
+.visible-element {
+  opacity: 1;
+  transition: opacity 1s linear;
+}
+
+.user-handle{
+  color: salmon;
+}
+
+.other-user-handle{
+  color: #3C4663;
+}
+
+/* .chat-window{
   height: 200px;
   overflow: auto;
   background: #fafafa;
 }
+
 
 .output p{
   padding: 14px 0px;
@@ -19,14 +129,14 @@ body  {
   color: #555;
 }
 
+.output strong{
+  color: salmon;
+}
+
 .feedback p{
   color: #aaa;
   padding: 14px 0px;
   margin: 0 20px;
-}
-
-.output strong{
-  color: salmon;
 }
 
 .message {
@@ -58,11 +168,7 @@ body  {
 
 .send:hover {
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-}
-
-.message-container {
-  width: 100%
-}
+} */
 
 
 .wrapper {

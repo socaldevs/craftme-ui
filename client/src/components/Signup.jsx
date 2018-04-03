@@ -139,6 +139,7 @@ class Signup extends Component {
           <InputLabel >BIOGRAPHY</InputLabel>
           <Input type='text' value={this.state.bio} onChange={e => this.handleChange(e, "bio")} />
         </FormControl>
+        
         <div>
           <BottomNavigation value={value} onChange={this.handleChangeButton} className={classes.root}>
             <BottomNavigationAction label="Student" value="student" icon={<PersonIcon />} />
@@ -155,4 +156,4 @@ class Signup extends Component {
 }
 
 
-export default withStyles(styles)(Signup)
+export default withStyles(styles)(Signup);

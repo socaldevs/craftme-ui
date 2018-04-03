@@ -61,7 +61,7 @@ class ConnectedNavbar extends Component {
         <Link to="/messages" className="navbar-item" style={{ textDecoration: 'none' }}>Messages</Link>
         <Link to="/search" className="navbar-item" style={{ textDecoration: 'none' }} onClick={this.handleLogoutClick}>Logout</Link> />
       </ul>
-    )
+    );
   }
 }
 
