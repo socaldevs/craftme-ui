@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 
 export default class Feedback extends Component {
@@ -19,14 +19,14 @@ export default class Feedback extends Component {
   async submitFeedback() {
     try {
       const { student_id, teacher_id, id } = this.props.history.location.state; //id is lesson id
-      await axios.post(`http://localhost:3000/student/submitFeedback`, {
+      await axios.post(`${process.env.REST_PATH}/student/submitFeedback`, {
         teacher_id,
         student_id,
         lesson_id: id,
         rating: this.state.rating,
         review: this.state.review,
       })
-      await axios.put(`http://localhost:3000/user/calculateAverageRatingForTeacher/`, {
+      await axios.put(`${process.env.REST_PATH}/user/calculateAverageRatingForTeacher/`, {
         teacher_id,
       })
       this.props.history.push('/lessons');
