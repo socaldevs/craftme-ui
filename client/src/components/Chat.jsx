@@ -7,55 +7,62 @@ import LanguageSelector from './LanguageSelector.jsx';
 
 class Chat extends Component {
   constructor(props) {
-    super(props); 
+    super(props);
     this.state = {
       message: '',
       messages: [],
       feedback: '',
       translateFrom: '',
       translateTo: '',
-    }
+      otherUser: '',
+      joined: false,
+    };
     this.username = this.props.currentUser;
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
   }
   componentDidMount() { 
     this.socket = io(`${process.env.SOCKET_PATH}/`);
     this.socket.on('connect', () => {
-      this.socket.emit('room', this.props.roomId);
+      this.socket.emit('room', {
+        room: this.props.roomId,
+        username: this.username,
+      });
     });
     this.socket.on('confirmation', (data) => {
-      console.log('message from server:', data)
-      if (this.state.messages.length !== 0) {
-        this.socket.emit('renderChat', {
-          messages: this.state.messages,
-          room: this.props.roomId,
-        });
-      } 
+      console.log('message from server', data);
+      this.socket.emit('renderChat', {
+        messages: this.state.messages,
+        room: this.props.roomId,
+        username: this.username,
+      });
+      this.setState({ otherUser: data.username });
+      this.setJoinedStatus();
     });
     this.socket.on('renderChat', (data) => {
-      this.setState({ messages: [...data]});
-    })
+      this.setState({
+        messages: [...data.messages],
+        otherUser: data.username,
+      });
+    });
     this.socket.on('chat', (data) => {
-      this.setState({ 
-        messages: [...this.state.messages, data], 
+      this.setState({
+        messages: [...this.state.messages, data],
         feedback: '',
       });
-    })
+    });
     this.socket.on('typing', (data) => {
-      this.setState({ feedback: data});
-    })
+      this.setState({ feedback: data });
+    });
     this.socket.on('offer', (offer) => {
-      console.log('am I receiving offer?')
       this.peer.signal(JSON.parse(offer));
     });
 
-    navigator.getUserMedia({ video: true, audio: false}, (stream) => {
+    navigator.getUserMedia({ video: true, audio: false }, (stream) => {
       this.stream = stream;
-
       this.peer = new Peer({
-        initiator: false, //who is the first peer?
+        initiator: false,
         trickle: false,
-        stream: stream
+        stream: stream,
       });
       this.peer.on('signal', (data) => {
         this.socket.emit('answer', {
@@ -63,52 +70,19 @@ class Chat extends Component {
           answer: JSON.stringify(data),
         });
       });
-      this.peer.on('connect', () => console.log('PEER CONNECTED'))
+      this.peer.on('connect', () => console.log('PEER CONNECTED'));
       this.peer.on('stream', (stream) => {
-        let video = document.createElement('video');
+        const video = document.createElement('video');
         this.videoContainer.append(video);
         video.src = window.URL.createObjectURL(stream);
         video.play();
-      })
-    }, (err) => console.log('err', err));
+      });
+    }, err => console.log('err', err));
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (this.props.roomId !== nextProps.roomId) { 
-  //     this.socket.emit('exit', this.props.roomId);
-  //     this.socket.emit('room', nextProps.roomId);
-  //     this.setState({ messages: [], feedback: '' });
-  //   }
-
-
-    // this.peer = new Peer({ key: process.env.PEERKEY });
-    // this.peer.on('open', (id) => {
-    //   this.setState({ peerId: id });
-    // });
-    // this.peer.on('call', (call) => {
-    //   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-    //   navigator.getUserMedia({video: true, audio: true}, (stream) => {
-    //     call.answer(stream); 
-    //     call.on('stream', (remoteStream) => {
-    //       let video = document.createElement('video');
-    //       this.videoContainer.append(video);
-    //       video.src = window.URL.createObjectURL(remoteStream);
-    //       video.play();
-    //     });
-    //     this.socket.on('endCall', () => {
-    //       call.close();
-    //     })
-    //   }, (err) => {
-    //     console.log('Failed to get local stream', err);
-    //   });
-    // });
-    
-  // }
-
   componentWillUnmount() {
-    this.stream.getTracks().forEach(track => track.stop())
+    this.stream.getTracks().forEach(track => track.stop());
     this.peer.destroy();
-    
   }
 
   
@@ -153,111 +127,113 @@ class Chat extends Component {
     this.setState({ message: '' });
   }
 
-  async callPeer() {
+  callPeer() {
     navigator.getUserMedia({ video: true, audio: false }, (stream) => {
       this.peer = new Peer({
-        initiator: true, 
+        initiator: true,
         trickle: false,
         stream: stream,
       });
       this.peer.on('signal', (data) => {
-        console.log('SIGNAL FROM INITIATOR')
         this.socket.emit('offer', {
           room: this.props.roomId,
           offer: JSON.stringify(data),
-        })
+        });
       });
       this.socket.on('answer', (answer) => {
-        console.log('on answer from callpeer f')
-        this.peer.signal(JSON.parse(answer))
+        this.peer.signal(JSON.parse(answer));
       });
-      this.peer.on('connect', () => console.log('PEER CONNECTED from callpeer f'))
+      this.peer.on('connect', () => console.log('PEER CONNECTED from callpeer'));
       this.peer.on('stream', (stream) => {
-        this.remoteStream = stream;
-        let video = document.createElement('video');
+        const video = document.createElement('video');
         this.videoContainer.append(video);
         video.src = window.URL.createObjectURL(stream);
         video.play();
       });
-    }, (err) => console.log('err', err));
+    }, err => console.log('err', err));
   }
 
-  // async callPeer() { 
-  //   const peer = this.peer;
-  //   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-  //   try {
-  //     let getOtherPeerId = await this.socket.emit('getOtherPeerId', this.props.roomId);
-  //     let videoCall = await navigator.getUserMedia({video: true, audio: true}, (stream) => {
-  //       this.call = peer.call(this.state.otherPeerId, stream);
-  //       this.call.on('stream', (remoteStream) => {
-  //         let video = document.createElement('video');
-  //         this.videoContainer.append(video);
-  //         video.src = window.URL.createObjectURL(remoteStream);
-  //         video.play();
-  //       });
-  //       this.socket.on('endCall', () => {
-  //         this.call.close();
-  //         //stream.stop();
-  //       })
-  //     }, (err) => {
-  //       console.log('Failed to get local stream', err);
-  //     });
-  //   } catch(err) {
-  //     console.log('err from callPeer', err);
-  //   }
-  // }
-
-  selectLanguage(e){
-    e.target.className === 'from' ? 
+  selectLanguage(e) {
+    e.target.className === 'from' ?
     this.setState({ translateFrom: e.target.value }) :
-    this.setState({ translateTo: e.target.value })
+    this.setState({ translateTo: e.target.value });
+  }
+
+  ifEnter(cb) {
+    return (e) => {
+      if (e.key == 'Enter') {
+        return cb();
+      }
+    };
+  }
+
+  async saveChat() {
+    const { messages } = this.state;
+    const { teacher_id, student_id } = this.props;
+    try {
+      const { data } = await axios.post(`${process.env.REST_PATH}/user/saveLesson/`, {
+        messages,
+        teacher_id,
+        student_id,
+      });
+      if (data) {
+        this.props.history.push('/feedback', data);
+      }
+    } catch (err) {
+      console.log('err from saveChat', err);
+    }
   }
 
   render() {
+    console.log('username, otheruser', this.username, this.state.otherUser);
     return (
       <div className="conference-container">
         <div className="upper-container">
           <div className="video-container" ref={(input) => { this.videoContainer = input; }} />
-          <div className="info-container"> 
+          <div className="info-container">
+            <div>
+              {this.state.joined ? `${this.state.otherUser} has joined the conference` : ''}
+            </div>
             <button className="call" className="glyphicon glyphicon-facetime-video" onClick={() => this.callPeer()} />
           </div>
         </div>
         <div className="message-container">
           <div className="message-topbar">
-            <div className="message-title">MESSAGES</div>
+            <div className="message-title">CHAT</div>
             <div className="language-selector">
-              <LanguageSelector 
-                selectLanguage={(e) => this.selectLanguage(e)} 
+              <LanguageSelector
+                selectLanguage={e => this.selectLanguage(e)}
                 translateFrom={this.state.translateFrom}
                 translateTo={this.state.translateTo}
               />
             </div>
-            <button className="save" onClick={() => this.saveChat()}>SAVE CHAT</button>
+            <button className="save" onClick={() => this.saveChat()}>SAVE</button>
           </div>
           <div className="chat-window">
             <div className="output">
-              {this.state.messages.map((data,i) => {
-                return <TextToTranslate 
-                  handle={data.handle} 
-                  message={data.message} 
+              {this.state.messages.map((data, i) => {
+                return (<TextToTranslate
+                  handle={data.handle}
+                  message={data.message}
                   translateFrom={this.state.translateFrom}
                   translateTo={this.state.translateTo}
-                  key={i} 
-                />
+                  key={i}
+                />);
               })}
             </div>
             <div className="feedback">{this.state.feedback}</div>
           </div>
           <div className="message-send">
-            <input className="message" 
-                   type="text" placeholder="Message" 
-                   value={this.state.message} 
-                   onChange={e => this.setText(e)}
-                   onKeyPress={ifEnter(() => this.sendChat())}
+            <input
+              className="message"
+              type="text"
+              placeholder="Message"
+              value={this.state.message}
+              onChange={e => this.setText(e)}
+              onKeyPress={this.ifEnter(() => this.sendChat())}
             />
             <button className="send" onClick={() => this.sendChat()}>SEND</button>
           </div>
-          
         </div>
       </div>
     );
@@ -265,11 +241,3 @@ class Chat extends Component {
 }
 
 export default Chat;
-
-function ifEnter(cb) {
-  return function(e) {
-    if (e.key == 'Enter') {
-      return cb();
-    }
-  };
-}

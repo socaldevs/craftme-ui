@@ -48,13 +48,8 @@ class Signup extends Component {
       passwordTwo: '',
       bio: '',
       value: 'student',
-<<<<<<< HEAD
       profile: 'http://www.planystech.com/wp-content/uploads/2017/03/profile-placeholder.jpg',
       file: null
-=======
-      profile: "http://www.planystech.com/wp-content/uploads/2017/03/profile-placeholder.jpg",
-      file: null,
->>>>>>> [FLEXBOX] styled conference component
     };
 
     this.urlInput = this.urlInput.bind(this);
@@ -97,12 +92,7 @@ class Signup extends Component {
       formData.append('password', this.state.password);
       formData.append('bio', this.state.bio);
       formData.append('type', type);
-<<<<<<< HEAD
       const data = await axios.post(`${process.env.REST_PATH}/auth/signup`, formData);
-=======
-
-      let data = await axios.post(process.env.REST_PATH + '/auth/signup', formData);
->>>>>>> [FLEXBOX] styled conference component
       if (data) {
         this.props.history.push('/login');
       }
