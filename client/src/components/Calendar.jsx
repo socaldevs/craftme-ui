@@ -8,6 +8,7 @@ import {
   fetchUserUpcomingBookings,
 } from './../apiCaller.js';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import Popup from './Popup.jsx';
 
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
@@ -47,7 +48,6 @@ export default class Calendar extends Component {
     super(props);
     
     this.state = {
-<<<<<<< HEAD
       currentUserId: 0, // either a student or a teacher 
       events: [],
       start: false,
@@ -55,16 +55,7 @@ export default class Calendar extends Component {
       selected_availability_id: 0,
       buttonStatus: true,
       userType: 1,    
-=======
-      teacher_id: 0,
-      student_id: 0,
-      events: [],
-      start: '',
-      end: '',
-      selected_availability_id: 0,
-      buttonStatus: true,
-      userType: null,    
->>>>>>> [Messages] - Updates messages live
+      showPopup: false,
     };
 
     this.submitBooking = this.submitBooking.bind(this);
@@ -73,7 +64,14 @@ export default class Calendar extends Component {
     this.renderStudentElements = this.renderStudentElements.bind(this);
     this.renderTeacherElements = this.renderTeacherElements.bind(this);
     this.getTeacherAppointments = this.getTeacherAppointments.bind(this);
-    this.getTeacherAvailability = this.getTeacherAvailability.bind(this);      
+    this.getTeacherAvailability = this.getTeacherAvailability.bind(this);
+    this.togglePopup = this.togglePopup.bind(this);   
+  }
+
+  togglePopup() {
+    this.setState({
+      showPopup: !this.state.showPopup
+    });
   }
 
 
@@ -106,6 +104,7 @@ export default class Calendar extends Component {
       availability.end = new Date(availability.end);
       // updating the events on the calendar
       await this.setState({ events: [...this.state.events, availability]});
+      await this.togglePopup();
     } catch (error) {
       console.error('error while trying to submit availability', error);
     }  
@@ -136,7 +135,7 @@ export default class Calendar extends Component {
       
       const updatedAvailabilities = this.state.events.filter((availability) => {
         // getting rid of the booked slot
-        if(availability.id === bookingToSend.selected_availability_id){
+        if (availability.id === bookingToSend.selected_availability_id) {
           return false;
         } else {
           return true;  
@@ -156,34 +155,17 @@ export default class Calendar extends Component {
     }
   }
 
-<<<<<<< HEAD
-  async timeSlotSelected(timeslot){
-=======
   async timeSlotSelected(timeslot) {
-    //TODO: check if the range hits an occupied slot
-    // Check if the slot has a teacher_id ( it has an availability record)
-    if (timeslot.hasOwnProperty('teacher_id')) {
-      if (this.state.userType === 1) {
-        // if the user is a student
-        console.log('this is available, timeslot: ', timeslot );
-        const { start, end, id } = timeslot;
-        await this.setState({start, end, buttonStatus:false, selected_availability_id: id});          
-      } else {
-        // if the user is a teacher
-        await this.setState({ buttonStatus:true });
-        console.log('You have an appointment at this time');   
-      }
->>>>>>> [Messages] - Updates messages live
 
     const { userType } = this.state;
 
     // if the user is a teacher
-    if(userType === 0) {
+    if (userType === 0) {
       // check if the action is drag
       // the drag action is to create availability for the teacher
-      if(timeslot.hasOwnProperty('slots')){
+      if (timeslot.hasOwnProperty('slots')) {
         // check if the availability created overlaps with a different event
-        if(!doesOverlap(this.state.events, timeslot)){
+        if (!doesOverlap(this.state.events, timeslot)) {
           // allow the teacher to submit the availability by enabling the submission button
           const { start, end } = timeslot;
           await this.setState({ start, end, buttonStatus:false });
@@ -196,7 +178,6 @@ export default class Calendar extends Component {
         console.log('its an event');
       }
       // if the user is a student
-<<<<<<< HEAD
     } else if(userType === 1) {
       // check if the event is clicked
       // events (availabilities) have a teacher id on them
@@ -204,11 +185,6 @@ export default class Calendar extends Component {
         const { start, end, id } = timeslot;
         // enable the button and allow the student to book the availability
         await this.setState({start, end, buttonStatus:false, selected_availability_id: id}); 
-=======
-      if (this.state.userType === 1) {
-        await this.setState({ buttonStatus:true });
-        console.log('this is unavailable');  
->>>>>>> [Messages] - Updates messages live
       } else {
         // it's not an event (availability) so
         // disable the button
@@ -218,15 +194,11 @@ export default class Calendar extends Component {
     }  
   }
 
-<<<<<<< HEAD
   renderStudentElements(){
     const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' };    
     const start = new Date(this.state.start).toLocaleTimeString('en-US', options);
     const end = new Date(this.state.end).toLocaleTimeString('en-US', options);
 
-=======
-  renderStudentElements() {
->>>>>>> [Messages] - Updates messages live
     return (
       <div>
         <h3 className="callout">
@@ -333,7 +305,6 @@ export default class Calendar extends Component {
   }
 
 
-<<<<<<< HEAD
   async componentDidMount(){
     console.log('this is comp', this.props.currentId);
     const { teacher } = this.props.history.location.state || {teacher: {id: this.props.currentId}}; 
@@ -343,22 +314,6 @@ export default class Calendar extends Component {
     // if user type is teacher get their appointments
     if(this.props.currentType === 0){
       this.getTeacherAppointments(teacher);
-=======
-  componentDidMount(){
-    this.setState({
-      userType: this.props.currentType
-    })
-    if (this.props.currentType === 1) {
-      const { studentId, teacher } = this.props.history.location.state;
-      
-      // for student user
-      this.getTeacherAvailability(studentId, teacher);
-      
-      // if user type is not student (it's teacher)
-      if(this.state.userType !== 1){
-        this.getTeacherAppointments(studentId, teacher);
-      }
->>>>>>> [Messages] - Updates messages live
     }
 
     await this.setState({ userType: this.props.currentType });
@@ -366,6 +321,9 @@ export default class Calendar extends Component {
   }
 
   render(){
+    const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' };    
+    const start = new Date(this.state.start).toLocaleTimeString('en-US', options);
+    const end = new Date(this.state.end).toLocaleTimeString('en-US', options);
     return (
       <React.Fragment>
 
@@ -391,6 +349,13 @@ export default class Calendar extends Component {
           onSelectSlot={ this.timeSlotSelected }
           eventPropGetter={ this.eventStyleGetter }
           />
+          {this.state.showPopup ? 
+          <Popup
+            text={`${start} - ${end} submitted!`}
+            closePopup={this.togglePopup}
+          />
+          : null
+          }
       </React.Fragment>
     );
   }    
