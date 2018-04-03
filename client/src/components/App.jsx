@@ -5,7 +5,6 @@ import Login from './Login.jsx';
 import Signup from './Signup.jsx';
 import Messages from './Messages.jsx';
 import Feedback from './Feedback.jsx';
-import Grid from './Grid.jsx';
 import Search from './Search.jsx';
 import LessonsContainer from './LessonsContainer.jsx';
 import Conference from './Conference.jsx';
@@ -31,7 +30,6 @@ class App extends Component {
           <Route path="/conference" component={props => (<Protected component={Conference} {...props} />)} />
           <Route path="/searchResults" component={props => (<Protected component={SearchResults} {...props} />)} />
           <Route path="/calendar" component={props => (<Protected component={Calendar} {...props} />)} />
-          <Route path="/grid" component={Grid} />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
           <Route path="/" component={props => (<Protected component={Search} {...props} />)} />
