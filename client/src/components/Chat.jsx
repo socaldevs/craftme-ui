@@ -15,7 +15,7 @@ class Chat extends Component {
       translateFrom: '',
       translateTo: '',
       otherUser: '',
-      joined: false,
+      displayStatus: 'hidden-element',
     };
     this.username = this.props.currentUser;
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
@@ -36,7 +36,7 @@ class Chat extends Component {
         username: this.username,
       });
       this.setState({ otherUser: data.username });
-      this.setJoinedStatus();
+      this.setPanel();
     });
     this.socket.on('renderChat', (data) => {
       this.setState({
@@ -117,6 +117,13 @@ class Chat extends Component {
       console.log('err from saveChat', err);
     }
   }
+  
+  setPanel() {
+    setTimeout(() => {
+      this.setState({ displayStatus: 'hidden-element' });
+    }, 3000);
+    this.setState({ displayStatus: 'visible-element' });
+  }
 
   sendChat() {
     this.socket.emit('chat', {
@@ -185,21 +192,18 @@ class Chat extends Component {
   }
 
   render() {
-    console.log('username, otheruser', this.username, this.state.otherUser);
     return (
       <div className="conference-container">
         <div className="upper-container">
           <div className="video-container" ref={(input) => { this.videoContainer = input; }} />
           <div className="info-container">
-            <div>
-              {this.state.joined ? `${this.state.otherUser} has joined the conference` : ''}
-            </div>
             <button className="call" className="glyphicon glyphicon-facetime-video" onClick={() => this.callPeer()} />
+            <button className="save" onClick={() => this.saveChat()}>SAVE LESSON</button>
           </div>
         </div>
         <div className="message-container">
           <div className="message-topbar">
-            <div className="message-title">CHAT</div>
+            <p className={this.state.displayStatus}>{`${this.state.otherUser} has joined the conference`}</p>
             <div className="language-selector">
               <LanguageSelector
                 selectLanguage={e => this.selectLanguage(e)}
@@ -207,7 +211,6 @@ class Chat extends Component {
                 translateTo={this.state.translateTo}
               />
             </div>
-            <button className="save" onClick={() => this.saveChat()}>SAVE</button>
           </div>
           <div className="chat-window">
             <div className="output">

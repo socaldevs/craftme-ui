@@ -22,19 +22,18 @@ body, html, div#app, .protected-wrapper {
 .conference-container{
   display: flex;
   flex-grow: 1;
-  flex-direction: column;
+  flex-direction: row;
 }
 
   .upper-container{
     display: flex;
-    flex-shrink: 0;
+    flex-direction: column;
     margin-top: 2px;
   }
 
     .video-container{
       height: 480px;
       width: 640px;
-      flex-grow: 2;
       
     }
 
@@ -60,6 +59,7 @@ body, html, div#app, .protected-wrapper {
     display: flex;
     flex-grow: 1;
     flex-direction: column;
+    border-left: 1px solid #383838;
   }
     .message-topbar{
       display: flex;
@@ -100,6 +100,15 @@ body, html, div#app, .protected-wrapper {
         flex-grow: 1;
       }
 
+.hidden-element {
+  opacity: 0;
+  transition: opacity 1s linear;
+}
+      
+.visible-element {
+  opacity: 1;
+  transition: opacity 1s linear;
+}
 
 /* .chat-window{
   height: 200px;
