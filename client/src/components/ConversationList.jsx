@@ -6,8 +6,42 @@ class ConversationList extends Component {
     super(props);
     this.state = {
       conversation: [],
+      recipient: '',
+      message: '',
     };
     this.grabConversations = this.grabConversations.bind(this);
+    this.sendMessage = this.sendMessage.bind(this);    
+  }
+
+  handleChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+  
+  async sendMessage() {
+    try {
+      const sender_id = this.props.props.currentId;
+      const id = await axios.get(
+        process.env.REST_PATH +`/user/getIdByUsername/${this.state.recipient}`
+      );
+      const { data } = await axios.post(
+        process.env.REST_PATH +`/user/messages/sendMessage`,
+        {
+          text: this.state.message,
+          sender_id: sender_id,
+          recipient_id: id.data.id
+        }
+      );
+      const message = data;
+      message.sender = this.props.props.currentUser;
+      this.setState({
+        message: '',
+        recipient: '',
+        conversation: [...this.state.conversation, message]
+      })
+    } catch (error) {
+      console.log('Error with sendMessage', error);
+      return;
+    }
   }
 
   async grabConversations(e) {
@@ -26,6 +60,24 @@ class ConversationList extends Component {
   render() {
     return (
       <div>
+        <div className="speech-bubble">
+          Recipient:{' '}
+          <input
+            type="text"
+            name="recipient"
+            value={this.state.recipient}
+            onChange={e => this.handleChange(e)}
+          />{' '}
+          <br />
+          Message:{' '}
+          <input
+            type="text"
+            name="message"
+            value={this.state.message}
+            onChange={e => this.handleChange(e)}
+          />
+          <button onClick={() => this.sendMessage()}>Send </button>
+        </div>
         <div className="wrapper">
           {this.props.conversations.map((conversation, i) => {
             return (
@@ -41,15 +93,14 @@ class ConversationList extends Component {
           )}
           <br />
           <div className="c2">
-            {this.state.conversation
-              ? this.state.conversation.map((conv, i) => {
+            {this.state.conversation.map((conv, i) => {
                   return (
                     <div className="conversation" key={i}>
                       {conv.sender} : {conv.text}
                     </div>
                   );
                 })
-              : null}
+              }
           </div>
         </div>
       </div>

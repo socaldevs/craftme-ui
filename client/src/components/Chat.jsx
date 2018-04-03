@@ -136,7 +136,12 @@ class Chat extends Component {
         roomId,
       });
       if (data) { 
-        this.props.history.push('/feedback', data);
+        if (this.props.currentType === 0) {
+          this.props.history.push('/lessons');
+        }
+        else {
+          this.props.history.push('/feedback', data);
+        }
       }
     } catch(err) {
       console.log('err from saveChat', err);

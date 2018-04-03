@@ -8,6 +8,7 @@ import {
   fetchUserUpcomingBookings,
 } from './../apiCaller.js';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import Popup from './Popup.jsx';
 
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
@@ -54,6 +55,7 @@ export default class Calendar extends Component {
       selected_availability_id: 0,
       buttonStatus: true,
       userType: 1,    
+      showPopup: false,
     };
 
     this.submitBooking = this.submitBooking.bind(this);
@@ -62,7 +64,14 @@ export default class Calendar extends Component {
     this.renderStudentElements = this.renderStudentElements.bind(this);
     this.renderTeacherElements = this.renderTeacherElements.bind(this);
     this.getTeacherAppointments = this.getTeacherAppointments.bind(this);
-    this.getTeacherAvailability = this.getTeacherAvailability.bind(this);      
+    this.getTeacherAvailability = this.getTeacherAvailability.bind(this);
+    this.togglePopup = this.togglePopup.bind(this);   
+  }
+
+  togglePopup() {
+    this.setState({
+      showPopup: !this.state.showPopup
+    });
   }
 
 
@@ -95,6 +104,7 @@ export default class Calendar extends Component {
       availability.end = new Date(availability.end);
       // updating the events on the calendar
       await this.setState({ events: [...this.state.events, availability]});
+      await this.togglePopup();
     } catch (error) {
       console.error('error while trying to submit availability', error);
     }  
@@ -125,7 +135,7 @@ export default class Calendar extends Component {
       
       const updatedAvailabilities = this.state.events.filter((availability) => {
         // getting rid of the booked slot
-        if(availability.id === bookingToSend.selected_availability_id){
+        if (availability.id === bookingToSend.selected_availability_id) {
           return false;
         } else {
           return true;  
@@ -145,17 +155,17 @@ export default class Calendar extends Component {
     }
   }
 
-  async timeSlotSelected(timeslot){
+  async timeSlotSelected(timeslot) {
 
     const { userType } = this.state;
 
     // if the user is a teacher
-    if(userType === 0) {
+    if (userType === 0) {
       // check if the action is drag
       // the drag action is to create availability for the teacher
-      if(timeslot.hasOwnProperty('slots')){
+      if (timeslot.hasOwnProperty('slots')) {
         // check if the availability created overlaps with a different event
-        if(!doesOverlap(this.state.events, timeslot)){
+        if (!doesOverlap(this.state.events, timeslot)) {
           // allow the teacher to submit the availability by enabling the submission button
           const { start, end } = timeslot;
           await this.setState({ start, end, buttonStatus:false });
@@ -311,6 +321,9 @@ export default class Calendar extends Component {
   }
 
   render(){
+    const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' };    
+    const start = new Date(this.state.start).toLocaleTimeString('en-US', options);
+    const end = new Date(this.state.end).toLocaleTimeString('en-US', options);
     return (
       <React.Fragment>
 
@@ -336,6 +349,13 @@ export default class Calendar extends Component {
           onSelectSlot={ this.timeSlotSelected }
           eventPropGetter={ this.eventStyleGetter }
           />
+          {this.state.showPopup ? 
+          <Popup
+            text={`${start} - ${end} submitted!`}
+            closePopup={this.togglePopup}
+          />
+          : null
+          }
       </React.Fragment>
     );
   }    

@@ -5,11 +5,8 @@ export default class Messages extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      recipient: '',
-      message: '',
       conversations: [],
     };
-    this.sendMessage = this.sendMessage.bind(this);
   }
 
   
@@ -27,56 +24,12 @@ export default class Messages extends Component {
     }
   }
 
-  handleChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-  }
-  
-  async sendMessage() {
-    try {
-      const sender_id = this.props.currentId;
-      const id = await axios.get(
-        process.env.REST_PATH +`/user/getIdByUsername/${this.state.recipient}`
-      );
-      const message = await axios.post(
-        process.env.REST_PATH +`/user/messages/sendMessage`,
-        {
-          text: this.state.message,
-          sender_id: sender_id,
-          recipient_id: id.data.id
-        }
-      );
-      this.setState({
-        message: '',
-        recipient: ''
-      })
-    } catch (error) {
-      console.log('Error with sendMessage', error);
-      return;
-    }
-  }
+ 
 
   render() {
     return (
       <div>
-        <div className="speech-bubble">
-          Recipient:{' '}
-          <input
-            type="text"
-            name="recipient"
-            value={this.state.recipient}
-            onChange={e => this.handleChange(e)}
-          />{' '}
-          <br />
-          Message:{' '}
-          <input
-            type="text"
-            name="message"
-            value={this.state.message}
-            onChange={e => this.handleChange(e)}
-          />
-          <button onClick={() => this.sendMessage()}>Send </button>
-        </div>
-        <ConversationList key={0} props={this.props} conversations={this.state.conversations} />
+        <ConversationList props={this.props} conversations={this.state.conversations} />
       </div>
     );
   }
