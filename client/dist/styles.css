@@ -69,7 +69,7 @@ body, html, div#app, .protected-wrapper {
       align-items: center;
       border-top: 1px solid #383838;
       border-bottom: 1px solid #383838;
-      background-color: cornsilk
+      background-color: #6D748C;
     }
       .message-title{
         flex-grow: 4;
@@ -108,6 +108,14 @@ body, html, div#app, .protected-wrapper {
 .visible-element {
   opacity: 1;
   transition: opacity 1s linear;
+}
+
+.user-handle{
+  color: salmon;
+}
+
+.other-user-handle{
+  color: #3C4663;
 }
 
 /* .chat-window{

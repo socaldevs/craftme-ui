@@ -85,7 +85,6 @@ class Chat extends Component {
     this.peer.destroy();
   }
 
-  
   setText(e) {
     this.setState({ message: e.target.value });
     this.socket.emit('typing', {
@@ -174,22 +173,11 @@ class Chat extends Component {
     };
   }
 
-  async saveChat() {
-    const { messages } = this.state;
-    const { teacher_id, student_id } = this.props;
-    try {
-      const { data } = await axios.post(`${process.env.REST_PATH}/user/saveLesson/`, {
-        messages,
-        teacher_id,
-        student_id,
-      });
-      if (data) {
-        this.props.history.push('/feedback', data);
-      }
-    } catch (err) {
-      console.log('err from saveChat', err);
-    }
+  setColor(username) {
+    return username === this.username ? 'user-handle' : 'other-user-handle';
   }
+
+
 
   render() {
     return (
@@ -220,6 +208,7 @@ class Chat extends Component {
                   message={data.message}
                   translateFrom={this.state.translateFrom}
                   translateTo={this.state.translateTo}
+                  setColor={(username) => this.setColor(username)}
                   key={i}
                 />);
               })}

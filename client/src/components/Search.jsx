@@ -9,7 +9,10 @@ import { MenuItem } from 'material-ui/Menu';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import styled from 'styled-components';
-import SearchIcon from 'material-ui-icons/Search'
+import SearchIcon from 'material-ui-icons/Search';
+import Input, { InputLabel } from 'material-ui/Input';
+import { FormControl } from 'material-ui/Form';
+
 /* import Button from 'material-ui/Button'; */
 
 const StyledDiv = styled.div`
@@ -118,6 +121,8 @@ class Search extends React.Component {
     this.state = {
       value: '',
       suggestions: [],
+      craft: '',
+      description: '',
     };
     this.search = async () => {
       try {
@@ -175,14 +180,17 @@ class Search extends React.Component {
         const matchedCraft = suggestions[matchedCraftIndex].craft;
         this.props.history.push('/searchResults', { matchedCraft });
       }
-
     }
+  }
+
+  setInputValue(e) {
+   console.log('what is e and className', e.target, e.target.id);
   }
 
 
   render() {
-    const { classes } = this.props;
-    return (
+    const { classes, currentType } = this.props;
+    return currentType === 0 ? (
       <div>
         <StyledDiv >
           <Grid container spacing={40}>
@@ -191,7 +199,31 @@ class Search extends React.Component {
             <h1>CraftMe</h1>
             <img src="logo.png" alt="logo" height="300" width="303" />
             <Grid item xs={12}>
-
+            <div>
+              <FormControl>
+                <InputLabel>What's your Craft?</InputLabel>
+                <Input id="craft" type="text" value={this.state.craft} onChange={e => this.setInputValue(e)} />
+             </FormControl>
+            </div>
+            <div> 
+              <FormControl>
+                <InputLabel >Desciption</InputLabel>
+                <Input id="description" type="text" value={this.state.description} onChange={e => this.setInputValue(e)} />
+              </FormControl>
+            </div>
+            </Grid>
+          </Grid>
+        </StyledDiv>
+      </div>
+    ) : (
+      <div>
+        <StyledDiv >
+          <Grid container spacing={40}>
+            <Grid item xs={6} sm={3}>
+            </Grid>
+            <h1>CraftMe</h1>
+            <img src="logo.png" alt="logo" height="300" width="303" />
+            <Grid item xs={12}>
               <Autosuggest
                 theme={{
                   container: classes.container,
@@ -214,12 +246,10 @@ class Search extends React.Component {
                   onKeyPress: this.handleKey,
                 }}
               />
-
             </Grid>
           </Grid>
         </StyledDiv>
       </div>
-
     );
   }
 }

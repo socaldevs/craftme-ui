@@ -30,7 +30,7 @@ class TextToTranslate extends Component {
     const { translation } = this.state;
     return (
       <div>
-        <strong>{handle}</strong>: <span onClick={()=>{this.translateText(message)}}>{message}</span>
+        <strong className={this.props.setColor(handle)}>{handle}</strong>: <span onClick={()=>{this.translateText(message)}}>{message}</span>
         <br />
         <small><i>{translation.slice(1, -1)}</i></small>
       </div>
