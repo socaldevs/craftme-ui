@@ -28,13 +28,11 @@ body, html, div#app, .protected-wrapper {
   .upper-container{
     display: flex;
     flex-direction: column;
-    margin-top: 2px;
   }
 
     .video-container{
       height: 480px;
       width: 640px;
-      
     }
 
     .info-container{
@@ -52,7 +50,6 @@ body, html, div#app, .protected-wrapper {
         margin: 15px;
         min-width: 50px;
         display: block;
-        
       }
 
   .message-container{

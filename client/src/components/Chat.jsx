@@ -93,30 +93,10 @@ class Chat extends Component {
     });
   }
 
-  async saveChat () {
-    const { messages } = this.state;
-    const { teacher_id, student_id, roomId, title } = this.props
-    try {
-      const {data} = await axios.post(`${process.env.REST_PATH}/user/saveLesson/`, { 
-        messages,
-        teacher_id,
-        student_id,
-        title,
-        roomId,
-      });
-      if (data) { 
-        if (this.props.currentType === 0) {
-          this.props.history.push('/lessons');
-        }
-        else {
-          this.props.history.push('/feedback', data);
-        }
-      }
-    } catch(err) {
-      console.log('err from saveChat', err);
-    }
+  setColor(username) {
+    return username === this.username ? 'user-handle' : 'other-user-handle';
   }
-  
+
   setPanel() {
     setTimeout(() => {
       this.setState({ displayStatus: 'hidden-element' });
@@ -173,11 +153,29 @@ class Chat extends Component {
     };
   }
 
-  setColor(username) {
-    return username === this.username ? 'user-handle' : 'other-user-handle';
+  async saveChat () {
+    const { messages } = this.state;
+    const { teacher_id, student_id, roomId, title } = this.props
+    try {
+      const {data} = await axios.post(`${process.env.REST_PATH}/user/saveLesson/`, { 
+        messages,
+        teacher_id,
+        student_id,
+        title,
+        roomId,
+      });
+      if (data) { 
+        if (this.props.currentType === 0) {
+          this.props.history.push('/lessons');
+        }
+        else {
+          this.props.history.push('/feedback', data);
+        }
+      }
+    } catch(err) {
+      console.log('err from saveChat', err);
+    }
   }
-
-
 
   render() {
     return (
