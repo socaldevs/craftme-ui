@@ -197,45 +197,59 @@ body, html, div#app, .protected-wrapper {
   font-family: Arial, Helvetica, sans-serif
 }
 
-
 .wrapper {
-  width: 100%;
+  display: flex;
 }
 
 .c1 {
-  float: left;
-  width: 70%;
+  width: 50%;
   overflow: auto;
+  margin: 2em;
+  max-height: 40em;
 }
 
 .c2 {
-  float: right;
-  width: 30%;
+  /* float: right; */
+  width: 50%;
   overflow: auto;
+  overflow-y: auto;
+  margin: 2em;
+  max-height: 40em;
 }
 
 .conversation {
   position: relative;
-  width: 100%;
-  height: 100%;
+  flex-grow: 2;
+  align-self: flex-end;
   text-align: center;
   line-height: 15px;
   background-color: #fff;
   border: 8px solid #666;
-  -webkit-border-radius: 30px;
-  -moz-border-radius: 30px;
-  border-radius: 30px;
-  -webkit-box-shadow: 2px 2px 4px #888;
-  -moz-box-shadow: 2px 2px 4px #888;
-  box-shadow: 2px 2px 4px #888;
+  border-radius: 1em;
+  display: block;
+  margin: .2em;
+  overflow-wrap: break-word;
+  max-width: 50%;
+}
+
+.recipient-input {
+  margin: .3em;
+  border-radius: .3em;
+  display: inline-block;
+}
+
+.message-input {
+  margin: .3em;
+  border-radius: .3em;
+  display: inline-block;
 }
 
 .thoughtbubble {
-  position:relative; 
-  width:50%; /*size of the bubble*/
-  padding:20px 40px;
-  /* margin:10px 10px 80px 40px; */
-  /**give the bubble's background a gradient**/
+  position: relative; 
+  width: 50%; /*size of the bubble*/
+  padding: 1em, 1em;
+  margin: .4em;
+  text-align: center;
   background:#f7a944; /*fallback colour for non-supporting browsers*/
   background:-webkit-gradient(linear, 0 0, 0 100%, from(#fac868), to(#f3961c));
   background:-moz-linear-gradient(#fac868, #f3961c);
@@ -251,7 +265,7 @@ body, html, div#app, .protected-wrapper {
   box-shadow: -3px 4px 8px #989898;
   /**style the text**/
   color:#575544;
-  font-size:1em;
+  font-size: 1.2em;
   letter-spacing:.06em;
 }
 
@@ -275,9 +289,14 @@ body, html, div#app, .protected-wrapper {
 
 .navbar {
   display: flex;
-  width: 100%;
   overflow: hidden;
-  background-color: #333;
+  background-color: #333333;
+}
+
+.p-p {
+  max-width: 100%;
+  max-height: 1.3em;
+  font-size: .8em;
 }
 
 .navbar-item {
@@ -302,16 +321,17 @@ body, html, div#app, .protected-wrapper {
 
 .speech-bubble {
   position:relative;
-  width: 320px;
+  width: 20%;
   padding: 10px;
   margin: 3em;
   background-color:#FFF;
   color: #666;
-  font: normal 12px "Segoe UI", Arial, Sans-serif;
+  font: normal, 1.2em, "Segoe UI", Arial, Sans-serif;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   border-radius: 10px;
   border: 10px solid rgba(0,0,0,0.095);
+  display: table;
 }
 
 .speech-bubble:before,
@@ -335,10 +355,7 @@ body, html, div#app, .protected-wrapper {
     border-bottom-color:rgba(0,0,0,0.095);
 }
 
-.p-p {
-  max-width: 100%;
-  max-height: 50px;
-}
+
 
 .popup {
   position: fixed;

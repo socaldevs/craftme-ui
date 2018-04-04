@@ -52,7 +52,7 @@ class Feedback extends Component {
 
   handleStar(e, value) {
     console.log('num: ', value)
-    this.setState({ rating: value.toString() });
+    this.setState({ rating: value });
   }
 
   async submitFeedback() {
@@ -82,13 +82,12 @@ class Feedback extends Component {
         <Paper>
           <div>
             This is the Feedback Component
-<div>
+            <div>
             </div>
             <TextField
               name="rating"
               label="RATING"
               id="margin-dense"
-
               value={this.state.rating}
               className={classes.textField}
               helperText="Please submit your rating (1-5)"

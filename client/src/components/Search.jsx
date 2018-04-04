@@ -204,6 +204,9 @@ class Search extends React.Component {
         userId: currentId,
       });
       console.log('what do I get back', craftSubmission);
+      if (craftSubmission) {
+        this.props.history.push('/calendar');
+      }
     } catch(err) {
       console.log('err from submitCraft', err);
     }

@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { fetchIdByUsername, sendMessage, fetchAllMessagesByConversationId, getConversationId } from '../apiCaller.js';
 
 class ConversationList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       conversation: [],
-      recipient: '',
       message: '',
+      recipient: '',
     };
     this.grabConversations = this.grabConversations.bind(this);
-    this.sendMessage = this.sendMessage.bind(this);    
+    this.sendMessage = this.sendMessage.bind(this);
   }
 
   handleChange(e) {
@@ -19,24 +20,17 @@ class ConversationList extends Component {
 
   async sendMessage() {
     try {
-      const sender_id = this.props.props.currentId;
-      const id = await axios.get(
-        process.env.REST_PATH +`/user/getIdByUsername/${this.state.recipient}`
-      );
-      const { data } = await axios.post(
-        process.env.REST_PATH +`/user/messages/sendMessage`,
-        {
-          text: this.state.message,
-          sender_id: sender_id,
-          recipient_id: id.data.id
-        }
-      );
-      const message = data;
-      message.sender = this.props.props.currentUser;
-      this.setState({
+      const { currentId } = this.props
+      const id = await fetchIdByUsername(this.state.recipient);
+      const data = await sendMessage(this.state.message, currentId, id);
+      const message = data.data;
+      message.sender = this.props.currentUser;
+      await this.props.updateConvo({recipient: this.state.recipient, sender: this.props.currentUser});
+      const convo = await this.grabConversations();
+      await this.setState({
         message: '',
         recipient: '',
-        conversation: [...this.state.conversation, message]
+        conversation: convo,
       })
     } catch (error) {
       console.log('Error with sendMessage', error);
@@ -46,11 +40,17 @@ class ConversationList extends Component {
 
   async grabConversations(e) {
     try {
-      const id = parseInt(e.target.getAttribute('data-id'));
-      const conversations = await axios.get(
-        process.env.REST_PATH + `/user/messages/fetchAllMessagesByConversationId/${id}`
-      );
-      this.setState({ conversation: conversations.data });
+      if (e) {
+        const id = parseInt(e.target.getAttribute('data-id'));
+        const { data } = await fetchAllMessagesByConversationId(id);
+        this.setState({ conversation: data });
+      } else {
+        const { recipient } = this.state;
+        const id = await fetchIdByUsername(recipient);
+        const convo = await getConversationId(this.props.currentId, id);
+        const messages = await fetchAllMessagesByConversationId(convo.data[0].id)
+        return messages.data;
+      }
     } catch (error) {
       console.log('Error with grabConversations', error);
       return;
@@ -67,6 +67,7 @@ class ConversationList extends Component {
             name="recipient"
             value={this.state.recipient}
             onChange={e => this.handleChange(e)}
+            className="recipient-input"
           />{' '}
           <br />
           Message:{' '}
@@ -75,23 +76,26 @@ class ConversationList extends Component {
             name="message"
             value={this.state.message}
             onChange={e => this.handleChange(e)}
+            className="message-input"
           />
-          <button onClick={() => this.sendMessage()}>Send </button>
+          <button onClick={this.sendMessage}>Send </button>
         </div>
         <div className="wrapper">
-          {this.props.conversations.map((conversation, i) => {
-            return (
-                <div className="c1" key={i}>
-                  <div key={i} className="thoughtbubble" data-id={conversation.id} onClick={e => this.grabConversations(e)} key={i}>
-                    View your conversation with: 
-                    {conversation.sender !== this.props.props.currentUser 
-                      ? conversation.sender : 
-                      conversation.recipient}
+          <div className="c1"> 
+            {
+              this.props.conversations.map((conversation, i) => {
+              return (
+                  <div key={i}>
+                    <div key={i} className="thoughtbubble" data-id={conversation.id} onClick={e => this.grabConversations(e)} key={i}>
+                      View your conversation with: 
+                      {conversation.sender === this.props.currentUser 
+                        ? conversation.recipient : 
+                        conversation.sender}
+                    </div>
                   </div>
-                </div>
+              )}
             )}
-          )}
-          <br />
+          </div>
           <div className="c2">
             {this.state.conversation.map((conv, i) => {
                   return (

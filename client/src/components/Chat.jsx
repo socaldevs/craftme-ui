@@ -192,7 +192,7 @@ class Chat extends Component {
       console.log('err from saveChat', err);
     }
   }
-
+  
   render() {
     return (
       <div className="conference-container">
