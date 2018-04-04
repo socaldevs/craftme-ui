@@ -83,7 +83,7 @@ class Chat extends Component {
   }
 
   componentWillUnmount() {
-    this.stream.getTracks().forEach(track => track.stop()) || null;
+    this.stream.getTracks().forEach(track => track.stop());
     this.peer.destroy();
   }
 
@@ -143,7 +143,7 @@ class Chat extends Component {
   }
 
   endCall() {
-    this.stream.getTracks().forEach(track => track.stop()) || null;
+    this.stream.getTracks().forEach(track => track.stop());
     this.peer.destroy();
   }
 
@@ -151,7 +151,7 @@ class Chat extends Component {
     this.video.pause();
   }
 
-  resumeCall(){
+  resumeCall() {
     this.video.play();
   }
 
@@ -171,9 +171,9 @@ class Chat extends Component {
 
   async saveChat () {
     const { messages } = this.state;
-    const { teacher_id, student_id, roomId, title } = this.props
+    const { teacher_id, student_id, roomId, title } = this.props;
     try {
-      const {data} = await axios.post(`${process.env.REST_PATH}/user/saveLesson/`, { 
+      const {data} = await axios.post(`${process.env.REST_PATH}/user/saveLesson/`, {
         messages,
         teacher_id,
         student_id,
@@ -188,7 +188,7 @@ class Chat extends Component {
           this.props.history.push('/feedback', data);
         }
       }
-    } catch(err) {
+    } catch (err) {
       console.log('err from saveChat', err);
     }
   }
@@ -201,15 +201,15 @@ class Chat extends Component {
           <div className="info-container">
             <button onClick={() => this.callPeer()}><i className="material-icons">videocam</i></button>
             <div className="play-pause">
-              <div onClick={() => this.resumeCall()}><i className="material-icons">play_arrow</i></div>  
-              <div onClick={() => this.pauseCall()}><i className="material-icons">pause</i></div> 
+              <div role="presentation" onClick={() => this.resumeCall()}><i className="material-icons">play_arrow</i></div>
+              <div role="presentation" onClick={() => this.pauseCall()}><i className="material-icons">pause</i></div>
             </div>
-            <button onClick={() => this.endCall()}><i className="material-icons">close</i></button>  
+            <button onClick={() => this.endCall()}><i className="material-icons">close</i></button>
           </div>
         </div>
         <div className="message-container">
           <div className="message-topbar">
-            <button onClick={() => this.saveChat()}><SimpleModal /></button>   
+            <button onClick={() => this.saveChat()}><SimpleModal /></button>
             <LanguageSelector
               selectLanguage={e => this.selectLanguage(e)}
               translateFrom={this.state.translateFrom}
@@ -225,7 +225,7 @@ class Chat extends Component {
                   message={data.message}
                   translateFrom={this.state.translateFrom}
                   translateTo={this.state.translateTo}
-                  setColor={(username) => this.setColor(username)}
+                  setColor={username => this.setColor(username)}
                   key={i}
                 />);
               })}
