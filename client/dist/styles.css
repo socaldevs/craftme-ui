@@ -1,11 +1,12 @@
 @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
-body  {
+/* body  {
   background-color: #daa26e;
   background-size:     cover;                     
   background-repeat:   no-repeat;
   background-position: center center; 
-  /* <------ background-image: url("https://ed.stanford.edu/sites/default/files/news_images/math2.jpeg");*/
-}
+  background-image: url("https://ed.stanford.edu/sites/default/files/news_images/math2.jpeg");
+}  */
+
 
 body, html, div#app, .protected-wrapper {
   height: 100%;
@@ -24,6 +25,7 @@ body, html, div#app, .protected-wrapper {
   display: flex;
   flex-grow: 1;
   flex-direction: row;
+  border: 1px solid #e9e9e9;
 }
 
   .upper-container{
@@ -34,49 +36,94 @@ body, html, div#app, .protected-wrapper {
     .video-container{
       height: 480px;
       width: 640px;
+      background-color: #333;
     }
 
     .info-container{
       display: flex;
       flex-grow: 1;
-      justify-content: flex-end;
-      flex-direction: column;
+      justify-content: space-between;
+      flex-direction: row;
       padding: 15px;
       align-items: center;
-      background-color: #eae6e6;
-      border-left: 1px solid #383838;
+      background-color: #cdcdcd;
+      border: 1px solid #e9e9e9;
     }
 
       .info-container  > button {
         margin: 15px;
         min-width: 50px;
+        min-height: 50px;
         display: block;
+        border: none;
+        background-color: white;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+        transition: box-shadow 0.3s ease-in-out; 
+        border-radius: 50%;
+        border: 1px solid #cdcdcd;
+      }
+
+      .info-container > button:hover{
+          box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      }
+
+      .info-container > button:focus{
+        outline: 0;
+      }
+
+      .play-pause {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .material-icons{
+        cursor: pointer;
       }
 
   .message-container{
     display: flex;
     flex-grow: 1;
     flex-direction: column;
-    border-left: 1px solid #383838;
+    border: 1px solid #cdcdcd;
   }
+
     .message-topbar{
       display: flex;
       flex-shrink: 0;
       flex-direction: row;
       padding: 8px;
       align-items: center;
-      border-top: 1px solid #383838;
-      border-bottom: 1px solid #383838;
-      background-color: #6D748C;
+      border: 1px solid #cdcdcd;
+      background-color: white;
+      justify-content: space-between;
     }
-      .message-title{
-        flex-grow: 4;
+
+      .message-topbar  > button {
+        margin: 15px;
+        min-width: 50px;
+        min-height: 50px;
+        display: block;
+        border: 1px solid #cdcdcd;
+        background-color: white;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+        transition: box-shadow 0.3s ease-in-out; 
+        border-radius: 50%;
       }
-      .language-selector{
-        flex-grow: 1;
-        justify-content: flex-end;
+
+      .message-topbar > button:hover{
+          box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      }
+
+      .message-topbar > button:focus{
+        outline: 0;
+      }
+
+      .select-container{
         display: flex;
+        justify-content: flex-end;
+        padding: 0px 15px;
       }
+
       .message-topbar button.save {
         margin-left: 16px;
       }
@@ -84,92 +131,71 @@ body, html, div#app, .protected-wrapper {
     .chat-window{
       flex-grow: 1;
       overflow: auto;
-      background-color: #eae6e6;
+      background-color: #E9E9E9;
     }
+
+      .hidden-element {
+        opacity: 0;
+        transition: opacity 1s linear;
+        padding: 0px 15px;
+        font-size: 18px;
+        font-family: Arial, Helvetica, sans-serif;
+      } 
+
+      .visible-element {
+        opacity: 1;
+        transition: opacity 1s linear;
+        padding: 0px 15px;
+        font-size: 18px;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .text-to-translate{
+        font-size: 18px;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .translated{
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
     .message-send{
       display: flex;
       flex-direction: row;
       flex-shrink: 0;
     }
+
       .message{
-        flex-grow: 5;
-      }
-      .send{
-        flex-grow: 1;
+        flex-grow: 4;
+        box-sizing: border-box;
+        padding: 10px 20px;
+        border: 0;
+        font-size: 16px;
       }
 
-.hidden-element {
-  opacity: 0;
-  transition: opacity 1s linear;
-}
+      .send{
+        flex-grow: 1;
+        padding: 12px 0;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+        transition: box-shadow 0.3s ease-in-out; 
+        border: 1px solid #cdcdcd;
+        font-size: 16px;
+      }
       
-.visible-element {
-  opacity: 1;
-  transition: opacity 1s linear;
-}
+      .send:hover{
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      }
 
 .user-handle{
   color: salmon;
+  font-size: 18px;
+  font-family: Arial, Helvetica, sans-serif
 }
 
 .other-user-handle{
-  color: #3C4663;
-}
-
-/* .chat-window{
-  height: 200px;
-  overflow: auto;
-  background: #fafafa;
-}
-
-
-.output p{
-  padding: 14px 0px;
-  margin: 0 20px;
-  border-bottom: 1px solid #e9e9e9;
-  color: #555;
-}
-
-.output strong{
-  color: salmon;
-}
-
-.feedback p{
-  color: #aaa;
-  padding: 14px 0px;
-  margin: 0 20px;
-}
-
-.message {
-  padding: 10px 20px;
-  box-sizing: border-box;
-  background: #eee;
-  border: 0;
-  display: block;
-  width: 85%;
-  background: #fff;
-  border-bottom: 1px solid #eee;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: #148EB2;
   font-size: 18px;
-  display: inline-block;
+  font-family: Arial, Helvetica, sans-serif
 }
-
-.send{
-  background: #6f73bb;
-  color: #fff;
-  font-size: 18px;
-  border: 0;
-  padding: 12px 0;
-  width: 15%;
-  border-radius: 0 0 2px 2px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
-  transition: box-shadow 0.3s ease-in-out; 
-  display: inline-block;
-}
-
-.send:hover {
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-} */
 
 
 .wrapper {
