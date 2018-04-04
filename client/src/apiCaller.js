@@ -116,4 +116,67 @@ export const fetchRemoteTeachersForCraft = async (craft_id) => {
   }
 };
 
+export const fetchIdByUsername = async (username) => {
+  try {
+    const { data } = await axios.get(`${SERVER}/user/getIdByUsername/${username}`);
+    return data.id;
+  } catch (error) {
+    console.log('Error with fetchIdByUsername', error);
+    return;
+  }
+};
+
+export const sendMessage = async (message, sender_id, recipient_id) => {
+  try {
+    const data  = await axios.post(
+      `${SERVER}/user/messages/sendMessage`,
+      {
+        text: message,
+        sender_id,
+        recipient_id,
+      }
+    );
+    return data;
+  } catch (error) {
+    console.log('Error with sendMessage', error);
+    return;
+  }
+};
+
+export const fetchAllMessagesByConversationId = async (id) => {
+  try {
+    const data = await axios.get(
+      `${SERVER}/user/messages/fetchAllMessagesByConversationId/${id}`
+    );
+    return data;
+  } catch (error) {
+    console.log('Error with fetchAllMessagesByConversationId', error);
+    return;
+  }
+};
+
+export const getConversationId = async (user_id, sender_id) => {
+  try {
+    const data = await axios.get(
+      `${SERVER}/user/getConversationId/${user_id}/${sender_id}`
+    );
+    return data;
+  } catch (error) {
+    console.log('Error with getConversationId', error);
+    return;
+  }
+};
+
+export const fetchAllConversationsById = async (id) => {
+  try {
+    const data = await axios.get(
+      `${SERVER}/user/messages/fetchAllConversationsById/${id}`
+    );
+    return data;
+  } catch (error) {
+    console.log('Error with fetchAllConversationsById', error);
+    return;
+  }
+};
+
 
