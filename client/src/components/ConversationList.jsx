@@ -78,7 +78,7 @@ class ConversationList extends Component {
             onChange={e => this.handleChange(e)}
             className="message-input"
           />
-          <button onClick={() => this.sendMessage()}>Send </button>
+          <button onClick={this.sendMessage}>Send </button>
         </div>
         <div className="wrapper">
           <div className="c1"> 
