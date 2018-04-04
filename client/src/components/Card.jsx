@@ -42,9 +42,9 @@ export default class Card extends Component {
   render() {
     const { booking, pastLesson, buttonName, teacher } = this.props;
     return (
-      <Paper>
+      <Paper className="card">
         <img src="" alt=""/>
-        <h3>
+        <h3 className="title">
         {
           ( booking && booking.title ) || 
           ( pastLesson && pastLesson.title ) || 
@@ -53,7 +53,7 @@ export default class Card extends Component {
         }
         </h3>
         <p> { ( pastLesson && pastLesson.notes ) || ( teacher && teacher.bio ) } </p>
-        <button type="button" onClick={this.clickHandler}>{buttonName}</button>
+        <button className="card-button" type="button" onClick={this.clickHandler}>{buttonName}</button>
       </Paper>
     )
   }

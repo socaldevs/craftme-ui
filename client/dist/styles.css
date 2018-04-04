@@ -287,7 +287,7 @@ body, html, div#app, .protected-wrapper {
   box-shadow: -3px 3px 8px #989898;
   }
 
-.navbar {
+nav.navbar {
   display: flex;
   overflow: hidden;
   background-color: #333333;
@@ -297,6 +297,9 @@ body, html, div#app, .protected-wrapper {
   max-width: 100%;
   max-height: 1.3em;
   font-size: .8em;
+  background-color: #333;
+  margin-bottom: 0;
+  border-radius: 0;
 }
 
 .navbar-item {
@@ -368,7 +371,7 @@ body, html, div#app, .protected-wrapper {
   margin: auto;
   background-color: rgba(0,0,0, 0.5);
 }
-.popup_inner {
+.popup-inner {
   position: absolute;
   left: 25%;
   right: 25%;
@@ -376,6 +379,10 @@ body, html, div#app, .protected-wrapper {
   bottom: 25%;
   margin: auto;
   background: white;
+  width: 35%;
+  height: 50%;
+  border-radius: 10px;
+
 }
 
 
@@ -420,3 +427,88 @@ h1 { font-size: 1.5em; margin: 10px; }
 .rating > input:checked ~ label:hover,
 .rating > label:hover ~ input:checked ~ label, /* lighten current selection */
 .rating > input:checked ~ label:hover ~ label { color: #FFED85;  } 
+
+
+
+button {
+  background: #333;
+  padding: 10px;
+  border: 1px #333 solid;
+  border-radius: 10px;
+}
+
+
+.card-button {
+  font-family: arial;
+  color: white;
+}
+/* .container {
+  max-width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+} */
+
+.card-container {
+  padding: 10px 25px;
+}
+
+.innerNav{
+  background: #98b6b1;
+  margin-bottom: 0px;
+  
+}
+
+.card{
+  max-width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1em;  
+  padding: 0.5em 1.5em;
+}
+
+
+.card .title, .title{
+  margin-top: 0;
+}
+
+html, #app {
+  background: #CCDAD1;
+}
+
+.calendar {
+  background: white;
+}
+
+.calendar-controls {
+  padding: 0.5em;
+  text-align: center;
+}
+
+.disabled[disabled] {
+  opacity: 0.1;
+  cursor: not-allowed;
+  -webkit-transition: opacity 0.8s linear; /* Safari */
+  transition: opacity 0.8s linear;
+}
+
+.confirmation-container{
+  padding: 2em;
+  text-align: center;
+}
+
+.confirmed-title{
+  font-size: 3.2rem;
+  margin-bottom: 1em;
+}
+
+.hidden-element {
+  opacity: 0;
+  -webkit-transition: opacity 0.8s linear; /* Safari */
+  transition: opacity 0.8s linear;
+}
+
+.visible-element {
+  opacity: 1;
+  -webkit-transition: opacity 0.8s linear; /* Safari */
+  transition: opacity 0.8s linear;
+}
