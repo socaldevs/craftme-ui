@@ -10,7 +10,6 @@ import {
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Popup from './Popup.jsx';
 
-
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 
 // helper
@@ -53,9 +52,10 @@ export default class Calendar extends Component {
       start: false,
       end: false,
       selected_availability_id: 0,
-      buttonStatus: true,
+      disableButton: true,
       userType: 1,    
       showPopup: false,
+      slotTextVisibility: 'hidden-element',
     };
 
     this.submitBooking = this.submitBooking.bind(this);
@@ -168,13 +168,24 @@ export default class Calendar extends Component {
         if (!doesOverlap(this.state.events, timeslot)) {
           // allow the teacher to submit the availability by enabling the submission button
           const { start, end } = timeslot;
-          await this.setState({ start, end, buttonStatus:false });
+          await this.setState({ 
+            start,
+            end,
+            disableButton:false,
+            slotTextVisibility: 'visible-element'
+          });
         } else {
           // if theres an overlap display an error message
+          await this.setState({ 
+            start: false,
+            end: false,
+            disableButton:true,
+            slotTextVisibility: 'hidden-element'
+          });
           console.log('Overlaping with event');
         }        
       } else { 
-        await this.setState({ buttonStatus:true });        
+        await this.setState({ disableButton:true });        
         console.log('its an event');
       }
       // if the user is a student
@@ -184,11 +195,22 @@ export default class Calendar extends Component {
       if(timeslot.hasOwnProperty('teacher_id')) {
         const { start, end, id } = timeslot;
         // enable the button and allow the student to book the availability
-        await this.setState({start, end, buttonStatus:false, selected_availability_id: id}); 
+        await this.setState({
+          start,
+          end,
+          disableButton:false,
+          selected_availability_id: id,
+          slotTextVisibility: 'visible-element'
+        }); 
       } else {
         // it's not an event (availability) so
         // disable the button
-        await this.setState({ buttonStatus:true });
+        await this.setState({ 
+          start: false,
+          end: false,
+          disableButton:true,
+          slotTextVisibility: 'hidden-element'
+        });
         console.log('its not available dude');
       }
     }  
@@ -200,14 +222,15 @@ export default class Calendar extends Component {
     const end = new Date(this.state.end).toLocaleTimeString('en-US', options);
 
     return (
-      <div>
-        <h3 className="callout">
+      <div className="calendar-controls">
+        <h3 className="callout title">
           To book appointment:
         </h3>
         <p>Click on the availability spot to select.</p>
-        {this.state.start && <p>Selected timeslot: from {start} to {end}</p>}
+        <p className={this.state.slotTextVisibility}>Selected timeslot: from {start} to {end}</p>
         <button type="button" onClick={this.submitBooking} 
-          disabled={this.state.buttonStatus} >Book appointment
+          className={'card-button ' + (this.state.disableButton && 'disabled')} 
+          disabled={this.state.disableButton} >Book appointment
         </button>
       </div>  
     );
@@ -218,16 +241,17 @@ export default class Calendar extends Component {
     const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' };    
     const start = new Date(this.state.start).toLocaleTimeString('en-US', options);
     const end = new Date(this.state.end).toLocaleTimeString('en-US', options);
-
+    console.log(this.state.disableButton);
     return (
-      <div>
-        <h3 className="callout">
+      <div className="calendar-controls">
+        <h3 className="callout title">
           To allocate availability:
         </h3>
         <p>Drag the mouse over the calendar to select a time range.</p>
-        {this.state.start && <p>Selected timeslot: from {start} to {end}</p>}
+        <p className={this.state.slotTextVisibility}>Selected timeslot: from {start} to {end}</p>
         <button type="button" onClick={this.submitAvailability} 
-          disabled={this.state.buttonStatus} >Submit
+           className={'card-button ' + (this.state.disableButton && 'disabled')} 
+           disabled={this.state.disableButton} >Submit
         </button>
       </div>  
     );
@@ -325,38 +349,41 @@ export default class Calendar extends Component {
     const start = new Date(this.state.start).toLocaleTimeString('en-US', options);
     const end = new Date(this.state.end).toLocaleTimeString('en-US', options);
     return (
-      <React.Fragment>
+      <div className="calendar">
+        <React.Fragment>
 
-        {
-          this.state.userType === 1 ? 
-            this.renderStudentElements():
-            this.renderTeacherElements()
-        }
-        <BigCalendar
-          style={ {minHeight: '100vh'} }
-          selectable
-          formats={{
-            // dateFormat:'mm dd yyyy',
-            dayFormat: (date, culture, localizer) =>
-            localizer.format(date, 'dd MM/DD', culture),
-        
-          }}
-          events={ this.state.events }
-          defaultView="week"
-          scrollToTime={ new Date(1970, 1, 1, 6) }
-          defaultDate={ new Date() }
-          onSelectEvent={ this.timeSlotSelected }
-          onSelectSlot={ this.timeSlotSelected }
-          eventPropGetter={ this.eventStyleGetter }
-          />
-          {this.state.showPopup ? 
-          <Popup
-            text={`${start} - ${end} submitted!`}
-            closePopup={this.togglePopup}
-          />
-          : null
+          {
+            this.state.userType === 1 ? 
+              this.renderStudentElements():
+              this.renderTeacherElements()
           }
-      </React.Fragment>
+          <BigCalendar
+            style={ {minHeight: '100vh'} }
+            selectable
+            formats={{
+              // dateFormat:'mm dd yyyy',
+              dayFormat: (date, culture, localizer) =>
+              localizer.format(date, 'dd MM/DD', culture),
+          
+            }}
+            events={ this.state.events }
+            defaultView="week"
+            scrollToTime={ new Date(1970, 1, 1, 6) }
+            defaultDate={ new Date() }
+            onSelectEvent={ this.timeSlotSelected }
+            onSelectSlot={ this.timeSlotSelected }
+            eventPropGetter={ this.eventStyleGetter }
+            />
+            {
+              this.state.showPopup ? 
+              <Popup
+                text={`${start} - ${end} submitted!`}
+                closePopup={this.togglePopup}
+              />
+              : null
+            }
+        </React.Fragment>
+      </div>
     );
   }    
 }

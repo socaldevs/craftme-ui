@@ -44,8 +44,8 @@ class LessonsContainer extends Component {
     console.log('props from conatiner', this.props);
     return (
       bookings.map((booking)=>{
-        return <Card key={booking.id} booking={booking} buttonName="Start Lesson" 
-          history={this.props.history} centered />;
+        return <Grid item md={12}> <Card key={booking.id} booking={booking} buttonName="Start Lesson" 
+          history={this.props.history} centered /> </Grid>;
       })
     );
   }
@@ -116,20 +116,22 @@ class LessonsContainer extends Component {
       // chats: this.renderChats
     }
     return (
-      <Grid container spacing={24}>  
-        <Grid item xs={12}>
-            <Tabs value={this.state.navbarValue} onChange={this.changeView}
-              indicatorColor="primary" textColor="primary" centered >
-              <Tab label="upcoming" value="upcoming"/>
-              <Tab label="Past" value="past"/>
-            </Tabs>
-        </Grid>
-        <Grid item xs={12}>
-          {
-            viewController[this.state.navbarValue]()
-          } 
-        </Grid>              
-    </Grid>
+      <div className="container lessonsContainer">            
+        <Grid container spacing={24}>  
+          <Grid item xs={12}>
+              <Tabs className="innerNav" value={this.state.navbarValue} onChange={this.changeView}
+                indicatorColor="primary" textColor="primary" centered >
+                <Tab label="upcoming" value="upcoming"/>
+                <Tab label="Past" value="past"/>
+              </Tabs>
+          </Grid>
+          <Grid item xs={12}>
+            {
+              viewController[this.state.navbarValue]()
+            } 
+          </Grid>              
+      </Grid>
+    </div>
     ) 
   }
 }
