@@ -67,6 +67,7 @@ class ConversationList extends Component {
             name="recipient"
             value={this.state.recipient}
             onChange={e => this.handleChange(e)}
+            className="recipient-input"
           />{' '}
           <br />
           Message:{' '}
@@ -75,23 +76,26 @@ class ConversationList extends Component {
             name="message"
             value={this.state.message}
             onChange={e => this.handleChange(e)}
+            className="message-input"
           />
           <button onClick={() => this.sendMessage()}>Send </button>
         </div>
         <div className="wrapper">
-          {this.props.conversations.map((conversation, i) => {
-            return (
-                <div className="c1" key={i}>
-                  <div key={i} className="thoughtbubble" data-id={conversation.id} onClick={e => this.grabConversations(e)} key={i}>
-                    View your conversation with: 
-                    {conversation.sender === this.props.currentUser 
-                      ? conversation.recipient : 
-                      conversation.sender}
+          <div className="c1"> 
+            {
+              this.props.conversations.map((conversation, i) => {
+              return (
+                  <div key={i}>
+                    <div key={i} className="thoughtbubble" data-id={conversation.id} onClick={e => this.grabConversations(e)} key={i}>
+                      View your conversation with: 
+                      {conversation.sender === this.props.currentUser 
+                        ? conversation.recipient : 
+                        conversation.sender}
+                    </div>
                   </div>
-                </div>
+              )}
             )}
-          )}
-          <br />
+          </div>
           <div className="c2">
             {this.state.conversation.map((conv, i) => {
                   return (
