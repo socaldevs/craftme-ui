@@ -7,10 +7,6 @@ class TextToTranslate extends Component {
     this.state = { translation: '' };
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.props = nextProps;
-  }
-
   async translateText(text) {
     const { translateFrom, translateTo } = this.props;
     try {
@@ -32,7 +28,7 @@ class TextToTranslate extends Component {
       <div>
         <strong className={this.props.setColor(handle)}>{handle}</strong>: <span className="text-to-translate" onClick={()=>{this.translateText(message)}}>{message}</span>
         <br />
-        <small><i>{translation.slice(1, -1)}</i></small>
+        <i classNmae="translated">{translation.slice(1, -1)}</i>
       </div>
     );
   }

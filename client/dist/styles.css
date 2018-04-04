@@ -60,6 +60,7 @@ body, html, div#app, .protected-wrapper {
         box-shadow: 0 1px 2px rgba(0,0,0,0.15);
         transition: box-shadow 0.3s ease-in-out; 
         border-radius: 50%;
+        border: 1px solid #cdcdcd;
       }
 
       .info-container > button:hover{
@@ -73,7 +74,6 @@ body, html, div#app, .protected-wrapper {
       .play-pause {
         display: flex;
         justify-content: space-between;
-
       }
 
       .material-icons{
@@ -86,6 +86,7 @@ body, html, div#app, .protected-wrapper {
     flex-direction: column;
     border: 1px solid #cdcdcd;
   }
+
     .message-topbar{
       display: flex;
       flex-shrink: 0;
@@ -93,7 +94,6 @@ body, html, div#app, .protected-wrapper {
       padding: 8px;
       align-items: center;
       border: 1px solid #cdcdcd;
-      
       background-color: white;
       justify-content: space-between;
     }
@@ -118,7 +118,6 @@ body, html, div#app, .protected-wrapper {
         outline: 0;
       }
 
-
       .select-container{
         display: flex;
         justify-content: flex-end;
@@ -134,26 +133,37 @@ body, html, div#app, .protected-wrapper {
       overflow: auto;
       background-color: #E9E9E9;
     }
+
       .hidden-element {
         opacity: 0;
         transition: opacity 1s linear;
         padding: 0px 15px;
+        font-size: 18px;
+        font-family: Arial, Helvetica, sans-serif;
       } 
 
       .visible-element {
         opacity: 1;
         transition: opacity 1s linear;
         padding: 0px 15px;
+        font-size: 18px;
+        font-family: Arial, Helvetica, sans-serif;
       }
 
       .text-to-translate{
-        font-size: 16px;
+        font-size: 18px;
+        font-family: Arial, Helvetica, sans-serif;
       }
+      .translated{
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
     .message-send{
       display: flex;
       flex-direction: row;
       flex-shrink: 0;
     }
+
       .message{
         flex-grow: 4;
         box-sizing: border-box;
@@ -161,32 +171,31 @@ body, html, div#app, .protected-wrapper {
         border: 0;
         font-size: 16px;
       }
+
       .send{
         flex-grow: 1;
         padding: 12px 0;
         box-shadow: 0 1px 2px rgba(0,0,0,0.15);
         transition: box-shadow 0.3s ease-in-out; 
-        /* border: 0; */
         border: 1px solid #cdcdcd;
-
         font-size: 16px;
       }
-
+      
       .send:hover{
         box-shadow: 0 5px 15px rgba(0,0,0,0.3);
       }
 
-
 .user-handle{
   color: salmon;
-  font-size: 16px;
+  font-size: 18px;
+  font-family: Arial, Helvetica, sans-serif
 }
 
 .other-user-handle{
-  color: #3C4663;
-  font-size: 16px;
+  color: #148EB2;
+  font-size: 18px;
+  font-family: Arial, Helvetica, sans-serif
 }
-
 
 
 .wrapper {

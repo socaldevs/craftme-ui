@@ -23,7 +23,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing.unit * 4,
-  }
+  },
 });
 
 class SimpleModal extends Component {
@@ -44,7 +44,6 @@ class SimpleModal extends Component {
 
   render() {
     const { classes } = this.props;
-
     return (
       <div>
         <div onClick={() => this.handleOpen()}><i className="material-icons">save</i></div>

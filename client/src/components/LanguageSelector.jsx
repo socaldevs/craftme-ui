@@ -49,7 +49,6 @@ class LanguageSelector extends Component {
 
   render() {
     const { classes, translateFrom, translateTo } = this.props;
-    console.log('from', translateFrom, 'to', translateTo);
     return (
       <div className="select-container">
         <form className={classes.root} autoComplete="off">

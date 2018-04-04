@@ -156,7 +156,6 @@ class Chat extends Component {
   }
 
   selectLanguage(e) {
-    console.log('e', e, 'e.target', e.target )
     e.target.name === 'from' ?
     this.setState({ translateFrom: e.target.value }) :
     this.setState({ translateTo: e.target.value });
@@ -171,7 +170,6 @@ class Chat extends Component {
   }
 
   async saveChat () {
-    console.log('chat svaed!!')
     const { messages } = this.state;
     const { teacher_id, student_id, roomId, title } = this.props
     try {
@@ -203,8 +201,8 @@ class Chat extends Component {
           <div className="info-container">
             <button onClick={() => this.callPeer()}><i className="material-icons">videocam</i></button>
             <div className="play-pause">
-              <div onClick={() => this.pauseCall()}><i className="material-icons">play_arrow</i></div>  
-              <div onClick={() => this.resumeCall()}><i className="material-icons">pause</i></div> 
+              <div onClick={() => this.resumeCall()}><i className="material-icons">play_arrow</i></div>  
+              <div onClick={() => this.pauseCall()}><i className="material-icons">pause</i></div> 
             </div>
             <button onClick={() => this.endCall()}><i className="material-icons">close</i></button>  
           </div>
