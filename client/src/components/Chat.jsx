@@ -4,6 +4,7 @@ import axios from 'axios';
 import Peer from 'simple-peer';
 import TextToTranslate from './TextToTranslate.jsx';
 import LanguageSelector from './LanguageSelector.jsx';
+import SimpleModal from './Modal.jsx';
 
 class Chat extends Component {
   constructor(props) {
@@ -73,6 +74,7 @@ class Chat extends Component {
       this.peer.on('connect', () => console.log('PEER CONNECTED'));
       this.peer.on('stream', (stream) => {
         const video = document.createElement('video');
+        this.video = video;
         this.videoContainer.append(video);
         video.src = window.URL.createObjectURL(stream);
         video.play();
@@ -81,7 +83,7 @@ class Chat extends Component {
   }
 
   componentWillUnmount() {
-    this.stream.getTracks().forEach(track => track.stop());
+    this.stream.getTracks().forEach(track => track.stop()) || null;
     this.peer.destroy();
   }
 
@@ -132,6 +134,7 @@ class Chat extends Component {
       this.peer.on('connect', () => console.log('PEER CONNECTED from callpeer'));
       this.peer.on('stream', (stream) => {
         const video = document.createElement('video');
+        this.video = video;
         this.videoContainer.append(video);
         video.src = window.URL.createObjectURL(stream);
         video.play();
@@ -139,8 +142,22 @@ class Chat extends Component {
     }, err => console.log('err', err));
   }
 
+  endCall() {
+    this.stream.getTracks().forEach(track => track.stop()) || null;
+    this.peer.destroy();
+  }
+
+  pauseCall() {
+    this.video.pause();
+  }
+
+  resumeCall(){
+    this.video.play();
+  }
+
   selectLanguage(e) {
-    e.target.className === 'from' ?
+    console.log('e', e, 'e.target', e.target )
+    e.target.name === 'from' ?
     this.setState({ translateFrom: e.target.value }) :
     this.setState({ translateTo: e.target.value });
   }
@@ -154,6 +171,7 @@ class Chat extends Component {
   }
 
   async saveChat () {
+    console.log('chat svaed!!')
     const { messages } = this.state;
     const { teacher_id, student_id, roomId, title } = this.props
     try {
@@ -183,22 +201,25 @@ class Chat extends Component {
         <div className="upper-container">
           <div className="video-container" ref={(input) => { this.videoContainer = input; }} />
           <div className="info-container">
-            <button className="call" className="glyphicon glyphicon-facetime-video" onClick={() => this.callPeer()} />
-            <button className="save" onClick={() => this.saveChat()}>SAVE LESSON</button>
+            <button onClick={() => this.callPeer()}><i className="material-icons">videocam</i></button>
+            <div className="play-pause">
+              <div onClick={() => this.pauseCall()}><i className="material-icons">play_arrow</i></div>  
+              <div onClick={() => this.resumeCall()}><i className="material-icons">pause</i></div> 
+            </div>
+            <button onClick={() => this.endCall()}><i className="material-icons">close</i></button>  
           </div>
         </div>
         <div className="message-container">
           <div className="message-topbar">
-            <p className={this.state.displayStatus}>{`${this.state.otherUser} has joined the conference`}</p>
-            <div className="language-selector">
-              <LanguageSelector
-                selectLanguage={e => this.selectLanguage(e)}
-                translateFrom={this.state.translateFrom}
-                translateTo={this.state.translateTo}
-              />
-            </div>
+            <button onClick={() => this.saveChat()}><SimpleModal /></button>   
+            <LanguageSelector
+              selectLanguage={e => this.selectLanguage(e)}
+              translateFrom={this.state.translateFrom}
+              translateTo={this.state.translateTo}
+            />
           </div>
           <div className="chat-window">
+            <p className={this.state.displayStatus}><strong>{this.state.otherUser}</strong>{ ' has joined the conference'}</p>
             <div className="output">
               {this.state.messages.map((data, i) => {
                 return (<TextToTranslate
@@ -222,7 +243,7 @@ class Chat extends Component {
               onChange={e => this.setText(e)}
               onKeyPress={this.ifEnter(() => this.sendChat())}
             />
-            <button className="send" onClick={() => this.sendChat()}>SEND</button>
+            <button className="send" onClick={() => this.sendChat()}><i className="material-icons">send</i></button>
           </div>
         </div>
       </div>

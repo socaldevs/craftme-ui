@@ -16,7 +16,7 @@ class ConversationList extends Component {
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
-  
+
   async sendMessage() {
     try {
       const sender_id = this.props.props.currentId;
