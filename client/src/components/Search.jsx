@@ -216,7 +216,7 @@ class Search extends React.Component {
       <div className="test">
         <StyledDiv >
           <h1>CraftMe</h1>
-          <img src="logo.png" alt="logo" height="300" width="303" />
+          {/* <img src="logo.png" alt="logo" height="300" width="303" /> */}
           <div>
             <FormControl>
               <InputLabel>What's your Craft?</InputLabel>

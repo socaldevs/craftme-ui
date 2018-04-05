@@ -83,8 +83,12 @@ class Chat extends Component {
   }
 
   componentWillUnmount() {
-    this.stream.getTracks().forEach(track => track.stop());
-    this.peer.destroy();
+    if (this.stream) {
+      this.stream.getTracks().forEach(track => track.stop());
+    }
+    if (this.peer) {
+      this.peer.destroy();
+    }
   }
 
   setText(e) {
@@ -143,8 +147,12 @@ class Chat extends Component {
   }
 
   endCall() {
-    this.stream.getTracks().forEach(track => track.stop());
-    this.peer.destroy();
+    if (this.stream) {
+      this.stream.getTracks().forEach(track => track.stop());
+    }
+    if (this.peer) {
+      this.peer.destroy();
+    }
   }
 
   pauseCall() {
@@ -241,7 +249,7 @@ class Chat extends Component {
               onChange={e => this.setText(e)}
               onKeyPress={this.ifEnter(() => this.sendChat())}
             />
-            <button className="send" onClick={() => this.sendChat()}><i className="material-icons">send</i></button>
+            <button id="send" onClick={() => this.sendChat()}><i className="material-icons">send</i></button>
           </div>
         </div>
       </div>
