@@ -8,4 +8,4 @@ export default function currentToken(state = null, action) {
       return state;
   }
   return state;
-};
+}

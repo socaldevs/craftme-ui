@@ -31,7 +31,6 @@ function renderInput(inputProps) {
 
   return (
     <TextField
-      fullWidth
       InputProps={{
         inputRef: ref,
         ...other,
@@ -47,17 +46,15 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
   return (
     <MenuItem selected={isHighlighted} component="div">
       <div>
-        {parts.map((part, index) => {
-          return part.highlight ? (
-            <span key={String(index)} style={{ fontWeight: 300 }}>
-              {part.text}
-            </span>
+        {parts.map((part, index) => (part.highlight ? (
+          <span key={String(index)} style={{ fontWeight: 300 }}>
+            {part.text}
+          </span>
           ) : (
-              <strong key={String(index)} style={{ fontWeight: 500 }}>
-                {part.text}
-              </strong>
-            );
-        })}
+            <strong key={String(index)} style={{ fontWeight: 500 }}>
+              {part.text}
+            </strong>
+            )))}
       </div>
     </MenuItem>
   );
@@ -67,9 +64,11 @@ function renderSuggestionsContainer(options) {
   const { containerProps, children } = options;
 
   return (
-    <Paper {...containerProps} square>
-      {children}
-    </Paper>
+    <div className="test">
+      <Paper {...containerProps} >
+        {children}
+      </Paper>
+    </div>
   );
 }
 
@@ -84,7 +83,7 @@ function getSuggestions(value) {
 
   return inputLength === 0
     ? []
-    : suggestions.filter(suggestion => {
+    : suggestions.filter((suggestion) => {
       const keep =
         count < 5 && suggestion.label.toLowerCase().slice(0, inputLength) === inputValue;
 
@@ -114,7 +113,7 @@ const styles = theme => ({
   suggestionsList: {
     margin: 0,
     padding: 0,
-    listStyleType: 'none',
+    listStyleType: { maxHeight: 200, overflow: 'auto' },
   },
 });
 
@@ -131,9 +130,9 @@ class Search extends React.Component {
       try {
         const data = await axios.get(`${process.env.REST_PATH}/user/getAllCrafts`);
         if (data) {
-          let newPull = [];
-          for (var element of data.data) {
-            newPull.push({ label: element.name, craft: element })
+          const newPull = [];
+          for (const element of data.data) {
+            newPull.push({ label: element.name, craft: element });
           }
           suggestions = newPull;
         }
@@ -171,10 +170,8 @@ class Search extends React.Component {
   handleKey(event) {
     if (event.key == 'Enter') {
       // the only part written by fireArthur
-      //find a match in the crafts array
-      const matchedCraftIndex = suggestions.findIndex((craftSuggestion) => {
-        return craftSuggestion.label === this.state.value;
-      });
+      // find a match in the crafts array
+      const matchedCraftIndex = suggestions.findIndex(craftSuggestion => craftSuggestion.label === this.state.value);
       // if match not found
       if (matchedCraftIndex < 0) {
         console.error(`match not found for ${this.state.value}`);
@@ -187,9 +184,9 @@ class Search extends React.Component {
   }
 
   setInputValue(e) {
-    e.target.id === 'enter-craft' ? 
-    this.setState({ craft: e.target.value }) :
-    this.setState({ description: e.target.value });
+    e.target.id === 'enter-craft' ?
+      this.setState({ craft: e.target.value }) :
+      this.setState({ description: e.target.value });
   }
 
   async submitCraft() {
@@ -201,11 +198,10 @@ class Search extends React.Component {
         description,
         userId: currentId,
       });
-      console.log('what do I get back', craftSubmission);
       if (craftSubmission) {
         this.props.history.push('/calendar');
       }
-    } catch(err) {
+    } catch (err) {
       console.log('err from submitCraft', err);
     }
   }
@@ -223,8 +219,8 @@ class Search extends React.Component {
               <Input
                 id="enter-craft"
                 type="text"
-                value={this.state.craft} 
-                onChange={e => this.setInputValue(e)} 
+                value={this.state.craft}
+                onChange={e => this.setInputValue(e)}
               />
             </FormControl>
           </div>
@@ -234,12 +230,12 @@ class Search extends React.Component {
               <Input
                 id="description"
                 type="text"
-                value={this.state.description} 
-                onChange={e => this.setInputValue(e)} 
+                value={this.state.description}
+                onChange={e => this.setInputValue(e)}
               />
             </FormControl>
           </div>
-          <p><StyleButton variant="raised" onClick={() => this.submitCraft()}>Submit</StyleButton></p>  
+          <p><StyleButton variant="raised" onClick={() => this.submitCraft()}>Submit</StyleButton></p>
         </StyledDiv>
       </div>
     ) : (
@@ -254,6 +250,7 @@ class Search extends React.Component {
               suggestionsList: classes.suggestionsList,
               suggestion: classes.suggestion,
             }}
+
             renderInputComponent={renderInput}
             suggestions={this.state.suggestions}
             onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}

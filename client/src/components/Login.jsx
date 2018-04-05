@@ -11,7 +11,6 @@ import FeedbackAlert from './FeedbackAlert.jsx';
 import { displayNotification } from '../apiCaller.js';
 
 
-
 const mapDispatchToProps = dispatch => ({
   updateUser: user => dispatch(actions.updateUser(user)),
   removeUser: () => dispatch(actions.removeUser()),
@@ -63,8 +62,6 @@ class ConnectedLogin extends Component {
         password: this.state.password,
       });
       if (data) {
-        
-        console.log("data: ", data);
 
         this.props.updateUser(data.data.username);
         this.props.updateId(data.data.id);
@@ -75,11 +72,13 @@ class ConnectedLogin extends Component {
       }
     } catch (error) {
       // render failure feedback
-      await displayNotification(this, 2000, 
+      await displayNotification(
+        this, 2000,
         {
           alertMessage: 'Invalid username or password!',
           alertType: 'alert-danger',
-        });
+        },
+      );
       console.log('error with login', error);
     }
   }
@@ -91,27 +90,27 @@ class ConnectedLogin extends Component {
   render() {
     return (
       <div>
-          <FeedbackAlert 
-          alertVisibility={this.state.alertVisibility} 
+        <FeedbackAlert
+          alertVisibility={this.state.alertVisibility}
           alertType={this.state.alertType}
           alertMessage={this.state.alertMessage}
-        /> 
+        />
         <StyledDiv>
           <h1>CraftMe</h1>
           <FormControl>
             <InputLabel >Username</InputLabel>
-            <Input type='text' value={this.state.username} onChange={e => this.handleChange(e, "username")} />
+            <Input type="text" value={this.state.username} onChange={e => this.handleChange(e, 'username')} />
           </FormControl>
-          <div> </div>
+          <div />
           <FormControl>
             <InputLabel >Password</InputLabel>
-            <Input type="password" value={this.state.password} onChange={e => this.handleChange(e, "password")} />
+            <Input type="password" value={this.state.password} onChange={e => this.handleChange(e, 'password')} />
           </FormControl>
           <p><StyleButton variant="raised" onClick={this.login}>LOGIN </StyleButton></p>
           <p><Link to="/signup">SIGNUP</Link></p>
         </StyledDiv>
       </div>
-      
+
     );
   }
 }

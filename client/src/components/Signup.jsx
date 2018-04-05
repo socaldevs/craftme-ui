@@ -9,8 +9,6 @@ import { withStyles } from 'material-ui/styles';
 import BottomNavigation, { BottomNavigationAction } from 'material-ui/BottomNavigation';
 import PersonIcon from 'material-ui-icons/Person';
 import SchoolIcon from 'material-ui-icons/School';
-import Avatar from 'material-ui/Avatar';
-import classNames from 'classnames';
 import FeedbackAlert from './FeedbackAlert.jsx';
 import { displayNotification } from '../apiCaller.js';
 
@@ -23,10 +21,9 @@ text-align: center;
 `;
 
 
-
 const styles = theme => ({
   root: {
-    backgroundColor: '#CCDAD1', 
+    backgroundColor: '#CCDAD1',
     width: '15%',
     marginLeft: 'auto',
     marginRight: 'auto',
@@ -34,7 +31,7 @@ const styles = theme => ({
   },
   row: {
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   avatar: {
     margin: 10,
@@ -73,26 +70,23 @@ class Signup extends Component {
   }
 
   urlInput(event) {
-
-    let reader = new FileReader();
-    var coming = event.target.files[0];
+    const reader = new FileReader();
+    const coming = event.target.files[0];
 
     reader.onloadend = () => {
       this.setState({
         profile: reader.result,
-        file: coming
+        file: coming,
       });
-      console.log(this.state.file)
-    }
-    reader.readAsDataURL(coming)
-
+    };
+    reader.readAsDataURL(coming);
   }
 
 
   async signUp() {
     try {
-      let type = (this.state.value === 'teacher') ? 0 : 1;
-      let active = (this.state.file) ? this.state.file : '';
+      const type = (this.state.value === 'teacher') ? 0 : 1;
+      const active = (this.state.file) ? this.state.file : '';
 
 
       const formData = new FormData();
@@ -107,11 +101,13 @@ class Signup extends Component {
       }
     } catch (error) {
       // render failure feedback
-      await displayNotification(this, 2000, 
+      await displayNotification(
+        this, 2000,
         {
           alertMessage: 'Username already exists or connection error!',
           alertType: 'alert-danger',
-        });
+        },
+      );
 
       console.log('error with signup', error);
     }
@@ -122,42 +118,43 @@ class Signup extends Component {
     const { value } = this.state;
     return (
       <div>
-        <FeedbackAlert 
-          alertVisibility={this.state.alertVisibility} 
+        <FeedbackAlert
+          alertVisibility={this.state.alertVisibility}
           alertType={this.state.alertType}
           alertMessage={this.state.alertMessage}
-        /> 
+        />
         <StyledDiv>
           <h1 id="app-title">CraftMe</h1>
 
           {/* <Avatar
             src={this.state.profile}
-            
+
           /> */}
-          <img 
+          <img
             src={this.state.profile}
             className="avatar"
-            alt="avatar placeholder"/>
+            alt="avatar placeholder"
+          />
           <div>
-            <form>  
-                <input type="file" onChange={this.urlInput} />
+            <form>
+              <input type="file" onChange={this.urlInput} />
             </form>
           </div>
           <FormControl>
             <InputLabel >Username</InputLabel>
-            <Input type='text' value={this.state.username} onChange={e => this.handleChange(e, "username")} />
+            <Input type="text" value={this.state.username} onChange={e => this.handleChange(e, 'username')} />
           </FormControl>
-          <div> </div>
+          <div />
           <FormControl>
             <InputLabel >Password</InputLabel>
-            <Input type="password" value={this.state.password} onChange={e => this.handleChange(e, "password")} />
+            <Input type="password" value={this.state.password} onChange={e => this.handleChange(e, 'password')} />
           </FormControl>
-          <div> </div>
+          <div />
           <FormControl>
             <InputLabel >Biography</InputLabel>
-            <Input type='text' value={this.state.bio} onChange={e => this.handleChange(e, "bio")} />
+            <Input type="text" value={this.state.bio} onChange={e => this.handleChange(e, 'bio')} />
           </FormControl>
-          
+
           <div>
             <BottomNavigation value={value} onChange={this.handleChangeButton} className={classes.root}>
               <BottomNavigationAction label="Student" value="student" icon={<PersonIcon />} />
@@ -169,7 +166,7 @@ class Signup extends Component {
 
           <p><Link to="/login">Login</Link></p>
         </StyledDiv>
-      </div>      
+      </div>
     );
   }
 }
