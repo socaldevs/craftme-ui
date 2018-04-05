@@ -28,7 +28,7 @@ class TextToTranslate extends Component {
       <div>
         <strong className={this.props.setColor(handle)}>{handle}</strong>: <span className="text-to-translate" onClick={()=>{this.translateText(message)}}>{message}</span>
         <br />
-        <i classNmae="translated">{translation.slice(1, -1)}</i>
+        <i className="translated">{translation.slice(1, -1)}</i>
       </div>
     );
   }
