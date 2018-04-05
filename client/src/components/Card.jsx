@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import Paper from 'material-ui/Paper';
 import { getChatFromLesson } from '../apiCaller.js';
+
 export default class Card extends Component {
   constructor(props) {
     super(props);
     this.clickHandler = this.clickHandler.bind(this);
   }
 
-  async clickHandler(){
+  async clickHandler() {
     // parent component ( LessonsContainer ) reaction to the click
     const { reactToClick } = this.props;
 
@@ -16,10 +16,10 @@ export default class Card extends Component {
     // redirect to conference
     if (this.props.booking) {
       const { booking } = this.props;
-      // at this case ( upcoming lessons ) redirect to conference and pass booking 
+      // at this case ( upcoming lessons ) redirect to conference and pass booking
       this.props.history.push('/conference', { booking });
-    } // past lessons case 
-      // render chats and chatlog
+    } // past lessons case
+    // render chats and chatlog
     else if (this.props.pastLesson) {
       try {
         const { chat_id } = this.props.pastLesson;
@@ -27,34 +27,36 @@ export default class Card extends Component {
         reactToClick(messages);
       } catch (error) {
         console.error('Error with rendering pastLessons', error);
-        return;
       }
     }
     // search results case
     // render teachers for a specific craft
-    else if(this.props.teacher){
-      const { teacher, student, matchedCraft, } = this.props;
-      this.props.history.push('/calendar', { teacher, student, matchedCraft});
+    else if (this.props.teacher) {
+      const { teacher, student, matchedCraft } = this.props;
+      this.props.history.push('/calendar', { teacher, student, matchedCraft });
     }
   }
-  
+
 
   render() {
-    const { booking, pastLesson, buttonName, teacher } = this.props;
+    const {
+      booking, pastLesson, buttonName, teacher,
+    } = this.props;
+    console.log('im like yeah shes fine!  ', this.props);
     return (
       <Paper className="card">
-        <img src="" alt=""/>
+        <img src="" alt="" />
         <h3 className="title">
-        {
-          ( booking && booking.title ) || 
-          ( pastLesson && pastLesson.title ) || 
-          ( teacher && teacher.username ) || 
+          {
+          (booking && booking.title) ||
+          (pastLesson && pastLesson.title) ||
+          (teacher && teacher.username) ||
           'no title'
         }
         </h3>
-        <p> { ( pastLesson && pastLesson.notes ) || ( teacher && teacher.bio ) } </p>
+        <p> { (pastLesson && pastLesson.notes) || (teacher && teacher.bio) } </p>
         <button className="card-button" type="button" onClick={this.clickHandler}>{buttonName}</button>
       </Paper>
-    )
+    );
   }
-};
+}

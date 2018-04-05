@@ -15,7 +15,7 @@ const mapDispatchToProps = dispatch => ({
   updateType: type => dispatch(actions.updateType(type)),
   removeType: () => dispatch(actions.removeType()),
   updateUrl: url => dispatch(actions.updateUrl(url)),
-  removeUrl: () => dispatch(actions.removeUrl())
+  removeUrl: () => dispatch(actions.removeUrl()),
 });
 
 const mapStateToProps = state => ({
@@ -36,24 +36,22 @@ class ConnectedProtected extends Component {
       const { exp } = await jwtDecode(this.props.currentToken);
       if (exp < 1) {
         this.props.history.push('/login');
-      } 
+      }
     } catch (error) {
       console.log('Error with decoding token', error);
       this.props.history.push('/login');
-      return;
     }
   }
 
-  render() 
-    {
-      const { component: Component } = this.props;
+  render() {
+    const { component: Component } = this.props;
     return (
       <div>
-        <Navbar key={'1'} {...this.props} />
+        <Navbar key="1" {...this.props} />
         {/* <MenuNav key={'1'}{...this.props}  /> */}
-        <Component key={'2'}{...this.props} />
+        <Component key="2"{...this.props} />
       </div>
-    )
+    );
   }
 }
 

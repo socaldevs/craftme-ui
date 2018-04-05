@@ -8,4 +8,4 @@ export default function currentType(state = null, action) {
       return state;
   }
   return state;
-};
+}

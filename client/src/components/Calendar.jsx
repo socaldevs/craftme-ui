@@ -1,61 +1,63 @@
-import React, { Component } from "react";
-import BigCalendar from 'react-big-calendar'
-import moment from 'moment';
-import { 
-  fetchTeacherAvailability, 
-  submitBookingToServer, 
+import React, { Component } from 'react';
+import BigCalendar from 'react-big-calendar';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import Moment from 'moment';
+import {
+  fetchTeacherAvailability,
+  submitBookingToServer,
   submitAvailabilityToServer,
   fetchUserUpcomingBookings,
+  displayNotification,
 } from './../apiCaller.js';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Popup from './Popup.jsx';
+import FeedbackAlert from './FeedbackAlert.jsx';
 
-BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
+BigCalendar.setLocalizer(BigCalendar.momentLocalizer(Moment));
 
 // helper
 const doesOverlap = (calendarEvents, event) => {
-  const eventStart = new moment(event.start);
-  const eventEnd = new moment(event.end);
-  let overlaps;
-  
-  overlaps = calendarEvents.findIndex((cEvent) => {
-    const cEventStart = new moment(cEvent.start);
-    const cEventEnd = new moment(cEvent.end);
+  const eventStart = new Moment(event.start);
+  const eventEnd = new Moment(event.end);
+
+  const overlaps = calendarEvents.findIndex((cEvent) => {
+    const cEventStart = new Moment(cEvent.start);
+    const cEventEnd = new Moment(cEvent.end);
     // First case: if the start of the selected slot is in between the
     // beginning the and the end of the calendar event
     // Second case: if the end of the selected slot is in between the
     // beginning the and the end of the calendar event
 
-    if(cEventStart.isBetween(eventStart, eventEnd) ||
+    if (cEventStart.isBetween(eventStart, eventEnd) ||
       cEventEnd.isBetween(eventStart, eventEnd) ||
-      eventStart.isBetween(cEventStart, cEventEnd) || 
+      eventStart.isBetween(cEventStart, cEventEnd) ||
       eventEnd.isBetween(cEventStart, cEventEnd) ||
-      eventStart.isSame(cEventStart) || 
-      eventStart.isBefore(new moment())
-    ){
+      eventStart.isSame(cEventStart) ||
+      eventStart.isBefore(new Moment())
+    ) {
       return true;
-    } else {
-      return false;  
     }
-  })
+    return false;
+  });
 
-  return overlaps === -1 ? false : true;
+  return overlaps !== -1;
 };
 
 export default class Calendar extends Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
-      currentUserId: 0, // either a student or a teacher 
       events: [],
       start: false,
       end: false,
       selected_availability_id: 0,
       disableButton: true,
-      userType: 1,    
+      userType: 1,
       showPopup: false,
       slotTextVisibility: 'hidden-element',
+      alertMessage: '',
+      alertVisibility: 'hidden-element',
+      alertType: '',
     };
 
     this.submitBooking = this.submitBooking.bind(this);
@@ -65,89 +67,86 @@ export default class Calendar extends Component {
     this.renderTeacherElements = this.renderTeacherElements.bind(this);
     this.getTeacherAppointments = this.getTeacherAppointments.bind(this);
     this.getTeacherAvailability = this.getTeacherAvailability.bind(this);
-    this.togglePopup = this.togglePopup.bind(this);   
+    this.togglePopup = this.togglePopup.bind(this);
   }
 
+  
   togglePopup() {
     this.setState({
-      showPopup: !this.state.showPopup
+      showPopup: !this.state.showPopup,
     });
   }
-
 
   async submitAvailability() {
     // Teachers are directed to search to add a craft on login
     // after they add it they're directed to calendar submit availability
-  
 
 
     // look for me
     // submit availability is a feature only teachers can use
     // so it assumes that the logged in usertype is teacher and
-    // it grabs the currentId as the teacher id 
+    // it grabs the currentId as the teacher id
     const { start, end } = this.state;
     const { currentId } = this.props;
     // this is used when the redirection to calendar from teacher account
     // is implemented
     // const { currentId } = this.props.history.location.state;
-  
+
     try {
-      const availabilityToSend  = {
+      const availabilityToSend = {
         teacher_id: currentId,
         start,
-        end
+        end,
       };
-      const availability  = await submitAvailabilityToServer(availabilityToSend);        
-      //datefying the string date
+      const availability = await submitAvailabilityToServer(availabilityToSend);
+      // datefying the string date
       availability.title = 'Open';
       availability.start = new Date(availability.start);
       availability.end = new Date(availability.end);
       // updating the events on the calendar
-      await this.setState({ events: [...this.state.events, availability]});
+      await this.setState({ events: [...this.state.events, availability] });
       await this.togglePopup();
     } catch (error) {
       console.error('error while trying to submit availability', error);
-    }  
+    }
   }
 
   async submitBooking() {
-
     const { start, end, selected_availability_id } = this.state;
     const { teacher, student, matchedCraft } = this.props.history.location.state;
-    // console.log('teacher', teacher, 'student', student, 'matched', matchedCraft);
     const title = `${matchedCraft.name} | Teacher: ${teacher.username} | Student: ${student.currentUser}`;
     try {
-      const bookingToSend  = {
+      const bookingToSend = {
         student_id: student.currentId,
         teacher_id: teacher.id,
         title,
         start,
         end,
-        selected_availability_id
+        selected_availability_id,
       };
-      
+
       // TO DO: create a confirmation modal popup to and fill it with the booking
-      let booking = await submitBookingToServer(bookingToSend);        
-      //datefying the string date
+      const booking = await submitBookingToServer(bookingToSend);
+      // datefying the string date
       booking.title = title;
       booking.start = new Date(booking.start);
       booking.end = new Date(booking.end);
-      
+
       const updatedAvailabilities = this.state.events.filter((availability) => {
         // getting rid of the booked slot
         if (availability.id === bookingToSend.selected_availability_id) {
           return false;
-        } else {
-          return true;  
         }
-        // if(String(availability.start) === String(booking.start) && 
+        return true;
+
+        // if(String(availability.start) === String(booking.start) &&
         // String(availability.end) === String(booking.end)){
         //   return false;
         // } else {
         //   return true;
         // }
       });
-      await this.setState({events: updatedAvailabilities});
+      await this.setState({ events: updatedAvailabilities });
       // redirect to lessons after a successful booking
       this.props.history.push('/lessons');
     } catch (error) {
@@ -156,7 +155,6 @@ export default class Calendar extends Component {
   }
 
   async timeSlotSelected(timeslot) {
-
     const { userType } = this.state;
 
     // if the user is a teacher
@@ -168,94 +166,135 @@ export default class Calendar extends Component {
         if (!doesOverlap(this.state.events, timeslot)) {
           // allow the teacher to submit the availability by enabling the submission button
           const { start, end } = timeslot;
-          await this.setState({ 
+          await this.setState({
             start,
             end,
-            disableButton:false,
-            slotTextVisibility: 'visible-element'
+            disableButton: false,
+            slotTextVisibility: 'visible-element',
           });
         } else {
           // if theres an overlap display an error message
-          await this.setState({ 
+          await this.setState({
             start: false,
             end: false,
-            disableButton:true,
-            slotTextVisibility: 'hidden-element'
+            disableButton: true,
+            slotTextVisibility: 'hidden-element',
           });
-          console.log('Overlaping with event');
-        }        
-      } else { 
-        await this.setState({ disableButton:true });        
-        console.log('its an event');
+
+          await displayNotification(
+            this, 2000,
+            {
+              alertMessage: 'Invalid timeslot!',
+              alertType: 'alert-danger',
+            },
+          );
+        }
+      } else {
+        await this.setState({ disableButton: true });
       }
       // if the user is a student
-    } else if(userType === 1) {
+    } else if (userType === 1) {
       // check if the event is clicked
       // events (availabilities) have a teacher id on them
-      if(timeslot.hasOwnProperty('teacher_id')) {
+      if (timeslot.hasOwnProperty('teacher_id')) {
         const { start, end, id } = timeslot;
         // enable the button and allow the student to book the availability
         await this.setState({
           start,
           end,
-          disableButton:false,
+          disableButton: false,
           selected_availability_id: id,
-          slotTextVisibility: 'visible-element'
-        }); 
+          slotTextVisibility: 'visible-element',
+        });
       } else {
         // it's not an event (availability) so
         // disable the button
-        await this.setState({ 
+        await this.setState({
           start: false,
           end: false,
-          disableButton:true,
-          slotTextVisibility: 'hidden-element'
+          disableButton: true,
+          slotTextVisibility: 'hidden-element',
         });
-        console.log('its not available dude');
+
+        await displayNotification(
+          this, 2000,
+          {
+            alertMessage: 'Invalid appointment! Use your best judgment!',
+            alertType: 'alert-danger',
+          },
+        );
       }
-    }  
+    }
   }
 
-  renderStudentElements(){
-    const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' };    
+  renderStudentElements() {
+    const alertFeedbackCustomStyle = {
+      marginTop: '0.5em',
+      marginBottom: '0.5em',
+    };
+    const options = {
+      weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+    };
     const start = new Date(this.state.start).toLocaleTimeString('en-US', options);
     const end = new Date(this.state.end).toLocaleTimeString('en-US', options);
 
     return (
       <div className="calendar-controls">
+        <FeedbackAlert
+          alertVisibility={this.state.alertVisibility}
+          alertType={this.state.alertType}
+          alertMessage={this.state.alertMessage}
+          customStyle={alertFeedbackCustomStyle}
+        />
         <h3 className="callout title">
           To book appointment:
         </h3>
         <p>Click on the availability spot to select.</p>
         <p className={this.state.slotTextVisibility}>Selected timeslot: from {start} to {end}</p>
-        <button type="button" onClick={this.submitBooking} 
-          className={'card-button ' + (this.state.disableButton && 'disabled')} 
-          disabled={this.state.disableButton} >Book appointment
+        <button
+          type="button"
+          onClick={this.submitBooking}
+          className={`card-button ${this.state.disableButton && 'disabled'}`}
+          disabled={this.state.disableButton}
+        >Book appointment
         </button>
-      </div>  
+      </div>
     );
   }
 
   renderTeacherElements() {
+    const alertFeedbackCustomStyle = {
+      marginTop: '0.5em',
+      marginBottom: '0.5em',
+    };
 
-    const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' };    
+    const options = {
+      weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+    };
     const start = new Date(this.state.start).toLocaleTimeString('en-US', options);
     const end = new Date(this.state.end).toLocaleTimeString('en-US', options);
-    console.log(this.state.disableButton);
     return (
       <div className="calendar-controls">
+        <FeedbackAlert
+          alertVisibility={this.state.alertVisibility}
+          alertType={this.state.alertType}
+          alertMessage={this.state.alertMessage}
+          customStyle={alertFeedbackCustomStyle}
+        />
         <h3 className="callout title">
           To allocate availability:
         </h3>
         <p>Drag the mouse over the calendar to select a time range.</p>
         <p className={this.state.slotTextVisibility}>Selected timeslot: from {start} to {end}</p>
-        <button type="button" onClick={this.submitAvailability} 
-           className={'card-button ' + (this.state.disableButton && 'disabled')} 
-           disabled={this.state.disableButton} >Submit
+        <button
+          type="button"
+          onClick={this.submitAvailability}
+          className={`card-button ${this.state.disableButton && 'disabled'}`}
+          disabled={this.state.disableButton}
+        >Submit
         </button>
-      </div>  
+      </div>
     );
-    
   }
 
   // for student user
@@ -266,7 +305,7 @@ export default class Calendar extends Component {
   async getTeacherAvailability(teacher) {
     try {
       let availabilities = await fetchTeacherAvailability(teacher.id);
-      //datefying the string dates
+      // datefying the string dates
       availabilities = availabilities.map((availability) => {
         availability.title = 'Open';
         availability.taken = false;
@@ -274,8 +313,7 @@ export default class Calendar extends Component {
         availability.end = new Date(availability.end);
         return availability;
       });
-      await this.setState({events: [...this.state.events, ...availabilities]});
-      // console.log('just finished excuting teacher availability and the state is', this.state.events);
+      await this.setState({ events: [...this.state.events, ...availabilities] });
     } catch (error) {
       console.error('error while trying to set the state from server availabilities', error);
     }
@@ -284,68 +322,60 @@ export default class Calendar extends Component {
   // Teacher feature
   // getting the appointments aleardy set for this teacher
   // assuming that the logged in usertype is teacher and
-  // and the currentId in this case is a teacher id 
+  // and the currentId in this case is a teacher id
   async getTeacherAppointments(teacher) {
     // const { currentId } = this.props;
     // map their titles to be like Craft with Student and proper date
     // add them to the events array
     try {
       // get bookings from bookings table for the logged in teacher
-      // console.log('hard coded input at fetchUserUpcomingBookings');
-      
+
       let appointments = await fetchUserUpcomingBookings(teacher.id);
-          
+
       appointments = appointments.map((appointment) => {
         appointment.taken = true;
         appointment.start = new Date(appointment.start);
         appointment.end = new Date(appointment.end);
         return appointment;
       });
-      await this.setState({ events: [...this.state.events, ...appointments] });  
+      await this.setState({ events: [...this.state.events, ...appointments] });
     } catch (error) {
       console.error('error while trying to get appointments from server', error);
     }
   }
 
-  eventStyleGetter (event) {
-    // console.log('event ====>', event);
+  eventStyleGetter(event) {
     let backgroundColor;
-    if(event.taken){
+    if (event.taken) {
       backgroundColor = '#d9534f';
     } else {
       backgroundColor = '#5cb85c';
     }
 
     const style = {
-        // backgroundColor: backgroundColor,
-        backgroundColor,        
-        // borderRadius: '0px',
-        // opacity: 0.8,
-        // color: 'black',
-        // border: '0px',
-        // display: 'block'
+      backgroundColor,
     };
     return { style };
   }
 
 
-  async componentDidMount(){
-    console.log('this is comp', this.props.currentId);
-    const { teacher } = this.props.history.location.state || {teacher: {id: this.props.currentId}}; 
-    
+  async componentDidMount() {
+    const { teacher } = this.props.history.location.state || { teacher: { id: this.props.currentId } };
+
     this.getTeacherAvailability(teacher);
-  
+
     // if user type is teacher get their appointments
-    if(this.props.currentType === 0){
+    if (this.props.currentType === 0) {
       this.getTeacherAppointments(teacher);
     }
 
     await this.setState({ userType: this.props.currentType });
-    
   }
 
-  render(){
-    const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' };    
+  render() {
+    const options = {
+      weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+    };
     const start = new Date(this.state.start).toLocaleTimeString('en-US', options);
     const end = new Date(this.state.end).toLocaleTimeString('en-US', options);
     return (
@@ -353,40 +383,38 @@ export default class Calendar extends Component {
         <React.Fragment>
 
           {
-            this.state.userType === 1 ? 
-              this.renderStudentElements():
+            this.state.userType === 1 ?
+              this.renderStudentElements() :
               this.renderTeacherElements()
           }
           <BigCalendar
-            style={ {minHeight: '100vh'} }
+            style={{ minHeight: '100vh' }}
             selectable
             formats={{
               // dateFormat:'mm dd yyyy',
               dayFormat: (date, culture, localizer) =>
               localizer.format(date, 'dd MM/DD', culture),
-          
+
             }}
-            events={ this.state.events }
+            events={this.state.events}
             defaultView="week"
-            scrollToTime={ new Date(1970, 1, 1, 6) }
-            defaultDate={ new Date() }
-            onSelectEvent={ this.timeSlotSelected }
-            onSelectSlot={ this.timeSlotSelected }
-            eventPropGetter={ this.eventStyleGetter }
-            />
-            {
-              this.state.showPopup ? 
-              <Popup
-                text={`${start} - ${end} submitted!`}
-                closePopup={this.togglePopup}
-              />
+            scrollToTime={new Date(1970, 1, 1, 6)}
+            defaultDate={new Date()}
+            onSelectEvent={this.timeSlotSelected}
+            onSelectSlot={this.timeSlotSelected}
+            eventPropGetter={this.eventStyleGetter}
+          />
+          {
+              this.state.showPopup ?
+                <Popup
+                  text={`${start} - ${end} submitted!`}
+                  closePopup={this.togglePopup}
+                />
               : null
             }
         </React.Fragment>
       </div>
     );
-  }    
+  }
 }
-  
-
 

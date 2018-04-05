@@ -8,4 +8,4 @@ export default function currentUser(state = null, action) {
       return state;
   }
   return state;
-};
+}

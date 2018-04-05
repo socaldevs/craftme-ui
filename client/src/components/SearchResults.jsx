@@ -24,7 +24,7 @@ class SearchResults extends Component {
       remoteTeachers: [],
       inPersonTeachers: [],
       matchedCraft: null,
-    }
+    };
     this.changeView = this.changeView.bind(this);
     this.renderRemoteTeachers = this.renderRemoteTeachers.bind(this);
     this.renderInPersonTeachers = this.renderInPersonTeachers.bind(this);
@@ -32,18 +32,24 @@ class SearchResults extends Component {
 
   changeView(event, value) {
     this.setState({ navbarValue: value });
-  };
+  }
 
-  renderRemoteTeachers(){
+  renderRemoteTeachers() {
     const remoteTeachers = this.state.remoteTeachers || [];
     return (
-      remoteTeachers.map((teacher)=>{
+      remoteTeachers.map((teacher) => {
         // currentId in search results always refers to a student cause only students
         // would be looking to learn a new skill
-        const { currentId, currentUser } = this.props;  
-        return <Card key={teacher.id} teacher={teacher} buttonName="View Availability"
-        history={this.props.history} student={{ currentId, currentUser }} 
-        matchedCraft={ this.state.matchedCraft } centered />;
+        const { currentId, currentUser } = this.props;
+        return (<Card
+          key={teacher.id}
+          teacher={teacher}
+          buttonName="View Availability"
+          history={this.props.history}
+          student={{ currentId, currentUser }}
+          matchedCraft={this.state.matchedCraft}
+          centered
+        />);
 
         // return <Card key={teacher.id} teacher={teacher} buttonName="View Availability"
         // studentId={this.props.currentId} matchedCraft={ this.state.matchedCraft } centered />;
@@ -51,27 +57,25 @@ class SearchResults extends Component {
     );
   }
 
-  renderInPersonTeachers(){
+  renderInPersonTeachers() {
     const inPersonTeachers = this.state.inPersonTeachers || [];
     return (
       // inPersonTeachers.map((inPersonTeacher)=>{
       //   return <Card key={inPersonTeacher.id} inPersonTeacher={inPersonTeacher} centered />;
       // })
-      <p>Placeholder for in person teachers</p>  
+      <p>Placeholder for in person teachers</p>
     );
   }
 
-  componentDidMount(){
-
+  componentDidMount() {
     const { matchedCraft } = this.props.history.location.state;
-    console.log('proops from search results router', matchedCraft);  
     const getRemotes = async () => {
       await this.setState({ matchedCraft });
-      const  craft_id = matchedCraft.id ;
+      const craft_id = matchedCraft.id;
 
       const remoteTeachers = await fetchRemoteTeachersForCraft(craft_id);
-      
-      this.setState({ remoteTeachers });  
+
+      this.setState({ remoteTeachers });
     };
 
     const getInPersons = async () => {
@@ -80,38 +84,42 @@ class SearchResults extends Component {
       // const {currentId} = this.props;
       // const pastLessons = await getUserPastLessons(currentId);
       // console.log('weird dude', pastLessons);
-      // this.setState({ pastLessons });  
+      // this.setState({ pastLessons });
     };
 
     getRemotes();
     // getInPersons();
     // console.log('lessons from the state',this.state.inPersonTeachers);
-    
   }
 
-  render(){
-    return(
-      <Grid container spacing={24}>  
+  render() {
+    return (
+      <Grid container spacing={24}>
         <Grid item xs={12}>
-            <Tabs value={this.state.navbarValue} onChange={this.changeView}
-              indicatorColor="primary" textColor="primary" centered >
-              <Tab label="Remote" value="remote"/>
-              <Tab label="In Person" value="inPerson"/>
-            </Tabs>
+          <Tabs
+            value={this.state.navbarValue}
+            onChange={this.changeView}
+            indicatorColor="primary"
+            textColor="primary"
+            centered
+          >
+            <Tab label="Remote" value="remote" />
+            <Tab label="In Person" value="inPerson" />
+          </Tabs>
         </Grid>
         <Grid item xs={12}>
           {
             this.state.navbarValue === 'remote' ?
             this.renderRemoteTeachers() : this.renderInPersonTeachers()
-          } 
-        </Grid>              
-    </Grid>
-    ) 
+          }
+        </Grid>
+      </Grid>
+    );
   }
 }
 
 SearchResults.propTypes = {
-  classes: PropTypes.object
+  classes: PropTypes.object,
 };
 
-export default withStyles(styles)(SearchResults)
+export default withStyles(styles)(SearchResults);

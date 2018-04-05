@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import ConversationList from './ConversationList.jsx';
 import { fetchAllConversationsById } from '../apiCaller.js';
+
 export default class Messages extends Component {
   constructor(props) {
     super(props);
@@ -13,9 +14,9 @@ export default class Messages extends Component {
   }
 
   async componentDidMount() {
-    await this.grabConversations()
+    await this.grabConversations();
   }
-  
+
   async updateConvo(convo) {
     // this.setState({conversations: [...this.state.conversations, convo]});
     await this.grabConversations();
@@ -28,7 +29,6 @@ export default class Messages extends Component {
       this.setState({ conversations: data });
     } catch (error) {
       console.log('Error with fetchAllMessages on front end', error);
-      return;
     }
   }
 

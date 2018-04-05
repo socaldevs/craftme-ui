@@ -398,7 +398,6 @@ nav.navbar {
 
 
 fieldset, label { margin: 0; padding: 0; }
-body{ margin: 20px; }
 h1 { font-size: 1.5em; margin: 10px; }
 
 /****** Style Star Rating Widget *****/
@@ -445,6 +444,7 @@ button, .button {
   padding: 10px;
   border: 1px #333 solid;
   border-radius: 10px;
+  cursor: pointer;
 }
 
 .card-button, .button {
@@ -540,7 +540,6 @@ html, #app {
 }
 
 .alert-danger {
-  /* background: #ff4444; */
   background: #f8d7da;
   color: #7A214B;
 }
@@ -549,4 +548,15 @@ html, #app {
   max-width: 3em;
   max-height: 3em;
   border-radius: 50%;
+}
+
+
+#react-autowhatever-1{
+  left: 42.5%;
+  right: auto;
+  min-width: 15%; 
+}
+
+ul.Search-suggestionsList-4{
+  overflow: auto;
 }

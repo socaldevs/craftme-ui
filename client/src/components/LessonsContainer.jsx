@@ -33,23 +33,24 @@ class LessonsContainer extends Component {
 
   switchChat(chats) {
     this.setState({ chats });
-    console.log('chats are: ', chats);
   }
   changeView(event, value) {
-    console.log(value);
     this.setState({ navbarValue: value });
   }
 
   renderUpcomingLessons() {
-    let bookings = this.state.upcomingBookings || [];
-    console.log('props from conatiner', this.props);
+    const bookings = this.state.upcomingBookings || [];
     return (
-      bookings.length > 0 ? 
-      bookings.map((booking)=>{
-        return <Grid item md={12}> <Card key={booking.id} booking={booking} buttonName="Start Lesson" 
-          history={this.props.history} centered /> </Grid>;
-      })
-      : <EmptyContent warningMessage="You have no upcoming lessons!"/>
+      bookings.length > 0 ?
+        bookings.map(booking => (<Grid item md={12}> <Card
+          key={booking.id}
+          booking={booking}
+          buttonName="Start Lesson"
+          history={this.props.history}
+          centered
+        />
+        </Grid>))
+        : <EmptyContent warningMessage="You have no upcoming lessons!" />
     );
   }
 
@@ -57,96 +58,94 @@ class LessonsContainer extends Component {
     const pastLessons = this.state.pastLessons || [];
     return (
       <div>
-        { 
+        {
           pastLessons.length > 0 ?
-          <div>  
-            {
-              pastLessons.map((pastLesson) => {
-                return (
-                  <div>
-                    <Card 
-                      key={pastLesson.id}
-                      buttonName="View Chat"
-                      reactToClick={this.switchChat}
-                      pastLesson={pastLesson}
-                      centered
-                    />
-                  </div>
-                );
-              })
+            <div>
+              {
+              pastLessons.map(pastLesson => (
+                <div>
+                  <Card
+                    key={pastLesson.id}
+                    buttonName="View Chat"
+                    reactToClick={this.switchChat}
+                    pastLesson={pastLesson}
+                    centered
+                  />
+                </div>
+                ))
             }
-           {
-            this.state.chats.map((chat, i) => {
-              return (
-                <p key={i}> {chat.handle} : {chat.message} </p>
-              );
-            })
-          } 
-        </div>
-        
+              {
+            this.state.chats.map((chat, i) => (
+              <p key={i}> {chat.handle} : {chat.message} </p>
+              ))
+          }
+            </div>
+
         : <EmptyContent warningMessage="You have no past lessons!" />
       }
-    </div>
+      </div>
     );
   }
 
   componentDidMount() {
-    //gettng the upcoming lessons for the logged in user
+    // gettng the upcoming lessons for the logged in user
     const { currentId } = this.props;
-    // const userId = {teacher_id: 1};    
+    // const userId = {teacher_id: 1};
     const getBookings = async () => {
-      
       // const userId = {teacher_id: 1};
       // if(type === 0){
-      //   userId['teacher_id'] = this.props.currentId;    
+      //   userId['teacher_id'] = this.props.currentId;
       // } else if (type === 1){
-      //   userId['student_id'] = this.props.currentId;    
+      //   userId['student_id'] = this.props.currentId;
       // }
       const upcomingBookings = await fetchUserUpcomingBookings(currentId);
-      this.setState({ upcomingBookings });  
+      this.setState({ upcomingBookings });
     };
 
     const getLessons = async () => {
-      
       const pastLessons = await getUserPastLessons(currentId);
-      this.setState({ pastLessons });  
+      this.setState({ pastLessons });
     };
 
     getBookings();
     getLessons();
-    console.log('lessons from the state',this.state.pastLessons);
-    
   }
 
   render() {
-    let viewController = {
+    const viewController = {
       upcoming: this.renderUpcomingLessons,
-      past: this.renderPastLessons
+      past: this.renderPastLessons,
       // chats: this.renderChats
-    }
+    };
     return (
-      <div className="container lessonsContainer">            
-        <Grid container spacing={24}>  
+      <div className="container lessonsContainer">
+        <Grid container spacing={24}>
           <Grid item xs={12}>
-              <Tabs className="innerNav" value={this.state.navbarValue} onChange={this.changeView}
-                indicatorColor="primary" textColor="primary" centered >
-                <Tab label="upcoming" value="upcoming"/>
-                <Tab label="Past" value="past"/>
-              </Tabs>
+            <Tabs
+              className="innerNav"
+              value={this.state.navbarValue}
+              onChange={this.changeView}
+              indicatorColor="primary"
+              textColor="primary"
+              centered
+            >
+              <Tab label="upcoming" value="upcoming" />
+              <Tab label="Past" value="past" />
+            </Tabs>
           </Grid>
           <Grid item xs={12}>
             {
               viewController[this.state.navbarValue]()
-            } 
-          </Grid>              
-      </Grid>
-    </div>
-    ) 
+            }
+          </Grid>
+        </Grid>
+      </div>
+    );
   }
 }
 
 LessonsContainer.propTypes = {
-  classes: PropTypes.object
+  classes: PropTypes.object,
 };
 
-export default withStyles(styles)(LessonsContainer)
+export default withStyles(styles)(LessonsContainer);

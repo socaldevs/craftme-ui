@@ -66,8 +66,6 @@ class ConnectedMenuNav extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleCloseUser = this.handleCloseUser.bind(this);
     this.handleLogoutClick = this.handleLogoutClick.bind(this);
-
-    console.log('my info: ', this.props);
   }
   handleClick(event) {
     this.setState({ anchorEl: event.currentTarget });
@@ -121,10 +119,10 @@ class ConnectedMenuNav extends React.Component {
 
               <MenuItem onClick={() => this.handleLogoutClick()}>
                 Logout
-                </MenuItem>
+              </MenuItem>
               <MenuItem onClick={this.handleCloseUser}>
                 Profile
-                </MenuItem>
+              </MenuItem>
             </Menu>
           </Paper>
         </Grid>

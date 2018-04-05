@@ -8,4 +8,4 @@ export default function currentUrl(state = null, action) {
       return state;
   }
   return state;
-};
+}
