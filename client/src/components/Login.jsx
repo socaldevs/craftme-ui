@@ -7,6 +7,9 @@ import { FormControl } from 'material-ui/Form';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import actions from '../actions/index.jsx';
+import FeedbackAlert from './FeedbackAlert.jsx';
+import { displayNotification } from '../apiCaller.js';
+
 
 
 const mapDispatchToProps = dispatch => ({
@@ -31,12 +34,12 @@ const mapStateToProps = state => ({
 });
 
 const StyleButton = styled(Button)`
-width: 25%;
+width: 15%;
 `;
 
 const StyledDiv = styled.div`
-margin-top: 20%;
-margin-left: 40%;
+padding-top: 10%;
+text-align: center;
 `;
 
 class ConnectedLogin extends Component {
@@ -45,6 +48,9 @@ class ConnectedLogin extends Component {
     this.state = {
       username: '',
       password: '',
+      alertMessage: '',
+      alertVisibility: 'hidden-element',
+      alertType: '',
     };
     this.login = this.login.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -68,6 +74,12 @@ class ConnectedLogin extends Component {
         this.props.history.push('/search');
       }
     } catch (error) {
+      // render failure feedback
+      await displayNotification(this, 2000, 
+        {
+          alertMessage: 'Invalid username or password!',
+          alertType: 'alert-danger',
+        });
       console.log('error with login', error);
     }
   }
@@ -78,20 +90,28 @@ class ConnectedLogin extends Component {
 
   render() {
     return (
-      <StyledDiv>
-        <h1>CraftMe</h1>
-        <FormControl>
-          <InputLabel >USERNAME</InputLabel>
-          <Input type='text' value={this.state.username} onChange={e => this.handleChange(e, "username")} />
-        </FormControl>
-        <div> </div>
-        <FormControl>
-          <InputLabel >PASSWORD</InputLabel>
-          <Input type="password" value={this.state.password} onChange={e => this.handleChange(e, "password")} />
-        </FormControl>
-        <p><StyleButton variant="raised" onClick={this.login}>LOGIN </StyleButton></p>
-        <p><Link to="/signup">SIGNUP</Link></p>
-      </StyledDiv>
+      <div>
+          <FeedbackAlert 
+          alertVisibility={this.state.alertVisibility} 
+          alertType={this.state.alertType}
+          alertMessage={this.state.alertMessage}
+        /> 
+        <StyledDiv>
+          <h1>CraftMe</h1>
+          <FormControl>
+            <InputLabel >Username</InputLabel>
+            <Input type='text' value={this.state.username} onChange={e => this.handleChange(e, "username")} />
+          </FormControl>
+          <div> </div>
+          <FormControl>
+            <InputLabel >Password</InputLabel>
+            <Input type="password" value={this.state.password} onChange={e => this.handleChange(e, "password")} />
+          </FormControl>
+          <p><StyleButton variant="raised" onClick={this.login}>LOGIN </StyleButton></p>
+          <p><Link to="/signup">SIGNUP</Link></p>
+        </StyledDiv>
+      </div>
+      
     );
   }
 }

@@ -8,8 +8,18 @@
 }  */
 
 
+@font-face {
+  font-family: lora;
+  src: url('./Lora-Regular.otf');
+}
+
+body {
+  font-family: lora;
+  margin:0;
+}
+
 body, html, div#app, .protected-wrapper {
-  height: 100%;
+  height: 90%;
 }
 
 .MuiGrid-typeContainer-7.MuiGrid-spacing-xs-24-30 {
@@ -430,15 +440,14 @@ h1 { font-size: 1.5em; margin: 10px; }
 
 
 
-button {
+button, .button {
   background: #333;
   padding: 10px;
   border: 1px #333 solid;
   border-radius: 10px;
 }
 
-
-.card-button {
+.card-button, .button {
   font-family: arial;
   color: white;
 }
@@ -511,4 +520,33 @@ html, #app {
   opacity: 1;
   -webkit-transition: opacity 0.8s linear; /* Safari */
   transition: opacity 0.8s linear;
+}
+
+.empty-content {
+  text-align: center;
+  font-size: 2em;
+}
+
+.alert {
+  text-align: center;
+  background: #eee;
+  font-family: Arial, Helvetica, sans-serif;
+  border-radius: 6px;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 0.8em;
+  padding-bottom: 0.8em;
+}
+
+.alert-danger {
+  /* background: #ff4444; */
+  background: #f8d7da;
+  color: #7A214B;
+}
+
+.avatar {
+  max-width: 3em;
+  max-height: 3em;
+  border-radius: 50%;
 }

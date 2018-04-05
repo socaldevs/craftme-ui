@@ -59,7 +59,7 @@ class ConnectedNavbar extends Component {
         {this.props.currentType === 1 ? null : <Link to="/calendar" className="navbar-item" style={{textDecoration: "none"}}> Calendar </Link>}
         <Link to="/lessons" className="navbar-item" style={{ textDecoration: "none" }}>Lessons</Link>
         <Link to="/messages" className="navbar-item" style={{ textDecoration: "none" }}>Messages</Link>
-        <Link to="/search" className="navbar-item" style={{ textDecoration: "none" }} onClick={this.handleLogoutClick}>Logout</Link> />
+        <Link to="/search" className="navbar-item" style={{ textDecoration: "none" }} onClick={this.handleLogoutClick}>Logout</Link>
       </nav>
     )
   }

@@ -11,20 +11,26 @@ import PersonIcon from 'material-ui-icons/Person';
 import SchoolIcon from 'material-ui-icons/School';
 import Avatar from 'material-ui/Avatar';
 import classNames from 'classnames';
-
+import FeedbackAlert from './FeedbackAlert.jsx';
+import { displayNotification } from '../apiCaller.js';
 
 const StyleButton = styled(Button)`
-width: 24%;
+width: 15%;
 `;
 
 const StyledDiv = styled.div`
-margin-top: 10%;
-margin-left: 40%;
+text-align: center;
 `;
+
+
 
 const styles = theme => ({
   root: {
-    width: 150,
+    backgroundColor: '#CCDAD1', 
+    width: '15%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: '1em',
   },
   row: {
     display: 'flex',
@@ -49,7 +55,10 @@ class Signup extends Component {
       bio: '',
       value: 'student',
       profile: 'http://www.planystech.com/wp-content/uploads/2017/03/profile-placeholder.jpg',
-      file: null
+      file: null,
+      alertMessage: '',
+      alertVisibility: 'hidden-element',
+      alertType: '',
     };
 
     this.urlInput = this.urlInput.bind(this);
@@ -96,8 +105,14 @@ class Signup extends Component {
       if (data) {
         this.props.history.push('/login');
       }
-      console.log(data);
     } catch (error) {
+      // render failure feedback
+      await displayNotification(this, 2000, 
+        {
+          alertMessage: 'Username already exists or connection error!',
+          alertType: 'alert-danger',
+        });
+
       console.log('error with signup', error);
     }
   }
@@ -106,51 +121,55 @@ class Signup extends Component {
     const { classes } = this.props;
     const { value } = this.state;
     return (
-      <StyledDiv>
-        <h1>CraftMe</h1>
-        <Avatar
-          src={this.state.profile}
-          className={classNames(classes.avatar, classes.bigAvatar)}
-        />
-        <div>
-          <form>
-            <label>
-              Display Photo:
-              <input type="file" onChange={this.urlInput} />
-            </label>
-          </form>
-        </div>
-        <FormControl>
-          <InputLabel >USERNAME</InputLabel>
-          <Input type='text' value={this.state.username} onChange={e => this.handleChange(e, "username")} />
-        </FormControl>
-        <div> </div>
-        <FormControl>
-          <InputLabel >PASSWORD</InputLabel>
-          <Input type="password" value={this.state.password} onChange={e => this.handleChange(e, "password")} />
-        </FormControl>
-        <div> </div>
-        <FormControl>
-          <InputLabel >RENTER PASSWORD</InputLabel>
-          <Input type="password" value={this.state.passwordTwo} onChange={e => this.handleChange(e, "passwordTwo")} />
-        </FormControl>
-        <div> </div>
-        <FormControl>
-          <InputLabel >BIOGRAPHY</InputLabel>
-          <Input type='text' value={this.state.bio} onChange={e => this.handleChange(e, "bio")} />
-        </FormControl>
-        
-        <div>
-          <BottomNavigation value={value} onChange={this.handleChangeButton} className={classes.root}>
-            <BottomNavigationAction label="Student" value="student" icon={<PersonIcon />} />
-            <BottomNavigationAction label="Teacher" value="teacher" icon={<SchoolIcon />} />
-          </BottomNavigation>
-        </div>
+      <div>
+        <FeedbackAlert 
+          alertVisibility={this.state.alertVisibility} 
+          alertType={this.state.alertType}
+          alertMessage={this.state.alertMessage}
+        /> 
+        <StyledDiv>
+          <h1 id="app-title">CraftMe</h1>
 
-        <p><StyleButton variant="raised" onClick={this.signUp}>SIGNUP</StyleButton></p>
+          {/* <Avatar
+            src={this.state.profile}
+            
+          /> */}
+          <img 
+            src={this.state.profile}
+            className="avatar"
+            alt="avatar placeholder"/>
+          <div>
+            <form>  
+                <input type="file" onChange={this.urlInput} />
+            </form>
+          </div>
+          <FormControl>
+            <InputLabel >Username</InputLabel>
+            <Input type='text' value={this.state.username} onChange={e => this.handleChange(e, "username")} />
+          </FormControl>
+          <div> </div>
+          <FormControl>
+            <InputLabel >Password</InputLabel>
+            <Input type="password" value={this.state.password} onChange={e => this.handleChange(e, "password")} />
+          </FormControl>
+          <div> </div>
+          <FormControl>
+            <InputLabel >Biography</InputLabel>
+            <Input type='text' value={this.state.bio} onChange={e => this.handleChange(e, "bio")} />
+          </FormControl>
+          
+          <div>
+            <BottomNavigation value={value} onChange={this.handleChangeButton} className={classes.root}>
+              <BottomNavigationAction label="Student" value="student" icon={<PersonIcon />} />
+              <BottomNavigationAction label="Teacher" value="teacher" icon={<SchoolIcon />} />
+            </BottomNavigation>
+          </div>
 
-        <p><Link to="/login">Login</Link></p>
-      </StyledDiv>
+          <p><StyleButton variant="raised" onClick={this.signUp}>SIGNUP</StyleButton></p>
+
+          <p><Link to="/login">Login</Link></p>
+        </StyledDiv>
+      </div>      
     );
   }
 }

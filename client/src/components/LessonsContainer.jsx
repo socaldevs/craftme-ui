@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import Grid from 'material-ui/Grid';
 import Card from './Card.jsx';
+import EmptyContent from './EmptyContent.jsx';
 
 import { fetchUserUpcomingBookings, getUserPastLessons } from '../apiCaller.js';
 
@@ -43,10 +44,12 @@ class LessonsContainer extends Component {
     let bookings = this.state.upcomingBookings || [];
     console.log('props from conatiner', this.props);
     return (
+      bookings.length > 0 ? 
       bookings.map((booking)=>{
         return <Grid item md={12}> <Card key={booking.id} booking={booking} buttonName="Start Lesson" 
           history={this.props.history} centered /> </Grid>;
       })
+      : <EmptyContent warningMessage="You have no upcoming lessons!"/>
     );
   }
 
@@ -54,29 +57,35 @@ class LessonsContainer extends Component {
     const pastLessons = this.state.pastLessons || [];
     return (
       <div>
-        {
-        pastLessons.map((pastLesson) => {
-          return (
-            <div>
-              <Card 
-                key={pastLesson.id}
-                buttonName="View Chat"
-                reactToClick={this.switchChat}
-                pastLesson={pastLesson}
-                centered
-              />
-            </div>
-          );
-        })
-        }
-        <div> {
-          this.state.chats.map((chat, i) => {
-            return (
-              <p key={i}> {chat.handle} : {chat.message} </p>
-            );
-          })
-        } 
-      </div>
+        { 
+          pastLessons.length > 0 ?
+          <div>  
+            {
+              pastLessons.map((pastLesson) => {
+                return (
+                  <div>
+                    <Card 
+                      key={pastLesson.id}
+                      buttonName="View Chat"
+                      reactToClick={this.switchChat}
+                      pastLesson={pastLesson}
+                      centered
+                    />
+                  </div>
+                );
+              })
+            }
+           {
+            this.state.chats.map((chat, i) => {
+              return (
+                <p key={i}> {chat.handle} : {chat.message} </p>
+              );
+            })
+          } 
+        </div>
+        
+        : <EmptyContent warningMessage="You have no past lessons!" />
+      }
     </div>
     );
   }
