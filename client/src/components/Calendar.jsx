@@ -18,7 +18,9 @@ BigCalendar.setLocalizer(BigCalendar.momentLocalizer(Moment));
 const doesOverlap = (calendarEvents, event) => {
   const eventStart = new Moment(event.start);
   const eventEnd = new Moment(event.end);
-
+  if (eventStart.isBefore(new Moment())) {
+    return true;
+  }
   const overlaps = calendarEvents.findIndex((cEvent) => {
     const cEventStart = new Moment(cEvent.start);
     const cEventEnd = new Moment(cEvent.end);
@@ -31,8 +33,7 @@ const doesOverlap = (calendarEvents, event) => {
       cEventEnd.isBetween(eventStart, eventEnd) ||
       eventStart.isBetween(cEventStart, cEventEnd) ||
       eventEnd.isBetween(cEventStart, cEventEnd) ||
-      eventStart.isSame(cEventStart) ||
-      eventStart.isBefore(new Moment())
+      eventStart.isSame(cEventStart)
     ) {
       return true;
     }
@@ -70,7 +71,7 @@ export default class Calendar extends Component {
     this.togglePopup = this.togglePopup.bind(this);
   }
 
-  
+
   togglePopup() {
     this.setState({
       showPopup: !this.state.showPopup,

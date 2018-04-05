@@ -86,7 +86,7 @@ class ConversationList extends Component {
               this.props.conversations.map((conversation, i) => {
               return (
                   <div key={i}>
-                    <div key={i} className="thoughtbubble" data-id={conversation.id} onClick={e => this.grabConversations(e)} key={i}>
+                    <div className="thoughtbubble" data-id={conversation.id} onClick={e => this.grabConversations(e)} key={i}>
                       View your conversation with: 
                       {conversation.sender === this.props.currentUser 
                         ? conversation.recipient : 
