@@ -7,9 +7,7 @@ import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
 import { MenuItem } from 'material-ui/Menu';
 import { withStyles } from 'material-ui/styles';
-import Grid from 'material-ui/Grid';
 import styled from 'styled-components';
-import SearchIcon from 'material-ui-icons/Search';
 import Input, { InputLabel } from 'material-ui/Input';
 import { FormControl } from 'material-ui/Form';
 import Button from 'material-ui/Button';
@@ -17,12 +15,13 @@ import Button from 'material-ui/Button';
 /* import Button from 'material-ui/Button'; */
 
 const StyleButton = styled(Button)`
-width: 24%;
+width: 15%;
 `;
 
 const StyledDiv = styled.div`
-margin-left: 40%;
-margin-right: 40%;
+padding-top: 1em;
+padding-bottom: 1em;
+text-align:center;
 `;
 
 let suggestions = [];
@@ -101,7 +100,6 @@ const styles = theme => ({
   container: {
     flexGrow: 1,
     position: 'relative',
-    height: 250,
   },
   suggestionsContainerOpen: {
     position: 'absolute',
@@ -215,72 +213,62 @@ class Search extends React.Component {
   render() {
     const { classes, currentType } = this.props;
     return currentType === 0 ? (
-      <div>
+      <div className="test">
         <StyledDiv >
-          <Grid container spacing={40}>
-            <Grid item xs={6} sm={3}>
-            </Grid>
-            <h1>CraftMe</h1>
-            <img src="logo.png" alt="logo" height="300" width="303" />
-            <Grid item xs={12}>
-            <div>
-              <FormControl>
-                <InputLabel>What's your Craft?</InputLabel>
-                <Input id="enter-craft" 
-                       type="text" 
-                       value={this.state.craft} 
-                       onChange={e => this.setInputValue(e)} 
-                />
-              </FormControl>
-            </div>
-            <div> 
-              <FormControl>
-                <InputLabel >Desciption</InputLabel>
-                <Input id="description" 
-                       type="text" 
-                       value={this.state.description} 
-                       onChange={e => this.setInputValue(e)} 
-                />
-              </FormControl>
-            </div>
-            <p><StyleButton variant="raised" onClick={() => this.submitCraft()}>Submit</StyleButton></p>
-            </Grid>
-          </Grid>
+          <h1>CraftMe</h1>
+          <img src="logo.png" alt="logo" height="300" width="303" />
+          <div>
+            <FormControl>
+              <InputLabel>What's your Craft?</InputLabel>
+              <Input
+                id="enter-craft"
+                type="text"
+                value={this.state.craft} 
+                onChange={e => this.setInputValue(e)} 
+              />
+            </FormControl>
+          </div>
+          <div>
+            <FormControl>
+              <InputLabel >Description</InputLabel>
+              <Input
+                id="description"
+                type="text"
+                value={this.state.description} 
+                onChange={e => this.setInputValue(e)} 
+              />
+            </FormControl>
+          </div>
+          <p><StyleButton variant="raised" onClick={() => this.submitCraft()}>Submit</StyleButton></p>  
         </StyledDiv>
       </div>
     ) : (
       <div>
         <StyledDiv >
-          <Grid container spacing={40}>
-            <Grid item xs={6} sm={3}>
-            </Grid>
-            <h1>CraftMe</h1>
-            <img src="logo.png" alt="logo" height="300" width="303" />
-            <Grid item xs={12}>
-              <Autosuggest
-                theme={{
-                  container: classes.container,
-                  suggestionsContainerOpen: classes.suggestionsContainerOpen,
-                  suggestionsList: classes.suggestionsList,
-                  suggestion: classes.suggestion,
-                }}
-                renderInputComponent={renderInput}
-                suggestions={this.state.suggestions}
-                onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
-                onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
-                renderSuggestionsContainer={renderSuggestionsContainer}
-                getSuggestionValue={getSuggestionValue}
-                renderSuggestion={renderSuggestion}
-                inputProps={{
-                  classes,
-                  placeholder: 'Search a Skill',
-                  value: this.state.value,
-                  onChange: this.handleChange,
-                  onKeyPress: this.handleKey,
-                }}
-              />
-            </Grid>
-          </Grid>
+          <h1>CraftMe</h1>
+          <img src="logo.png" alt="logo" height="300" width="303" />
+          <Autosuggest
+            theme={{
+              container: classes.container,
+              suggestionsContainerOpen: classes.suggestionsContainerOpen,
+              suggestionsList: classes.suggestionsList,
+              suggestion: classes.suggestion,
+            }}
+            renderInputComponent={renderInput}
+            suggestions={this.state.suggestions}
+            onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
+            renderSuggestionsContainer={renderSuggestionsContainer}
+            getSuggestionValue={getSuggestionValue}
+            renderSuggestion={renderSuggestion}
+            inputProps={{
+              classes,
+              placeholder: 'Search a Skill',
+              value: this.state.value,
+              onChange: this.handleChange,
+              onKeyPress: this.handleKey,
+            }}
+          />
         </StyledDiv>
       </div>
     );

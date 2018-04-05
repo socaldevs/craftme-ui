@@ -180,3 +180,17 @@ export const fetchAllConversationsById = async (id) => {
 };
 
 
+
+
+// helper
+
+export const displayNotification = async (context, displayTime, stateProperties) => {
+  stateProperties.alertVisibility = 'visible-element';
+  await context.setState(stateProperties);
+  
+  setTimeout(()=> {
+    context.setState({
+      alertVisibility: 'hidden-element',
+    });
+  }, displayTime);
+}; 
