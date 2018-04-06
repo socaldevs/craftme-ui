@@ -404,7 +404,6 @@ nav.navbar {
 
 
 fieldset, label { margin: 0; padding: 0; }
-<<<<<<< HEAD
 h1 {
 	text-shadow:
     -1px -1px 0 black,
@@ -413,10 +412,6 @@ h1 {
     1px 1px 0 black;
     text-shadow: 2px 2px 4px #000000;
 color: floralwhite; font-family: origami-making; font-size: 8em; margin: 10px; font-weight: normal; }
-=======
-/* body{ margin: 20px; } */
-h1 { font-size: 1.5em; margin: 10px; }
->>>>>>> [Rebase] - commit for rebase
 
 /****** Style Star Rating Widget *****/
 
@@ -632,4 +627,14 @@ ul.Search-suggestionsList-4{
   max-width: 15%;
   margin-left:auto;
   margin-right:auto;
+}
+.profile {
+  padding: 2em;
+  text-align: center;
+}
+
+.profile-button {
+  font-family: arial;
+  color: white;
+  margin: 2em;
 }
