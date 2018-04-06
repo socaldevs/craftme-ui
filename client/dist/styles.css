@@ -628,3 +628,19 @@ ul.Search-suggestionsList-4{
   margin-left:auto;
   margin-right:auto;
 }
+.profile {
+  padding: 2em;
+  text-align: center;
+}
+
+.profile-button {
+  font-family: arial;
+  color: white;
+  margin: 2em;
+}
+
+.profile-h1 {
+  font-family: helvetica-neue;
+  font-size: 185%;
+  text-decoration: none;
+}

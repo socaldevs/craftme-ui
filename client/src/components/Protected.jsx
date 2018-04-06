@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import jwtDecode from 'jwt-decode';
 import { connect } from 'react-redux';
 import actions from '../actions/index.jsx';
-import MenuNav from './Menu.jsx';
 import Navbar from './Navbar.jsx';
 
 const mapDispatchToProps = dispatch => ({

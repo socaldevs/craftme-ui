@@ -158,6 +158,29 @@ export const fetchAllConversationsById = async (id) => {
   }
 };
 
+export const fetchUserInfo = async (id) => {
+  try {
+    const data = await axios.get(`${SERVER}/user/fetchUserInfo/${id}`)
+    return data;
+  } catch (error) {
+    console.log('Error with fetchuserInfo', error);
+    return;
+  }
+};
+
+export const updateUserInfo = async (bio, id) => {
+  try {
+    const updatedInfo = await axios.put(`${SERVER}/user/updateUserInfo`, {
+      bio, 
+      id
+    });
+    return updatedInfo;
+  } catch (error) {
+    console.log('Error with updateUserInfo', error);
+    return;
+  }
+}
+
 
 // helper
 

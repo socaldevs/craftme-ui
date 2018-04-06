@@ -10,6 +10,7 @@ import LessonsContainer from './LessonsContainer.jsx';
 import Conference from './Conference.jsx';
 import SearchResults from './SearchResults.jsx';
 import Calendar from './Calendar.jsx';
+import Profile from './Profile.jsx';
 
 class App extends Component {
   constructor(props) {
@@ -32,6 +33,7 @@ class App extends Component {
           <Route path="/calendar" component={props => (<Protected component={Calendar} {...props} />)} />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
+          <Route path="/profile" component={props => (<Protected component={Profile} {...props} />)} />
           <Route path="/" component={props => (<Protected component={Search} {...props} />)} />
         </Switch>
       </div>
