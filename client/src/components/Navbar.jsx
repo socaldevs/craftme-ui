@@ -50,15 +50,9 @@ class ConnectedNavbar extends Component {
   render() {
     return (
       <nav className="navbar">
-<<<<<<< HEAD
-        <Link to="#" className="navbar-item" style={{ textDecoration: 'none' }} onMouseEnter={this.renderImage} onMouseLeave={this.renderImage}>
-          {this.state.expand === false ? <div> Welcome {this.props.currentUser}! </div>
-          : <img className="p-p" src={this.props.currentUrl || 'https://goo.gl/Ra3EGA'} />}
-=======
         <Link to="/profile" className="navbar-item" style={{ textDecoration: "none" }} onMouseEnter={this.renderImage} onMouseLeave={this.renderImage}>
           {this.state.expand === false ? <div> Welcome {this.props.currentUser}! </div> 
           : <img className="p-p" src={this.props.currentUrl || "https://goo.gl/Ra3EGA"}/>}
->>>>>>> [Profile] - Adds edit bio information
         </Link>
         <Link to="/search" className="navbar-item" style={{ textDecoration: 'none' }}> {this.props.currentType === 1 ? 'Search' : 'Add a craft'}</Link>
         {this.props.currentType === 1 ? null : <Link to="/calendar" className="navbar-item" style={{ textDecoration: 'none' }}> Calendar </Link>}
