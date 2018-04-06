@@ -61,7 +61,7 @@ class Profile extends Component {
   render() {
     return (
       <div className="profile">
-        <h1 className="profile-h1"> Edit {this.props.currentUser}'s information  </h1>
+        <h2 className="profile-h2"> Edit {this.props.currentUser}'s information  </h2>
         <br/>
         <FormControl className="profile-line">
           <InputLabel >Bio</InputLabel>
