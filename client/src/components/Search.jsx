@@ -19,7 +19,7 @@ width: 15%;
 `;
 
 const StyledDiv = styled.div`
-padding-top: 1em;
+padding-top: 10em;
 padding-bottom: 1em;
 text-align:center;
 `;
@@ -242,7 +242,6 @@ class Search extends React.Component {
       <div>
         <StyledDiv >
           <h1>CraftMe</h1>
-          <img src="logo.png" alt="logo" height="300" width="303" />
           <Autosuggest
             theme={{
               container: classes.container,

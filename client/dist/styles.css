@@ -9,12 +9,17 @@
 
 
 @font-face {
-  font-family: lora;
-  src: url('./Lora-Regular.otf');
+  font-family: helvetica-neue;
+  src: url('./HelveticaNeue.ttf');
+}
+@font-face {
+  font-family: origami-making;
+  src: url('./origami_making.ttf');
 }
 
+
 body {
-  font-family: lora;
+  font-family: helvetica-neue;
   margin:0;  
 }
 
@@ -399,7 +404,14 @@ nav.navbar {
 
 
 fieldset, label { margin: 0; padding: 0; }
-h1 { font-size: 1.5em; margin: 10px; }
+h1 {
+	text-shadow:
+    -1px -1px 0 black,
+    1px -1px 0 black,
+    -1px 1px 0 black,
+    1px 1px 0 black;
+    text-shadow: 2px 2px 4px #000000;
+color: floralwhite; font-family: origami-making; font-size: 8em; margin: 10px; font-weight: normal; }
 
 /****** Style Star Rating Widget *****/
 
@@ -463,10 +475,10 @@ button, .button {
 }
 
 .innerNav{
-  background: #98b6b1;
   margin-bottom: 0px;
   
 }
+
 
 .card{
   max-width: 60%;
@@ -482,7 +494,7 @@ button, .button {
 }
 
 html, #app {
-  background: #CCDAD1;
+  background: #D3D3D3;
 }
 
 .calendar {
