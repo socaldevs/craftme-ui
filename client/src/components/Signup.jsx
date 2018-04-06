@@ -130,7 +130,7 @@ class Signup extends Component {
             src={this.state.profile}
 
           /> */}
-          <img
+          {/* <img
             src={this.state.profile}
             className="avatar"
             alt="avatar placeholder"
@@ -139,7 +139,17 @@ class Signup extends Component {
             <form>
               <input type="file" onChange={this.urlInput} />
             </form>
-          </div>
+          </div> */}
+          <form className="profile-picture-form" method="put" encType="multipart/form-data">
+            <label className="upload-profile-picture" >
+              <img className="img-thumbnail image" alt="avatar" src={this.state.profile} />
+              <input hidden type="file" id="profile-picture-upload" name="file" onChange={this.urlInput} multiple />
+              <div className="middle">
+                <div className="text">Upload</div>
+              </div>
+            </label>
+            <button type="button" onClick={this.updateProfilePicture} className="button">Submit</button>
+          </form>
           <FormControl>
             <InputLabel >Username</InputLabel>
             <Input type="text" value={this.state.username} onChange={e => this.handleChange(e, 'username')} />
