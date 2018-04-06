@@ -64,7 +64,7 @@ function renderSuggestionsContainer(options) {
   const { containerProps, children } = options;
 
   return (
-    <div className="test">
+    <div>
       <Paper {...containerProps} >
         {children}
       </Paper>
@@ -113,7 +113,7 @@ const styles = theme => ({
   suggestionsList: {
     margin: 0,
     padding: 0,
-    listStyleType: { maxHeight: 200, overflow: 'auto' },
+    listStyleType: 'none',
   },
 });
 
@@ -209,7 +209,7 @@ class Search extends React.Component {
   render() {
     const { classes, currentType } = this.props;
     return currentType === 0 ? (
-      <div className="test">
+      <div>
         <StyledDiv >
           <h1>CraftMe</h1>
           {/* <img src="logo.png" alt="logo" height="300" width="303" /> */}

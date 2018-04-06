@@ -42,7 +42,6 @@ export default class Card extends Component {
     const {
       booking, pastLesson, buttonName, teacher,
     } = this.props;
-    console.log('im like yeah shes fine!  ', this.props);
     return (
       <Paper className="card">
         <img src="" alt="" />

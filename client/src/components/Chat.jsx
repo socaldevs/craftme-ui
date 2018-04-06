@@ -58,7 +58,7 @@ class Chat extends Component {
       this.peer.signal(JSON.parse(offer));
     });
 
-    navigator.getUserMedia({ video: true, audio: false }, (stream) => {
+    navigator.getUserMedia({ video: true, audio: true }, (stream) => {
       this.stream = stream;
       this.peer = new Peer({
         initiator: false,
@@ -120,7 +120,7 @@ class Chat extends Component {
   }
 
   callPeer() {
-    navigator.getUserMedia({ video: true, audio: false }, (stream) => {
+    navigator.getUserMedia({ video: true, audio: true }, (stream) => {
       this.peer = new Peer({
         initiator: true,
         trickle: false,
