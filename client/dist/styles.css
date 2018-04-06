@@ -638,3 +638,9 @@ ul.Search-suggestionsList-4{
   color: white;
   margin: 2em;
 }
+
+.profile-h1 {
+  font-family: helvetica-neue;
+  font-size: 185%;
+  text-decoration: none;
+}
