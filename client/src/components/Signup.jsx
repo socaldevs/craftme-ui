@@ -23,7 +23,7 @@ text-align: center;
 
 const styles = theme => ({
   root: {
-    backgroundColor: '#CCDAD1',
+    backgroundColor: 'lightgray',
     width: '15%',
     marginLeft: 'auto',
     marginRight: 'auto',
@@ -40,6 +40,10 @@ const styles = theme => ({
     width: 60,
     height: 60,
   },
+  selected: {
+    paddingTop: 6,
+    color: '#333333',
+  }
 });
 
 class Signup extends Component {
@@ -157,8 +161,8 @@ class Signup extends Component {
 
           <div>
             <BottomNavigation value={value} onChange={this.handleChangeButton} className={classes.root}>
-              <BottomNavigationAction label="Student" value="student" icon={<PersonIcon />} />
-              <BottomNavigationAction label="Teacher" value="teacher" icon={<SchoolIcon />} />
+              <BottomNavigationAction label="Student" value="student" className={classes.selected} icon={<PersonIcon />} />
+              <BottomNavigationAction label="Teacher" value="teacher" className={classes.selected} icon={<SchoolIcon />} />
             </BottomNavigation>
           </div>
 

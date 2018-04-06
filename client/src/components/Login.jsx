@@ -107,7 +107,7 @@ class ConnectedLogin extends Component {
             <Input type="password" value={this.state.password} onChange={e => this.handleChange(e, 'password')} />
           </FormControl>
           <p><StyleButton variant="raised" onClick={this.login}>LOGIN </StyleButton></p>
-          <p><Link to="/signup">SIGNUP</Link></p>
+          <p><Link to="/signup">Signup</Link></p>
         </StyledDiv>
       </div>
 

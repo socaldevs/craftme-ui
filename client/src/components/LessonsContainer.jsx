@@ -125,12 +125,18 @@ class LessonsContainer extends Component {
               className="innerNav"
               value={this.state.navbarValue}
               onChange={this.changeView}
-              indicatorColor="primary"
-              textColor="primary"
+              indicatorColor="#333333"
+              textColor="#333333"
               centered
             >
-              <Tab label="upcoming" value="upcoming" />
-              <Tab label="Past" value="past" />
+              <Tab  
+              label="upcoming" 
+              value="upcoming" 
+              />
+              <Tab 
+              label="Past" 
+              value="past"
+               />
             </Tabs>
           </Grid>
           <Grid item xs={12}>
